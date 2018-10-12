@@ -40,7 +40,6 @@ public class Inventory extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1031, 665));
-        setPreferredSize(new java.awt.Dimension(1031, 650));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -49,6 +48,7 @@ public class Inventory extends javax.swing.JFrame {
         btnViewAllStock.setText("View All");
         btnViewAllStock.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(254, 212, 29), 1, true));
         btnViewAllStock.setBorderPainted(false);
+        btnViewAllStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(btnViewAllStock);
         btnViewAllStock.setBounds(130, 160, 109, 31);
 
@@ -57,6 +57,7 @@ public class Inventory extends javax.swing.JFrame {
         btnAddStock.setText("Add Stock");
         btnAddStock.setBorder(null);
         btnAddStock.setBorderPainted(false);
+        btnAddStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddStockActionPerformed(evt);
@@ -72,6 +73,7 @@ public class Inventory extends javax.swing.JFrame {
         btnSearchStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/searchIcon.png"))); // NOI18N
         btnSearchStock.setBorderPainted(false);
         btnSearchStock.setContentAreaFilled(false);
+        btnSearchStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(btnSearchStock);
         btnSearchStock.setBounds(880, 140, 46, 49);
 

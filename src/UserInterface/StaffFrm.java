@@ -47,6 +47,7 @@ public class StaffFrm extends javax.swing.JFrame {
         btnViewAllStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         btnViewAllStaff.setText("View All Staff");
         btnViewAllStaff.setBorderPainted(false);
+        btnViewAllStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(btnViewAllStaff);
         btnViewAllStaff.setBounds(170, 170, 190, 37);
 
@@ -54,6 +55,7 @@ public class StaffFrm extends javax.swing.JFrame {
         btnViewPendingStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         btnViewPendingStaff.setText("View Pending Staff");
         btnViewPendingStaff.setBorderPainted(false);
+        btnViewPendingStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewPendingStaff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewPendingStaffActionPerformed(evt);
@@ -82,6 +84,7 @@ public class StaffFrm extends javax.swing.JFrame {
         btnAcceptStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         btnAcceptStaff.setText("Accept Staff");
         btnAcceptStaff.setBorderPainted(false);
+        btnAcceptStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(btnAcceptStaff);
         btnAcceptStaff.setBounds(741, 510, 180, 33);
 

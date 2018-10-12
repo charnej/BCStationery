@@ -27,47 +27,19 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        btnInventory = new javax.swing.JButton();
-        btnOrders = new javax.swing.JButton();
-        btnStaff = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        btnInventory = new javax.swing.JButton();
+        btnStaff = new javax.swing.JButton();
+        btnOrders = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setBackground(new java.awt.Color(254, 212, 29));
-
-        jLabel1.setFont(new java.awt.Font("Calibri", 0, 48)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Welcome Admin");
-
-        btnInventory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/menubtn.png"))); // NOI18N
-        btnInventory.setToolTipText("Inventory ");
-        btnInventory.setBorderPainted(false);
-        btnInventory.setContentAreaFilled(false);
-        btnInventory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInventoryActionPerformed(evt);
-            }
-        });
-
-        btnOrders.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnOrders.png"))); // NOI18N
-        btnOrders.setToolTipText("Orders");
-        btnOrders.setBorderPainted(false);
-        btnOrders.setContentAreaFilled(false);
-
-        btnStaff.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnStaff.png"))); // NOI18N
-        btnStaff.setToolTipText("Staff");
-        btnStaff.setBorderPainted(false);
-        btnStaff.setContentAreaFilled(false);
-        btnStaff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStaffActionPerformed(evt);
-            }
-        });
+        setMinimumSize(new java.awt.Dimension(652, 459));
+        setPreferredSize(new java.awt.Dimension(652, 486));
+        setResizable(false);
+        getContentPane().setLayout(null);
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
         btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
@@ -82,6 +54,8 @@ public class Menu extends javax.swing.JFrame {
                 btnMinimizeMouseClicked(evt);
             }
         });
+        getContentPane().add(btnMinimize);
+        btnMinimize.setBounds(550, 10, 30, 30);
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -101,6 +75,8 @@ public class Menu extends javax.swing.JFrame {
                 btnBackLogoutActionPerformed(evt);
             }
         });
+        getContentPane().add(btnBackLogout);
+        btnBackLogout.setBounds(580, 10, 30, 30);
 
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -114,62 +90,49 @@ public class Menu extends javax.swing.JFrame {
                 btnExitMouseClicked(evt);
             }
         });
+        getContentPane().add(btnExit);
+        btnExit.setBounds(610, 10, 30, 30);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(109, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBackLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addGap(86, 86, 86))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBackLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel1)))
-                .addGap(43, 43, 43)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(187, Short.MAX_VALUE))
-        );
+        btnInventory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/menubtn.png"))); // NOI18N
+        btnInventory.setToolTipText("Inventory ");
+        btnInventory.setBorderPainted(false);
+        btnInventory.setContentAreaFilled(false);
+        btnInventory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInventoryActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnInventory);
+        btnInventory.setBounds(150, 190, 165, 56);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        btnStaff.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnStaff.png"))); // NOI18N
+        btnStaff.setToolTipText("Staff");
+        btnStaff.setBorderPainted(false);
+        btnStaff.setContentAreaFilled(false);
+        btnStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStaffActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStaff);
+        btnStaff.setBounds(360, 190, 167, 55);
+
+        btnOrders.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnOrders.png"))); // NOI18N
+        btnOrders.setToolTipText("Orders");
+        btnOrders.setBorderPainted(false);
+        btnOrders.setContentAreaFilled(false);
+        btnOrders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnOrders);
+        btnOrders.setBounds(150, 270, 165, 55);
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/adminMenu.png"))); // NOI18N
+        jLabel2.setText("jLabel2");
+        jLabel2.setMinimumSize(new java.awt.Dimension(652, 459));
+        jLabel2.setPreferredSize(new java.awt.Dimension(652, 459));
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(0, 0, 652, 459);
 
         pack();
         setLocationRelativeTo(null);
@@ -247,7 +210,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnOrders;
     private javax.swing.JButton btnStaff;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
