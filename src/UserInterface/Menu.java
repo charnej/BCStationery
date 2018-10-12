@@ -48,6 +48,11 @@ public class Menu extends javax.swing.JFrame {
         btnInventory.setToolTipText("Inventory ");
         btnInventory.setBorderPainted(false);
         btnInventory.setContentAreaFilled(false);
+        btnInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInventoryActionPerformed(evt);
+            }
+        });
 
         btnOrders.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnOrders.png"))); // NOI18N
         btnOrders.setToolTipText("Orders");
@@ -58,6 +63,11 @@ public class Menu extends javax.swing.JFrame {
         btnStaff.setToolTipText("Staff");
         btnStaff.setBorderPainted(false);
         btnStaff.setContentAreaFilled(false);
+        btnStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStaffActionPerformed(evt);
+            }
+        });
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
         btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
@@ -76,7 +86,7 @@ public class Menu extends javax.swing.JFrame {
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout1.png"))); // NOI18N
-        btnBackLogout.setToolTipText("Back");
+        btnBackLogout.setToolTipText("Logout");
         btnBackLogout.setBorder(null);
         btnBackLogout.setBorderPainted(false);
         btnBackLogout.setContentAreaFilled(false);
@@ -162,6 +172,7 @@ public class Menu extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
@@ -182,6 +193,18 @@ public class Menu extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_btnExitMouseClicked
 
+    private void btnInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventoryActionPerformed
+        Inventory inventory = new Inventory();
+        inventory.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInventoryActionPerformed
+
+    private void btnStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffActionPerformed
+        StaffFrm staffForm = new StaffFrm();
+        staffForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnStaffActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -193,7 +216,7 @@ public class Menu extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows Classic".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
