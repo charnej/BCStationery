@@ -5,6 +5,9 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Category;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author User
@@ -16,6 +19,15 @@ public class AddStock extends javax.swing.JFrame {
      */
     public AddStock() {
         initComponents();
+        //fill dropdown with possible catagories
+            //get all catagories
+        Category objCategoryHolder = new Category();
+        for (Category cat : objCategoryHolder.getCategories()) {
+            //fill with all possible names
+            cmboCategoryAdd.addItem(cat.getName());
+        }
+            
+            
     }
 
     /**
@@ -42,6 +54,11 @@ public class AddStock extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(800, 628));
         setResizable(false);
         setSize(new java.awt.Dimension(800, 628));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
         txtProductNameAdd.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -54,7 +71,6 @@ public class AddStock extends javax.swing.JFrame {
         getContentPane().add(txtManufacturerAdd);
         txtManufacturerAdd.setBounds(140, 310, 200, 30);
 
-        cmboCategoryAdd.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmboCategoryAdd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         getContentPane().add(cmboCategoryAdd);
         cmboCategoryAdd.setBounds(130, 410, 210, 30);
@@ -137,7 +153,19 @@ public class AddStock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnItemAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItemAddActionPerformed
-        this.dispose();
+        //check all fields are entered && of the right type
+        boolean prodName = (!txtProductNameAdd.getText().equals(""));
+        boolean manName = (!txtManufacturerAdd.getText().equals(""));
+        boolean catagoryName = (!cmboCategoryAdd.getSelectedItem().equals(""));
+        boolean prodPrice = ((int)spnPriceAdd.getValue()>0);
+        boolean prodQuantity = ((int)spnQtyAdd.getValue()>0);
+        if (prodName&&manName&&catagoryName&&prodPrice&&prodQuantity) {
+            //create object of Stock
+            //send object of stock to db
+        }else{
+           //show error 
+        }
+        
     }//GEN-LAST:event_btnItemAddActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
@@ -151,6 +179,10 @@ public class AddStock extends javax.swing.JFrame {
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        //JOptionPane.showMessageDialog(null,"hi");
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments

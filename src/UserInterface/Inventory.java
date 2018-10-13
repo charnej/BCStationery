@@ -5,6 +5,11 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Stock;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author User
@@ -16,7 +21,22 @@ public class Inventory extends javax.swing.JFrame {
      */
     public Inventory() {
         initComponents();
-        
+        Stock objStockHolder = new Stock();
+        ArrayList<Stock> allStock =objStockHolder.getStock();
+        DefaultTableModel dmodel =  (DefaultTableModel)tblInventory.getModel();
+        Object[] row = new Object[5];
+        for (int i = 0; i < dmodel.getRowCount(); i++) {
+           dmodel.removeRow(i); 
+        }
+        for (Stock stc : allStock) {
+           row[0]= stc.getProductName();
+           row[1]= stc.getManufacturer();
+           row[2]= stc.getCategory().getName();
+           row[3]= stc.getPrice();
+           row[4]= stc.getQuantity();
+           dmodel.addRow(row); 
+            
+        }
         
     }
 
@@ -69,6 +89,11 @@ public class Inventory extends javax.swing.JFrame {
         btnAddStock.setBounds(260, 160, 102, 31);
 
         txtSearchStock.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        txtSearchStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchStockActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtSearchStock);
         txtSearchStock.setBounds(660, 160, 202, 36);
 
@@ -81,19 +106,38 @@ public class Inventory extends javax.swing.JFrame {
 
         tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ProductName", "Manufacturer", "Category", "Price", "Quantity"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblInventory);
+        if (tblInventory.getColumnModel().getColumnCount() > 0) {
+            tblInventory.getColumnModel().getColumn(0).setResizable(false);
+            tblInventory.getColumnModel().getColumn(1).setResizable(false);
+            tblInventory.getColumnModel().getColumn(2).setResizable(false);
+            tblInventory.getColumnModel().getColumn(3).setResizable(false);
+            tblInventory.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(110, 220, 832, 310);
+        jScrollPane1.setBounds(100, 220, 832, 310);
 
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -177,6 +221,10 @@ public class Inventory extends javax.swing.JFrame {
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
         this.setState(this.ICONIFIED);
     }//GEN-LAST:event_btnMinimizeMouseClicked
+
+    private void txtSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchStockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchStockActionPerformed
 
     /**
      * @param args the command line arguments
