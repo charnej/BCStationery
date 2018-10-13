@@ -5,6 +5,11 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Admin;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author User
@@ -169,11 +174,45 @@ public class AdminLogin extends javax.swing.JFrame {
         staffLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
-
+    private int logInAtempts=0;
     private void btnAdminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminLoginActionPerformed
-       //get all admin users by creating admin object
-       
-       //iterate through admin usernames and passwords
+//T         
+        //Get all staff user objects
+        Admin  objHolder = new Admin();
+        List<Admin> allAdmin =new ArrayList<>(); //objHolder.getAdmin();
+        allAdmin.add(new Admin(1, "Tyrone", "Du Plesis", "tyrone", "tyrone"));
+        allAdmin.add(new Admin(1, "Charne", "Jordaan", "charne", "charne"));
+        allAdmin.add(new Admin(1, "Jozehan", "Grobler", "jozehan", "jozehan"));
+        allAdmin.add(new Admin(1, "Admin", "Admin", "admin", "admin"));
+        boolean UserFound = false;
+        for (Admin adminItem : allAdmin) {
+            if(adminItem.getUsername().equals(txtAdminUsername.getText())){
+                if (adminItem.getPassword().equals(txtPassword.getText())) {
+                    //log in user user valid
+                    UserFound=true;
+                }
+            }
+        }
+        if (UserFound) {
+            //log in user
+            // close current form
+            // re route to another form
+        }else if (logInAtempts<3)
+        {
+            //throw warning
+            JOptionPane.showMessageDialog(null, "\n Wrong credentials \n", "Please Note", JOptionPane.WARNING_MESSAGE);
+            //increase log in attempts
+            logInAtempts++;
+        }else if (logInAtempts==3)
+        {
+            //add waiting mechanism
+            //disable textboxes for certain time
+            logInAtempts=0;
+            //throw warning
+            JOptionPane.showMessageDialog(null, "\n You do not have any log in attempts left \n", "Please Note", JOptionPane.WARNING_MESSAGE);
+            //increase log in attempts
+            logInAtempts++;
+        }
     }//GEN-LAST:event_btnAdminLoginActionPerformed
 
     private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed
