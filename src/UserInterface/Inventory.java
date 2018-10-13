@@ -27,36 +27,154 @@ public class Inventory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlBG = new javax.swing.JPanel();
+        btnViewAllStock = new javax.swing.JButton();
+        btnAddStock = new javax.swing.JButton();
+        txtSearchStock = new javax.swing.JTextField();
+        btnSearchStock = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        btnExit = new javax.swing.JButton();
+        btnBackLogout = new javax.swing.JButton();
+        btnMinimize = new javax.swing.JButton();
+        BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setResizable(false);
+        getContentPane().setLayout(null);
 
-        pnlBG.setBackground(new java.awt.Color(255, 255, 255));
+        btnViewAllStock.setBackground(new java.awt.Color(254, 212, 29));
+        btnViewAllStock.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnViewAllStock.setText("View All");
+        btnViewAllStock.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(254, 212, 29), 1, true));
+        btnViewAllStock.setBorderPainted(false);
+        btnViewAllStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnViewAllStock);
+        btnViewAllStock.setBounds(130, 160, 109, 31);
 
-        javax.swing.GroupLayout pnlBGLayout = new javax.swing.GroupLayout(pnlBG);
-        pnlBG.setLayout(pnlBGLayout);
-        pnlBGLayout.setHorizontalGroup(
-            pnlBGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 938, Short.MAX_VALUE)
-        );
-        pnlBGLayout.setVerticalGroup(
-            pnlBGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 533, Short.MAX_VALUE)
-        );
+        btnAddStock.setBackground(new java.awt.Color(254, 212, 29));
+        btnAddStock.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnAddStock.setText("Add Stock");
+        btnAddStock.setBorder(null);
+        btnAddStock.setBorderPainted(false);
+        btnAddStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddStockActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAddStock);
+        btnAddStock.setBounds(260, 160, 102, 31);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        txtSearchStock.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        getContentPane().add(txtSearchStock);
+        txtSearchStock.setBounds(660, 160, 202, 36);
+
+        btnSearchStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/searchIcon.png"))); // NOI18N
+        btnSearchStock.setBorderPainted(false);
+        btnSearchStock.setContentAreaFilled(false);
+        btnSearchStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnSearchStock);
+        btnSearchStock.setBounds(880, 140, 46, 49);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(110, 220, 832, 310);
+
+        btnExit.setBackground(new java.awt.Color(255, 255, 255));
+        btnExit.setForeground(new java.awt.Color(255, 255, 255));
+        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/exit.png"))); // NOI18N
+        btnExit.setToolTipText("Exit");
+        btnExit.setBorderPainted(false);
+        btnExit.setContentAreaFilled(false);
+        btnExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnExitMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnExit);
+        btnExit.setBounds(980, 10, 50, 30);
+
+        btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
+        btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        btnBackLogout.setToolTipText("Back");
+        btnBackLogout.setBorder(null);
+        btnBackLogout.setBorderPainted(false);
+        btnBackLogout.setContentAreaFilled(false);
+        btnBackLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBackLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackLogoutMouseClicked(evt);
+            }
+        });
+        btnBackLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackLogoutActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBackLogout);
+        btnBackLogout.setBounds(950, 10, 31, 31);
+
+        btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
+        btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
+        btnMinimize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/minimize.png"))); // NOI18N
+        btnMinimize.setToolTipText("Minimize");
+        btnMinimize.setBorder(null);
+        btnMinimize.setBorderPainted(false);
+        btnMinimize.setContentAreaFilled(false);
+        btnMinimize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMinimizeMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnMinimize);
+        btnMinimize.setBounds(910, 10, 31, 31);
+
+        BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/InventoryBG.png"))); // NOI18N
+        getContentPane().add(BG);
+        BG.setBounds(0, 0, 1030, 637);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStockActionPerformed
+        AddStock addStock = new AddStock();
+        addStock.setVisible(true);
+    }//GEN-LAST:event_btnAddStockActionPerformed
+
+    private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_btnExitMouseClicked
+
+    private void btnBackLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackLogoutMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBackLogoutMouseClicked
+
+    private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
+        Menu menu = new Menu();
+        menu.setVisible(true);;
+        this.dispose();
+    }//GEN-LAST:event_btnBackLogoutActionPerformed
+
+    private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
+        this.setState(this.ICONIFIED);
+    }//GEN-LAST:event_btnMinimizeMouseClicked
 
     /**
      * @param args the command line arguments
@@ -69,7 +187,7 @@ public class Inventory extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Windows Classic".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -95,6 +213,15 @@ public class Inventory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel pnlBG;
+    private javax.swing.JLabel BG;
+    private javax.swing.JButton btnAddStock;
+    private javax.swing.JButton btnBackLogout;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnMinimize;
+    private javax.swing.JButton btnSearchStock;
+    private javax.swing.JButton btnViewAllStock;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField txtSearchStock;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,30 +5,42 @@
  */
 package BusinessLayerPackage;
 
+import DataAccessLayerPackage.StaffHandler;
+import java.awt.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Tyrone
  */
 public class Staff {
-   // random comment 
-    private int staffID;
+
     private String firstName;
     private String lastName;
     private String email;
     private String cellphone;
     private String username;
+    private String password;
     private int department;
     private int campusLocation;
     private int accepted;
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
     public int getStaffID() {
         return staffID;
     }
-
-    public void setStaffID(int staffID) {
-        this.staffID = staffID;
-    }
-
+    //Dont need to set ID 
+    
     public String getFirstName() {
         return firstName;
     }
@@ -93,20 +105,33 @@ public class Staff {
         this.accepted = accepted;
     }
 
-    public Staff(String firstName, String lastName, String email, String cellphone, String username, int department, int campusLocation, int accepted) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.cellphone = cellphone;
-        this.username = username;
-        this.department = department;
-        this.campusLocation = campusLocation;
-        this.accepted = accepted;
-    }
-
+   
     @Override
     public String toString() {
         return "Staff{" + "staffID=" + staffID + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", cellphone=" + cellphone + ", username=" + username + ", department=" + department + ", campusLocation=" + campusLocation + ", accepted=" + accepted + '}';
+    }
+    public ArrayList<Staff> getStaff(){
+        ArrayList<Staff> allStaff = new ArrayList<Staff>();
+        StaffHandler inst =StaffHandler.getInstance();
+        ResultSet staffUsers =inst.getUser();
+        try {
+            while (staffUsers.next()) {
+                allStaff.add(new Staff(staffUsers.getInt("StaffID"),
+                                        staffUsers.getString("FirstName"),
+                                        staffUsers.getString("LastName"),
+                                        staffUsers.getString("Email"),
+                                        staffUsers.getString("Cellphone"),
+                                        staffUsers.getString("Username"),
+                                        staffUsers.getString("Password"),
+                                        staffUsers.getInt("Department"),
+                                        staffUsers.getInt("CampusLocation"),
+                                        staffUsers.getInt("Accepted")));
+            }
+            return allStaff;
+        } catch (SQLException ex) {
+            Logger.getLogger(Staff.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
 }

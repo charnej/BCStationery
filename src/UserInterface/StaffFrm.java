@@ -9,13 +9,14 @@ package UserInterface;
  *
  * @author User
  */
-public class Menu extends javax.swing.JFrame {
+public class StaffFrm extends javax.swing.JFrame {
 
     /**
-     * Creates new form Menu
+     * Creates new form Staff
      */
-    public Menu() {
+    public StaffFrm() {
         initComponents();
+        btnAcceptStaff.setVisible(false);
     }
 
     /**
@@ -27,19 +28,65 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnViewAllStaff = new javax.swing.JButton();
+        btnViewPendingStaff = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        btnAcceptStaff = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        btnInventory = new javax.swing.JButton();
-        btnStaff = new javax.swing.JButton();
-        btnOrders = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(652, 459));
-        setPreferredSize(new java.awt.Dimension(652, 486));
+        setMinimumSize(new java.awt.Dimension(1031, 665));
         setResizable(false);
         getContentPane().setLayout(null);
+
+        btnViewAllStaff.setBackground(new java.awt.Color(254, 212, 29));
+        btnViewAllStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnViewAllStaff.setText("View All Staff");
+        btnViewAllStaff.setBorderPainted(false);
+        btnViewAllStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnViewAllStaff);
+        btnViewAllStaff.setBounds(170, 170, 190, 37);
+
+        btnViewPendingStaff.setBackground(new java.awt.Color(254, 212, 29));
+        btnViewPendingStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnViewPendingStaff.setText("View Pending Staff");
+        btnViewPendingStaff.setBorderPainted(false);
+        btnViewPendingStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewPendingStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewPendingStaffActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnViewPendingStaff);
+        btnViewPendingStaff.setBounds(390, 170, 240, 37);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(164, 224, 758, 270);
+
+        btnAcceptStaff.setBackground(new java.awt.Color(254, 212, 29));
+        btnAcceptStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnAcceptStaff.setText("Accept Staff");
+        btnAcceptStaff.setBorderPainted(false);
+        btnAcceptStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnAcceptStaff);
+        btnAcceptStaff.setBounds(741, 510, 180, 33);
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
         btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
@@ -55,12 +102,12 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnMinimize);
-        btnMinimize.setBounds(550, 10, 30, 30);
+        btnMinimize.setBounds(910, 10, 31, 31);
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout1.png"))); // NOI18N
-        btnBackLogout.setToolTipText("Logout");
+        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        btnBackLogout.setToolTipText("Back");
         btnBackLogout.setBorder(null);
         btnBackLogout.setBorderPainted(false);
         btnBackLogout.setContentAreaFilled(false);
@@ -76,7 +123,7 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnBackLogout);
-        btnBackLogout.setBounds(580, 10, 30, 30);
+        btnBackLogout.setBounds(950, 10, 31, 31);
 
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -91,52 +138,20 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnExit);
-        btnExit.setBounds(610, 10, 30, 30);
+        btnExit.setBounds(980, 10, 50, 30);
 
-        btnInventory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/menubtn.png"))); // NOI18N
-        btnInventory.setToolTipText("Inventory ");
-        btnInventory.setBorderPainted(false);
-        btnInventory.setContentAreaFilled(false);
-        btnInventory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnInventory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInventoryActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnInventory);
-        btnInventory.setBounds(150, 190, 165, 56);
-
-        btnStaff.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnStaff.png"))); // NOI18N
-        btnStaff.setToolTipText("Staff");
-        btnStaff.setBorderPainted(false);
-        btnStaff.setContentAreaFilled(false);
-        btnStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnStaff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStaffActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnStaff);
-        btnStaff.setBounds(360, 190, 167, 55);
-
-        btnOrders.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnOrders.png"))); // NOI18N
-        btnOrders.setToolTipText("Orders");
-        btnOrders.setBorderPainted(false);
-        btnOrders.setContentAreaFilled(false);
-        btnOrders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(btnOrders);
-        btnOrders.setBounds(150, 270, 165, 55);
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/adminMenu.png"))); // NOI18N
-        jLabel2.setText("jLabel2");
-        jLabel2.setMinimumSize(new java.awt.Dimension(652, 459));
-        jLabel2.setPreferredSize(new java.awt.Dimension(652, 459));
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(0, 0, 652, 459);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/StaffBG.png"))); // NOI18N
+        jLabel1.setText("jLabel1");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 0, 1031, 637);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnViewPendingStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPendingStaffActionPerformed
+        btnAcceptStaff.setVisible(true);
+    }//GEN-LAST:event_btnViewPendingStaffActionPerformed
 
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
         this.setState(this.ICONIFIED);
@@ -147,8 +162,8 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutMouseClicked
 
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
-        StaffLogin staffLogin = new StaffLogin();
-        staffLogin.setVisible(true);
+        Menu menu = new Menu();
+        menu.setVisible(true);;
         this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
@@ -156,22 +171,14 @@ public class Menu extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_btnExitMouseClicked
 
-    private void btnInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventoryActionPerformed
-        Inventory inventory = new Inventory();
-        inventory.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnInventoryActionPerformed
-
-    private void btnStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffActionPerformed
-        StaffFrm staffForm = new StaffFrm();
-        staffForm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnStaffActionPerformed
-
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        
+        
+        
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -185,31 +192,35 @@ public class Menu extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu().setVisible(true);
+                new StaffFrm().setVisible(true);
+                
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAcceptStaff;
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
-    private javax.swing.JButton btnInventory;
     private javax.swing.JButton btnMinimize;
-    private javax.swing.JButton btnOrders;
-    private javax.swing.JButton btnStaff;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnViewAllStaff;
+    private javax.swing.JButton btnViewPendingStaff;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

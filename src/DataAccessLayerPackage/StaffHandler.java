@@ -5,13 +5,51 @@
  */
 package DataAccessLayerPackage;
 
+
+import java.awt.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Tyrone
  */
 public class StaffHandler {
 
-    public StaffHandler() {
+    private static StaffHandler instance = new StaffHandler();
+    private StaffHandler() {}
+    public static StaffHandler getInstance(){
+        return instance;
     }
+    //get users from db
+    //hold users in resultset private to compare changes
+    private  ResultSet rsUsers;
+    public  ResultSet getUser(){
+        if (rsUsers==null) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
+                Connection con =(Connection) DriverManager.getConnection(url,"root","");
+                Statement st = (Statement) con.createStatement();
+                String query = "SELECT * FROM tblStaff";
+                ResultSet rs = st.executeQuery(query);
+                con.close();
+                return rs;
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(StaffHandler.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(StaffHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }else return rsUsers;
+        return null;
+    }
+    //do update user
+    //do delete user
     
 }
