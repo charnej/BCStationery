@@ -12,10 +12,10 @@ import java.sql.Date;
  * @author Jozehan
  */
 public class StaffRequest {
-    int requestNr;
-    Date requestDate;
+    private int requestNr;
+    private Date requestDate;
     //staff type staff
     //Stock type stock
-    int quantity; 
-    //Complete neem aan boolean
+    private int quantity; 
+    private boolean Complete;// neem aan boolean
 }
