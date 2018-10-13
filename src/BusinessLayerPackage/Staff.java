@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,6 +20,25 @@ import java.util.logging.Logger;
  */
 public class Staff {
 
+    public Staff() {
+        staffID=0;
+    }
+
+    
+    public Staff(int staffID, String firstName, String lastName, String email, String cellphone, String username, String password, int department, int campusLocation, int accepted) {
+        this.staffID = staffID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.cellphone = cellphone;
+        this.username = username;
+        this.password = password;
+        this.department = department;
+        this.campusLocation = campusLocation;
+        this.accepted = accepted;
+    }
+
+    private final int staffID;
     private String firstName;
     private String lastName;
     private String email;
@@ -135,3 +155,4 @@ public class Staff {
     }
     
 }
+

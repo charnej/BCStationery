@@ -59,6 +59,11 @@ public class AdminLogin extends javax.swing.JFrame {
         btnAdminLogin.setBorder(null);
         btnAdminLogin.setBorderPainted(false);
         btnAdminLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAdminLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminLoginActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnAdminLogin);
         btnAdminLogin.setBounds(110, 400, 280, 40);
 
@@ -73,6 +78,11 @@ public class AdminLogin extends javax.swing.JFrame {
         btnMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnMinimizeMouseClicked(evt);
+            }
+        });
+        btnMinimize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMinimizeActionPerformed(evt);
             }
         });
         getContentPane().add(btnMinimize);
@@ -159,6 +169,16 @@ public class AdminLogin extends javax.swing.JFrame {
         staffLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
+
+    private void btnAdminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminLoginActionPerformed
+       //get all admin users by creating admin object
+       
+       //iterate through admin usernames and passwords
+    }//GEN-LAST:event_btnAdminLoginActionPerformed
+
+    private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMinimizeActionPerformed
 
     /**
      * @param args the command line arguments
