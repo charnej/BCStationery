@@ -5,6 +5,13 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Staff;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.Icon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author User
@@ -46,9 +53,15 @@ public class StaffLogin extends javax.swing.JFrame {
         txtStaffUsername.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         txtStaffUsername.setText("Username");
         txtStaffUsername.setBorder(null);
+        txtStaffUsername.setName(""); // NOI18N
         txtStaffUsername.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtStaffUsernameMouseClicked(evt);
+            }
+        });
+        txtStaffUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStaffUsernameActionPerformed(evt);
             }
         });
         getContentPane().add(txtStaffUsername);
@@ -107,6 +120,11 @@ public class StaffLogin extends javax.swing.JFrame {
         btnStaffLogin1.setBorder(null);
         btnStaffLogin1.setBorderPainted(false);
         btnStaffLogin1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnStaffLogin1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStaffLogin1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnStaffLogin1);
         btnStaffLogin1.setBounds(430, 360, 280, 40);
 
@@ -172,6 +190,34 @@ public class StaffLogin extends javax.swing.JFrame {
         adminLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAdminActionPerformed
+    private int logInAtempts =0;
+    private void btnStaffLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffLogin1ActionPerformed
+         
+        //Get all staff user objects
+        Staff objHolder = new Staff();
+        List<Staff> allStaff = objHolder.getStaff();
+        boolean UserFound = false;
+        for (Staff staffItem : allStaff) {
+            if(staffItem.getUsername().equals(txtStaffUsername.getText())){
+                if (staffItem.getPassword().equals(txtPassword.getText())) {
+                    //log in user user valid
+                    UserFound=true;
+                }
+            }
+        }
+        if (UserFound) {
+            //log in user
+        }else{
+            //throw warning
+            JOptionPane.showMessageDialog(null, "\nWrong credentials\n", "Please Note", JOptionPane.WARNING_MESSAGE);
+            //increase log in attempts
+            logInAtempts++;
+        }
+    }//GEN-LAST:event_btnStaffLogin1ActionPerformed
+
+    private void txtStaffUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStaffUsernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStaffUsernameActionPerformed
 
     /**
      * @param args the command line arguments

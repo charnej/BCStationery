@@ -19,6 +19,11 @@ import java.util.logging.Logger;
  */
 public class Staff {
 
+    public Staff() {
+        staffID=0;
+    }
+
+    
     public Staff(int staffID, String firstName, String lastName, String email, String cellphone, String username, String password, int department, int campusLocation, int accepted) {
         this.staffID = staffID;
         this.firstName = firstName;
