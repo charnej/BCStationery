@@ -19,6 +19,20 @@ import java.util.logging.Logger;
  */
 public class Staff {
 
+    public Staff(int staffID, String firstName, String lastName, String email, String cellphone, String username, String password, int department, int campusLocation, int accepted) {
+        this.staffID = staffID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.cellphone = cellphone;
+        this.username = username;
+        this.password = password;
+        this.department = department;
+        this.campusLocation = campusLocation;
+        this.accepted = accepted;
+    }
+
+    private final int staffID;
     private String firstName;
     private String lastName;
     private String email;
@@ -36,11 +50,12 @@ public class Staff {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public int getStaffID() {
         return staffID;
     }
     //Dont need to set ID 
-    
+
     public String getFirstName() {
         return firstName;
     }
@@ -105,27 +120,27 @@ public class Staff {
         this.accepted = accepted;
     }
 
-   
     @Override
     public String toString() {
         return "Staff{" + "staffID=" + staffID + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", cellphone=" + cellphone + ", username=" + username + ", department=" + department + ", campusLocation=" + campusLocation + ", accepted=" + accepted + '}';
     }
-    public ArrayList<Staff> getStaff(){
+
+    public ArrayList<Staff> getStaff() {
         ArrayList<Staff> allStaff = new ArrayList<Staff>();
-        StaffHandler inst =StaffHandler.getInstance();
-        ResultSet staffUsers =inst.getUser();
+        StaffHandler inst = StaffHandler.getInstance();
+        ResultSet staffUsers = inst.getUser();
         try {
             while (staffUsers.next()) {
                 allStaff.add(new Staff(staffUsers.getInt("StaffID"),
-                                        staffUsers.getString("FirstName"),
-                                        staffUsers.getString("LastName"),
-                                        staffUsers.getString("Email"),
-                                        staffUsers.getString("Cellphone"),
-                                        staffUsers.getString("Username"),
-                                        staffUsers.getString("Password"),
-                                        staffUsers.getInt("Department"),
-                                        staffUsers.getInt("CampusLocation"),
-                                        staffUsers.getInt("Accepted")));
+                        staffUsers.getString("FirstName"),
+                        staffUsers.getString("LastName"),
+                        staffUsers.getString("Email"),
+                        staffUsers.getString("Cellphone"),
+                        staffUsers.getString("Username"),
+                        staffUsers.getString("Password"),
+                        staffUsers.getInt("Department"),
+                        staffUsers.getInt("CampusLocation"),
+                        staffUsers.getInt("Accepted")));
             }
             return allStaff;
         } catch (SQLException ex) {
@@ -133,5 +148,5 @@ public class Staff {
         }
         return null;
     }
-    
+
 }

@@ -16,6 +16,8 @@ public class Inventory extends javax.swing.JFrame {
      */
     public Inventory() {
         initComponents();
+        
+        
     }
 
     /**
@@ -32,7 +34,7 @@ public class Inventory extends javax.swing.JFrame {
         txtSearchStock = new javax.swing.JTextField();
         btnSearchStock = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblInventory = new javax.swing.JTable();
         btnExit = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
@@ -77,7 +79,7 @@ public class Inventory extends javax.swing.JFrame {
         getContentPane().add(btnSearchStock);
         btnSearchStock.setBounds(880, 140, 46, 49);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -88,7 +90,7 @@ public class Inventory extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblInventory);
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(110, 220, 832, 310);
@@ -221,7 +223,7 @@ public class Inventory extends javax.swing.JFrame {
     private javax.swing.JButton btnSearchStock;
     private javax.swing.JButton btnViewAllStock;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblInventory;
     private javax.swing.JTextField txtSearchStock;
     // End of variables declaration//GEN-END:variables
 }
