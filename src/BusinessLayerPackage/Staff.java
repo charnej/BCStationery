@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,6 +20,11 @@ import java.util.logging.Logger;
  */
 public class Staff {
 
+    public Staff() {
+        staffID=0;
+    }
+
+    
     public Staff(int staffID, String firstName, String lastName, String email, String cellphone, String username, String password, int department, int campusLocation, int accepted) {
         this.staffID = staffID;
         this.firstName = firstName;
@@ -50,12 +56,11 @@ public class Staff {
     public void setPassword(String password) {
         this.password = password;
     }
-
     public int getStaffID() {
         return staffID;
     }
     //Dont need to set ID 
-
+    
     public String getFirstName() {
         return firstName;
     }
@@ -120,27 +125,27 @@ public class Staff {
         this.accepted = accepted;
     }
 
+   
     @Override
     public String toString() {
         return "Staff{" + "staffID=" + staffID + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", cellphone=" + cellphone + ", username=" + username + ", department=" + department + ", campusLocation=" + campusLocation + ", accepted=" + accepted + '}';
     }
-
-    public ArrayList<Staff> getStaff() {
+    public ArrayList<Staff> getStaff(){
         ArrayList<Staff> allStaff = new ArrayList<Staff>();
-        StaffHandler inst = StaffHandler.getInstance();
-        ResultSet staffUsers = inst.getUser();
+        StaffHandler inst =StaffHandler.getInstance();
+        ResultSet staffUsers =inst.getUser();
         try {
             while (staffUsers.next()) {
                 allStaff.add(new Staff(staffUsers.getInt("StaffID"),
-                        staffUsers.getString("FirstName"),
-                        staffUsers.getString("LastName"),
-                        staffUsers.getString("Email"),
-                        staffUsers.getString("Cellphone"),
-                        staffUsers.getString("Username"),
-                        staffUsers.getString("Password"),
-                        staffUsers.getInt("Department"),
-                        staffUsers.getInt("CampusLocation"),
-                        staffUsers.getInt("Accepted")));
+                                        staffUsers.getString("FirstName"),
+                                        staffUsers.getString("LastName"),
+                                        staffUsers.getString("Email"),
+                                        staffUsers.getString("Cellphone"),
+                                        staffUsers.getString("Username"),
+                                        staffUsers.getString("Password"),
+                                        staffUsers.getInt("Department"),
+                                        staffUsers.getInt("CampusLocation"),
+                                        staffUsers.getInt("Accepted")));
             }
             return allStaff;
         } catch (SQLException ex) {
@@ -148,5 +153,6 @@ public class Staff {
         }
         return null;
     }
-
+    
 }
+
