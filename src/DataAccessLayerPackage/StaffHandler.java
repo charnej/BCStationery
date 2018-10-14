@@ -6,14 +6,10 @@
 package DataAccessLayerPackage;
 //T
 
-import java.awt.List;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,35 +17,61 @@ import java.util.logging.Logger;
  */
 public class StaffHandler {
 
-    private static StaffHandler instance = new StaffHandler();
-    private StaffHandler() {}
-    public static StaffHandler getInstance(){
-        return instance;
-    }
-    //get users from db
-    //hold users in resultset private to compare changes
-    private  ResultSet rsUsers;
-    public  ResultSet getUser(){
-        if (rsUsers==null) {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
-                Connection con =(Connection) DriverManager.getConnection(url,"root","");
-                Statement st = (Statement) con.createStatement();
-                String query = "SELECT * FROM tblStaff";
-                ResultSet rs = st.executeQuery(query);
-                con.close();
-                return rs;
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(StaffHandler.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(StaffHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }else return rsUsers;
-        return null;
-    }
-    //do update user
-    //do delete user
+    // Public variables
+    private static Connection con = null;
+    private static PreparedStatement pst = null;
+    private static Statement st = null;
     
+    //get Staff from db
+    public static PreparedStatement getStaff() {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            String sql = "SELECT * FROM staff "
+                    + "INNER JOIN department ON staff.Department = department.DepartmentID "
+                    + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
+                    + "WHERE Accepted = 1";
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            //
+            return pst;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+
+        return pst;
+    }
+
+    //get Pending Staff from db
+    public static PreparedStatement getPendingStaff() {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            String sql = "SELECT * FROM staff "
+                    + "INNER JOIN department ON staff.Department = department.DepartmentID "
+                    + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
+                    + "WHERE Accepted = 0";
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            //
+            return pst;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+
+        return pst;
+    }
+
+    //accept a pending staff member
+    public static void acceptPendingStaff(String name, int id) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            try {
+                st = con.createStatement();
+                st.executeUpdate("UPDATE staff SET Accepted=1 WHERE StaffID="+id);
+                JOptionPane.showMessageDialog(null, String.format("Successfully Added,\nMember: %s", name));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+
 }
