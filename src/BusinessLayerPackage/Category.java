@@ -5,6 +5,10 @@
  */
 package BusinessLayerPackage;
 //T
+
+import java.awt.List;
+import java.util.ArrayList;
+
 /**
  *
  * @author Jozehan
@@ -20,6 +24,19 @@ public class Category {
         this.description = description;
     }
 
+    public Category(int CategoryID) {
+        this.CategoryID = CategoryID;
+        //look for category with ID and add data
+    }
+    
+    public ArrayList<Category> getCategories(){
+        //get categories, populate them and send them. 
+        ArrayList<Category> dummy = new ArrayList<Category>();
+        dummy.add(new Category(1, "Cat1", "desc1"));
+        dummy.add(new Category(1, "Cat2", "desc2"));
+        dummy.add(new Category(1, "Cat3", "desc3"));
+        return dummy;
+    }
     public int getCategoryID() {
         return CategoryID;
     }

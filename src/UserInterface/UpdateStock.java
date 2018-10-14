@@ -5,6 +5,11 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Category;
+import BusinessLayerPackage.Stock;
+import java.awt.List;
+import java.util.ArrayList;
+
 /**
  *
  * @author User
@@ -16,6 +21,13 @@ public class UpdateStock extends javax.swing.JFrame {
      */
     public UpdateStock() {
         initComponents();
+        //fill dropdown with possible catagories
+            //get all catagories
+        Category objCategoryHolder = new Category();
+        for (Category cat : objCategoryHolder.getCategories()) {
+            //fill with all possible names
+            cmboCategoryUpd.addItem(cat.getName());
+        }
     }
 
     /**
@@ -54,7 +66,6 @@ public class UpdateStock extends javax.swing.JFrame {
         getContentPane().add(txtManufacturerUpd);
         txtManufacturerUpd.setBounds(140, 310, 190, 30);
 
-        cmboCategoryUpd.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmboCategoryUpd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         getContentPane().add(cmboCategoryUpd);
         cmboCategoryUpd.setBounds(130, 410, 210, 30);
@@ -142,7 +153,20 @@ public class UpdateStock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateItemActionPerformed
-       this.dispose();
+       boolean prodName = (!txtProductNameUpd.getText().equals(""));
+        boolean manName = (!txtManufacturerUpd.getText().equals(""));
+        boolean catagoryName = (!cmboCategoryUpd.getSelectedItem().equals(""));
+        boolean prodPrice = ((int)spnPriceUpd.getValue()>0);
+        boolean prodQuantity = ((int)spnQuantityUpd.getValue()>0);
+        //create object of Stock
+        Stock currentStock = new Stock();
+        if (prodName&&manName&&catagoryName&&prodPrice&&prodQuantity) {
+            //get current object working on and try to update
+            
+            //send object of stock to db for update
+        }else{
+           //show error 
+        }
     }//GEN-LAST:event_btnUpdateItemActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
