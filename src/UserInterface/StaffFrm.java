@@ -5,6 +5,11 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Staff;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
@@ -31,7 +36,7 @@ public class StaffFrm extends javax.swing.JFrame {
         btnViewAllStaff = new javax.swing.JButton();
         btnViewPendingStaff = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblStaff = new javax.swing.JTable();
         btnAcceptStaff = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
@@ -48,6 +53,11 @@ public class StaffFrm extends javax.swing.JFrame {
         btnViewAllStaff.setText("View All Staff");
         btnViewAllStaff.setBorderPainted(false);
         btnViewAllStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewAllStaff.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnViewAllStaffMouseClicked(evt);
+            }
+        });
         getContentPane().add(btnViewAllStaff);
         btnViewAllStaff.setBounds(170, 170, 190, 37);
 
@@ -56,6 +66,11 @@ public class StaffFrm extends javax.swing.JFrame {
         btnViewPendingStaff.setText("View Pending Staff");
         btnViewPendingStaff.setBorderPainted(false);
         btnViewPendingStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewPendingStaff.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnViewPendingStaffMouseClicked(evt);
+            }
+        });
         btnViewPendingStaff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewPendingStaffActionPerformed(evt);
@@ -64,18 +79,15 @@ public class StaffFrm extends javax.swing.JFrame {
         getContentPane().add(btnViewPendingStaff);
         btnViewPendingStaff.setBounds(390, 170, 240, 37);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblStaff.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Staff ID", "Username", "Password", "First Name", "Last Name", "Email", "Cell- number", "Department", "Campus Location"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblStaff);
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(164, 224, 758, 270);
@@ -85,6 +97,11 @@ public class StaffFrm extends javax.swing.JFrame {
         btnAcceptStaff.setText("Accept Staff");
         btnAcceptStaff.setBorderPainted(false);
         btnAcceptStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAcceptStaff.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAcceptStaffMouseClicked(evt);
+            }
+        });
         getContentPane().add(btnAcceptStaff);
         btnAcceptStaff.setBounds(741, 510, 180, 33);
 
@@ -171,14 +188,56 @@ public class StaffFrm extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_btnExitMouseClicked
 
+    private void btnViewAllStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllStaffMouseClicked
+        btnAcceptStaff.setVisible(false);
+
+        ArrayList<Staff> staffList = Staff.getStaff();
+        addTableData(staffList);
+    }//GEN-LAST:event_btnViewAllStaffMouseClicked
+
+    private void btnViewPendingStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewPendingStaffMouseClicked
+        btnAcceptStaff.setVisible(true);
+
+        ArrayList<Staff> staffList = Staff.getPendingStaff();
+        addTableData(staffList);
+    }//GEN-LAST:event_btnViewPendingStaffMouseClicked
+
+    private void btnAcceptStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAcceptStaffMouseClicked
+        try {
+            int id = (int) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0);
+            String name = tblStaff.getValueAt(tblStaff.getSelectedRow(), 3).toString();
+            Staff.acceptPendingStaff(name, id);
+            //
+            ArrayList<Staff> staffList = Staff.getPendingStaff();
+            addTableData(staffList);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Please select a valid Staff Request to Accept");
+        }
+    }//GEN-LAST:event_btnAcceptStaffMouseClicked
+
+    public void addTableData(ArrayList<Staff> staffList) {
+        DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
+        model.setRowCount(0);
+        Object rowData[] = new Object[9];
+        for (Staff s : staffList) {
+            rowData[0] = s.getStaffID();
+            rowData[1] = s.getUsername();
+            rowData[2] = s.getPassword();
+            rowData[3] = s.getFirstName();
+            rowData[4] = s.getLastName();
+            rowData[5] = s.getEmail();
+            rowData[6] = s.getCellphone();
+            rowData[7] = s.getDepartmentName();
+            rowData[8] = s.getCampusName();
+            model.addRow(rowData);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
-        
-        
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -207,7 +266,7 @@ public class StaffFrm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new StaffFrm().setVisible(true);
-                
+
             }
         });
     }
@@ -221,6 +280,6 @@ public class StaffFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnViewPendingStaff;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblStaff;
     // End of variables declaration//GEN-END:variables
 }
