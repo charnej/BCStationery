@@ -1,50 +1,46 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DataAccessLayerPackage;
-//T
+
+import BusinessLayerPackage.Stock;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Jozehan
- */
 public class StockHandler {
-       private static StockHandler instance = new StockHandler();
-    private StockHandler() {}
-    public static StockHandler getInstance(){
-        return instance;
-    }
+       
+    public StockHandler() {}
+    
     //get users from db
     //hold users in resultset private to compare changes
-    private  ResultSet rsStock;
-    public  ResultSet getUser(){
-        if (rsStock==null) {
+    
+    public  ArrayList<Stock> getStock(){
+            ArrayList<Stock> lsStock = new ArrayList<Stock>();
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
                 Connection con =(Connection) DriverManager.getConnection(url,"root","");
                 Statement st = (Statement) con.createStatement();
                 String query = "SELECT * FROM tblStaff";
-                rsStock = st.executeQuery(query);
+                ResultSet rs = st.executeQuery(query);
+                while (rs.next()) {                    
+//                    lsStock.add(new Stock(rs.getInt("StockID"),
+//                            rs.getString("ProductName"), 
+//                            rs.getString("Manufacturer"), 
+//                            rs.getString("Category"), 0, 0, entryDate))
+                }
                 con.close();
-                return rsStock;
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(StaffHandler.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
                 Logger.getLogger(StaffHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-        }else return rsStock;
-        return null;
+            return lsStock;
+        
     }
     //do update user
     //do delete user

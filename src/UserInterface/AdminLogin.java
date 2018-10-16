@@ -179,11 +179,11 @@ public class AdminLogin extends javax.swing.JFrame {
 //T         
         //Get all staff user objects
         Admin  objHolder = new Admin();
-        List<Admin> allAdmin =new ArrayList<>(); //objHolder.getAdmin();
-        allAdmin.add(new Admin(1, "Tyrone", "Du Plesis", "tyrone", "tyrone"));
-        allAdmin.add(new Admin(1, "Charne", "Jordaan", "charne", "charne"));
-        allAdmin.add(new Admin(1, "Jozehan", "Grobler", "jozehan", "jozehan"));
-        allAdmin.add(new Admin(1, "Admin", "Admin", "admin", "admin"));
+        ArrayList<Admin> allAdmin =objHolder.getAdmin();//new ArrayList<>(); //
+//        allAdmin.add(new Admin(1, "Tyrone", "Du Plesis", "tyrone", "tyrone"));
+//        allAdmin.add(new Admin(1, "Charne", "Jordaan", "charne", "charne"));
+//        allAdmin.add(new Admin(1, "Jozehan", "Grobler", "jozehan", "jozehan"));
+//        allAdmin.add(new Admin(1, "Admin", "Admin", "admin", "admin"));
         boolean UserFound = false;
         for (Admin adminItem : allAdmin) {
             if(adminItem.getUsername().equals(txtAdminUsername.getText())){
@@ -197,6 +197,9 @@ public class AdminLogin extends javax.swing.JFrame {
             //log in user
             // close current form
             // re route to another form
+            Menu mainMenu = new Menu();
+            mainMenu.setVisible(true);
+            this.dispose();
         }else if (logInAtempts<3)
         {
             //throw warning

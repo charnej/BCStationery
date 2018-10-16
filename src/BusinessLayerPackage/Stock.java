@@ -5,6 +5,7 @@
  */
 package BusinessLayerPackage;
 //T
+import DataAccessLayerPackage.StockHandler;
 import java.awt.List;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -33,12 +34,15 @@ public class Stock {
     private Date entryDate;
     public ArrayList<Stock> getStock(){
        //populate list with stock from db;
-       ArrayList<Stock> dummyData = new ArrayList<>();
-       dummyData.add(new Stock(1, "Prod1", "man1", (new Category(1)), 150, 200, Date.valueOf("2018-10-13")));
-       dummyData.add(new Stock(2, "Prod2", "man2", (new Category(2)), 200, 50, Date.valueOf("2018-10-13")));
-       dummyData.add(new Stock(3, "Prod3", "man3", (new Category(3)), 250, 1000, Date.valueOf("2018-10-13")));
-       dummyData.add(new Stock(4, "Prod4", "man4", (new Category(4)), 300, 15, Date.valueOf("2018-10-13")));
-      return dummyData;
+        StockHandler dbHandler = new StockHandler();
+        return  dbHandler.getStock();
+       //ArrayList<Stock> dummyData = new ArrayList<>();
+       
+//       dummyData.add(new Stock(1, "Prod1", "man1", (new Category(1)), 150, 200, Date.valueOf("2018-10-13")));
+//       dummyData.add(new Stock(2, "Prod2", "man2", (new Category(2)), 200, 50, Date.valueOf("2018-10-13")));
+//       dummyData.add(new Stock(3, "Prod3", "man3", (new Category(3)), 250, 1000, Date.valueOf("2018-10-13")));
+//       dummyData.add(new Stock(4, "Prod4", "man4", (new Category(4)), 300, 15, Date.valueOf("2018-10-13")));
+      //return dummyData;
     }
     public boolean addStock()
     {
