@@ -73,21 +73,9 @@ public class Admin {
     }
     public ArrayList<Admin> getAdmin(){
         ArrayList<Admin> allAdmin = new ArrayList<Admin>();
-        AdminHandler inst =AdminHandler.getInstance();
-        ResultSet staffUsers =inst.getUsers();
-        try {
-            while (staffUsers.next()) {
-                allAdmin.add(new Admin(staffUsers.getInt("AdminID"),
-                                        staffUsers.getString("FirstName"),
-                                        staffUsers.getString("LastName"),
-                                        staffUsers.getString("Username"),
-                                        staffUsers.getString("Password")));
-            }
-            return allAdmin;
-        } catch (SQLException ex) {
-            Logger.getLogger(Staff.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        AdminHandler inst =new AdminHandler();
+        allAdmin=inst.getUsers();
+        return allAdmin;
     }
     
 }
