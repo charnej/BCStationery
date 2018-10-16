@@ -53,11 +53,11 @@ public class StockHandler {
     public boolean insertStock(Stock stock){
         
         try {
-                Class.forName("com.mysql.jdb0c.Driver");
+                Class.forName("com.mysql.jdbc.Driver");
                 String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
                 Connection con =(Connection) DriverManager.getConnection(url,"root","");
-                String sql ="INSERT INTO `staff`( `FirstName`, `LastName`, `Email`, `Cellphone`, `Username`, `Password`, `Department`, `CampusLocation`, `Accepted`)"
-                        + " VALUES (?,?,?,?,?,?,?,?,?)";
+                String sql ="INSERT INTO `stock`( `ProductName`, `Manufacturer`, `Category`, `Price`, `Quantity`, `EntryDate`) "
+                        + " VALUES (?,?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setString(1, stock.getProductName());
                 ps.setString(2, stock.getManufacturer());
@@ -85,5 +85,42 @@ public class StockHandler {
         
     }
     //do update Stock
+    public boolean updateStock(Stock stock){
+        
+        try {
+                Class.forName("com.mysql.jdbc.Driver");
+                String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
+                Connection con =(Connection) DriverManager.getConnection(url,"root","");
+                String sql ="UPDATE `stock` "
+                        + "SET`ProductName`= ?,`Manufacturer`= ? ,"
+                        + "`Category`=?,`Price`=?,`Quantity`=?,"
+                        + "`EntryDate`=? WHERE  `StockID`=?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, stock.getProductName());
+                ps.setString(2, stock.getManufacturer());
+                ArrayList<Category> cats= new Category().getCategories();
+                int catChosen=0;
+                for (Category cat : cats) {
+                   if(cat.getName().equals(stock.getCategory())){
+                       catChosen= cat.getCategoryID();
+                   }
+                }
+                ps.setInt(3, catChosen);
+                ps.setDouble(4, stock.getPrice());
+                ps.setInt(5, stock.getQuantity());
+                ps.setDate(6, stock.getEntryDate());
+                ps.setInt(7, stock.getStockID());
+                ps.executeUpdate();
+                con.close();
+                return true;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
+    }
     //do delete Stock
 }

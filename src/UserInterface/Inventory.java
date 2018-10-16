@@ -6,8 +6,14 @@
 package UserInterface;
 
 import BusinessLayerPackage.Stock;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
 /**
@@ -21,24 +27,44 @@ public class Inventory extends javax.swing.JFrame {
      */
     public Inventory() {
         initComponents();
-        populateTable();
+        Stock objStockHolder = new Stock();
+        allStock =objStockHolder.getStock();
+        populateTable(allStock);
+        //event listener for sorting on column headers
+        JTableHeader header = tblInventory.getTableHeader();
+        //using built in function
+        tblInventory.setAutoCreateRowSorter(true);
+        //using comparator
+        //header.addMouseListener(new headerSortMouseListener(tblInventory));
+//        JTable dmodel = new JTable(tblInventory.getModel());
+//        dmodel.getTableHeader().addMouseListener(new MouseAdapter () { 
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                int colSelected = dmodel.columnAtPoint(e.getPoint());
+//                JOptionPane.showMessageDialog(null,colSelected);
+//            }
+//            
+//        });
         
     }
-    private void populateTable(){
-        Stock objStockHolder = new Stock();
-        ArrayList<Stock> allStock =objStockHolder.getStock();
+    private ArrayList<Stock> allStock;
+    private void populateTable(ArrayList<Stock> stockList){
+        
         DefaultTableModel dmodel =  (DefaultTableModel)tblInventory.getModel();
         Object[] row = new Object[5];
         //clearTable
         dmodel.setRowCount(0);
-        
-        for (Stock stc : allStock) {
-           row[0]= stc.getProductName();
-           row[1]= stc.getManufacturer();
-           row[2]= stc.getCategory();
-           row[3]= stc.getPrice();
-           row[4]= stc.getQuantity();
-           dmodel.addRow(row);
+        if(stockList.size()>0){
+            for (Stock stc : stockList) {
+               row[0]= stc.getProductName();
+               row[1]= stc.getManufacturer();
+               row[2]= stc.getCategory();
+               row[3]= stc.getPrice();
+               row[4]= stc.getQuantity();
+               dmodel.addRow(row);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "There is no Data that matches your search result","Attention",JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -140,6 +166,16 @@ public class Inventory extends javax.swing.JFrame {
             }
         });
         tblInventory.setColumnSelectionAllowed(true);
+        tblInventory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblInventoryMouseClicked(evt);
+            }
+        });
+        tblInventory.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblInventoryKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblInventory);
         tblInventory.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tblInventory.getColumnModel().getColumnCount() > 0) {
@@ -241,12 +277,48 @@ public class Inventory extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchStockActionPerformed
 
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
-        // TODO add your handling code here:
+        //Iterate and search for specific stock
+        String input =txtSearchStock.getText();
+        ArrayList<Stock> newListStock = new ArrayList<Stock>();
+        if(!input.isEmpty())
+        {
+            for (Stock stock : allStock) {
+                if((stock.getProductName().contains(input))||(stock.getCategory().contains(input))){
+                    newListStock.add(stock);
+                }
+            }
+            populateTable(newListStock);
+        }else{
+            JOptionPane.showMessageDialog(null, "Please enter a keyword for the search","Attention",JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnSearchStockActionPerformed
 
     private void btnViewAllStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllStockActionPerformed
-        populateTable();
+        populateTable(allStock);
     }//GEN-LAST:event_btnViewAllStockActionPerformed
+
+    private void tblInventoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInventoryMouseClicked
+        //Get selected value
+        //Send object to update form.
+        DefaultTableModel dmodel =  (DefaultTableModel)tblInventory.getModel();
+        Stock curStock = new Stock();
+        String CurrentPName= ((String) tblInventory.getValueAt(tblInventory.getSelectedRow(),0));
+        int selection =JOptionPane.showConfirmDialog(null, "Do you want to update "+CurrentPName
+                , "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if(selection==JOptionPane.YES_OPTION){
+            for (Stock stock : allStock) {
+                if(stock.getProductName().equals(CurrentPName))curStock=stock;
+            }
+            //new update page object
+            UpdateStock newUpdateStock = new UpdateStock(curStock);
+            newUpdateStock.setVisible(true);;
+            this.dispose();
+        }
+    }//GEN-LAST:event_tblInventoryMouseClicked
+
+    private void tblInventoryKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblInventoryKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblInventoryKeyPressed
 
     /**
      * @param args the command line arguments

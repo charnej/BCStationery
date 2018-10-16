@@ -163,25 +163,32 @@ public class AddStock extends javax.swing.JFrame {
         String prodName =      (txtProductNameAdd.getText());
         String manName =       (txtManufacturerAdd.getText());
         String catagoryName =  (cmboCategoryAdd.getSelectedItem().toString());
-        Double prodPrice =     ((double)spnPriceAdd.getValue());
+        Double prodPrice =     (Double.parseDouble((Integer.toString((int) spnPriceAdd.getValue()))));
         int prodQuantity =  ((int)spnQtyAdd.getValue());
         ArrayList<String> errors = new ArrayList<>();
-        boolean bprodName =      (!txtProductNameAdd.getText().equals(""));
+        boolean bprodName =      (txtProductNameAdd.getText().isEmpty());
         if(bprodName)errors.add("You cant have the name field empty");
-        boolean bmanName =       (!txtManufacturerAdd.getText().equals(""));
+        boolean bmanName =       (txtManufacturerAdd.getText().equals(""));
         if(bmanName)errors.add("You cant have the Manufacturer field empty");
-        boolean bcatagoryName =  (!cmboCategoryAdd.getSelectedItem().equals(""));
+        boolean bcatagoryName =  (cmboCategoryAdd.getSelectedItem().equals(""));
         if(bcatagoryName)errors.add("You cant have the Category Selection empty");
-        boolean bprodPrice =     ((int)spnPriceAdd.getValue()>0);
+        boolean bprodPrice =     !((int)spnPriceAdd.getValue()>0);
         if(bprodPrice)errors.add("You cant have the Price field empty");
-        boolean bprodQuantity =  ((int)spnQtyAdd.getValue()>0);
+        boolean bprodQuantity =  !((int)spnQtyAdd.getValue()>0);
         if(bprodQuantity)errors.add("You cant have the Quantity field empty");
-        if (bprodName&&bmanName&&bcatagoryName&&bprodPrice&&bprodQuantity) {
+        if (!bprodName&&!bmanName&&!bcatagoryName&&!bprodPrice&&!bprodQuantity) {
             //create object of Stock
-            Stock stock = new Stock(0, prodName, manName, catagoryName, 0, prodQuantity, Date.valueOf(LocalDate.now()));
-            stock.addStock();
+            Stock stock = new Stock(0, prodName, manName, catagoryName, prodPrice, prodQuantity, Date.valueOf(LocalDate.now()));
+            boolean workDone =stock.addStock(stock);
+            if (workDone) {
+                JOptionPane.showMessageDialog(null, "StockAdded to inventory");
+            }else{
+                JOptionPane.showMessageDialog(null, "Something went wrong please contact you administrator");
+            }
+            
             //send object of stock to db
         }else{
+            JOptionPane.showMessageDialog(null, errors.get(0), "Please Note", JOptionPane.WARNING_MESSAGE);
            //show error 
            //just keep showing the first error in the ArrayList
            

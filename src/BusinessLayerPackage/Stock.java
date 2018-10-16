@@ -38,28 +38,22 @@ public class Stock {
         return  dbHandler.getStock();
        
     }
-    public boolean addStock()
+    public boolean addStock(Stock stock)
     {
+        StockHandler dbHandler = new StockHandler();
         //new stock to db
         //get instance of dbHandler
         //insert new record
+        return dbHandler.insertStock(stock);
         
-        if (true) {
-           return true; 
-        }else{
-            return false;
-        }
     }
-    public boolean updateStock()
+    public boolean updateStock(Stock stock)
     {
+        StockHandler dbHandler = new StockHandler();
         //alter stock to db
         //get instance of dbHandler
         //update record
-        if (true) {
-           return true; 
-        }else{
-           return false;
-        }
+        return dbHandler.updateStock(stock);
     }
     public String getProductName() {
         return productName;
