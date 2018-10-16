@@ -6,6 +6,7 @@
 package BusinessLayerPackage;
 //T
 
+import DataAccessLayerPackage.catagoryHandler;
 import java.awt.List;
 import java.util.ArrayList;
 
@@ -16,12 +17,10 @@ import java.util.ArrayList;
 public class Category {
     private final int CategoryID;
     private String name;
-    private String description;
 
-    public Category(int CategoryID, String name, String description) {
+    public Category(int CategoryID, String name) {
         this.CategoryID = CategoryID;
         this.name = name;
-        this.description = description;
     }
 
     public Category(int CategoryID) {
@@ -31,11 +30,8 @@ public class Category {
     
     public ArrayList<Category> getCategories(){
         //get categories, populate them and send them. 
-        ArrayList<Category> dummy = new ArrayList<Category>();
-        dummy.add(new Category(1, "Cat1", "desc1"));
-        dummy.add(new Category(1, "Cat2", "desc2"));
-        dummy.add(new Category(1, "Cat3", "desc3"));
-        return dummy;
+        catagoryHandler dbHandler = new catagoryHandler();
+        return dbHandler.getCatagories();
     }
     public int getCategoryID() {
         return CategoryID;
@@ -53,12 +49,5 @@ public class Category {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
     
 }

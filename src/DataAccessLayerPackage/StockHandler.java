@@ -1,8 +1,10 @@
 package DataAccessLayerPackage;
 
+import BusinessLayerPackage.Category;
 import BusinessLayerPackage.Stock;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,14 +26,19 @@ public class StockHandler {
                 String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
                 Connection con =(Connection) DriverManager.getConnection(url,"root","");
                 Statement st = (Statement) con.createStatement();
-                String query = "SELECT * FROM tblStaff";
+                String query = 
+"SELECT StockID,ProductName,Manufacturer,category.Name,Price,Quantity,EntryDate FROM Stock INNER JOIN category ON category.CategoryID = Stock.Category ";//WHERE StockID=1
                 ResultSet rs = st.executeQuery(query);
                 while (rs.next()) {                    
-//                    lsStock.add(new Stock(rs.getInt("StockID"),
-//                            rs.getString("ProductName"), 
-//                            rs.getString("Manufacturer"), 
-//                            rs.getString("Category"), 0, 0, entryDate))
+                    lsStock.add(new Stock(rs.getInt("StockID"),
+                            rs.getString("ProductName"), 
+                            rs.getString("Manufacturer"), 
+                            rs.getString("Name"),
+                            rs.getDouble("Price"),
+                            rs.getInt("Quantity"),
+                            rs.getDate("EntryDate")));
                 }
+                
                 con.close();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(StaffHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -42,6 +49,41 @@ public class StockHandler {
             return lsStock;
         
     }
-    //do update user
-    //do delete user
+    //do insert Stock
+    public boolean insertStock(Stock stock){
+        
+        try {
+                Class.forName("com.mysql.jdb0c.Driver");
+                String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
+                Connection con =(Connection) DriverManager.getConnection(url,"root","");
+                String sql ="INSERT INTO `staff`( `FirstName`, `LastName`, `Email`, `Cellphone`, `Username`, `Password`, `Department`, `CampusLocation`, `Accepted`)"
+                        + " VALUES (?,?,?,?,?,?,?,?,?)";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, stock.getProductName());
+                ps.setString(2, stock.getManufacturer());
+                ArrayList<Category> cats= new Category().getCategories();
+                int catChosen=0;
+                for (Category cat : cats) {
+                   if(cat.getName().equals(stock.getCategory())){
+                       catChosen= cat.getCategoryID();
+                   }
+                }
+                ps.setInt(3, catChosen);
+                ps.setDouble(4, stock.getPrice());
+                ps.setInt(5, stock.getQuantity());
+                ps.setDate(6, stock.getEntryDate());
+                ps.executeUpdate();
+                con.close();
+                return true;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
+    }
+    //do update Stock
+    //do delete Stock
 }

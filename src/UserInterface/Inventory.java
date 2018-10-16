@@ -21,23 +21,25 @@ public class Inventory extends javax.swing.JFrame {
      */
     public Inventory() {
         initComponents();
+        populateTable();
+        
+    }
+    private void populateTable(){
         Stock objStockHolder = new Stock();
         ArrayList<Stock> allStock =objStockHolder.getStock();
         DefaultTableModel dmodel =  (DefaultTableModel)tblInventory.getModel();
         Object[] row = new Object[5];
-        for (int i = 0; i < dmodel.getRowCount(); i++) {
-           dmodel.removeRow(i); 
-        }
+        //clearTable
+        dmodel.setRowCount(0);
+        
         for (Stock stc : allStock) {
            row[0]= stc.getProductName();
            row[1]= stc.getManufacturer();
-           row[2]= stc.getCategory().getName();
+           row[2]= stc.getCategory();
            row[3]= stc.getPrice();
            row[4]= stc.getQuantity();
-           dmodel.addRow(row); 
-            
+           dmodel.addRow(row);
         }
-        
     }
 
     /**
@@ -71,6 +73,11 @@ public class Inventory extends javax.swing.JFrame {
         btnViewAllStock.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(254, 212, 29), 1, true));
         btnViewAllStock.setBorderPainted(false);
         btnViewAllStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewAllStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllStockActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnViewAllStock);
         btnViewAllStock.setBounds(130, 160, 109, 31);
 
@@ -101,6 +108,11 @@ public class Inventory extends javax.swing.JFrame {
         btnSearchStock.setBorderPainted(false);
         btnSearchStock.setContentAreaFilled(false);
         btnSearchStock.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSearchStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchStockActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnSearchStock);
         btnSearchStock.setBounds(880, 140, 46, 49);
 
@@ -127,7 +139,9 @@ public class Inventory extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblInventory.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(tblInventory);
+        tblInventory.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tblInventory.getColumnModel().getColumnCount() > 0) {
             tblInventory.getColumnModel().getColumn(0).setResizable(false);
             tblInventory.getColumnModel().getColumn(1).setResizable(false);
@@ -225,6 +239,14 @@ public class Inventory extends javax.swing.JFrame {
     private void txtSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchStockActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchStockActionPerformed
+
+    private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSearchStockActionPerformed
+
+    private void btnViewAllStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllStockActionPerformed
+        populateTable();
+    }//GEN-LAST:event_btnViewAllStockActionPerformed
 
     /**
      * @param args the command line arguments

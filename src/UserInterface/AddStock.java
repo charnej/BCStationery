@@ -6,6 +6,11 @@
 package UserInterface;
 
 import BusinessLayerPackage.Category;
+import BusinessLayerPackage.Stock;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -80,6 +85,7 @@ public class AddStock extends javax.swing.JFrame {
         spnQtyAdd.setBounds(500, 310, 130, 30);
 
         spnPriceAdd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        spnPriceAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(spnPriceAdd);
         spnPriceAdd.setBounds(500, 220, 130, 30);
 
@@ -154,16 +160,31 @@ public class AddStock extends javax.swing.JFrame {
 
     private void btnItemAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItemAddActionPerformed
         //check all fields are entered && of the right type
-        boolean prodName = (!txtProductNameAdd.getText().equals(""));
-        boolean manName = (!txtManufacturerAdd.getText().equals(""));
-        boolean catagoryName = (!cmboCategoryAdd.getSelectedItem().equals(""));
-        boolean prodPrice = ((int)spnPriceAdd.getValue()>0);
-        boolean prodQuantity = ((int)spnQtyAdd.getValue()>0);
-        if (prodName&&manName&&catagoryName&&prodPrice&&prodQuantity) {
+        String prodName =      (txtProductNameAdd.getText());
+        String manName =       (txtManufacturerAdd.getText());
+        String catagoryName =  (cmboCategoryAdd.getSelectedItem().toString());
+        Double prodPrice =     ((double)spnPriceAdd.getValue());
+        int prodQuantity =  ((int)spnQtyAdd.getValue());
+        ArrayList<String> errors = new ArrayList<>();
+        boolean bprodName =      (!txtProductNameAdd.getText().equals(""));
+        if(bprodName)errors.add("You cant have the name field empty");
+        boolean bmanName =       (!txtManufacturerAdd.getText().equals(""));
+        if(bmanName)errors.add("You cant have the Manufacturer field empty");
+        boolean bcatagoryName =  (!cmboCategoryAdd.getSelectedItem().equals(""));
+        if(bcatagoryName)errors.add("You cant have the Category Selection empty");
+        boolean bprodPrice =     ((int)spnPriceAdd.getValue()>0);
+        if(bprodPrice)errors.add("You cant have the Price field empty");
+        boolean bprodQuantity =  ((int)spnQtyAdd.getValue()>0);
+        if(bprodQuantity)errors.add("You cant have the Quantity field empty");
+        if (bprodName&&bmanName&&bcatagoryName&&bprodPrice&&bprodQuantity) {
             //create object of Stock
+            Stock stock = new Stock(0, prodName, manName, catagoryName, 0, prodQuantity, Date.valueOf(LocalDate.now()));
+            stock.addStock();
             //send object of stock to db
         }else{
            //show error 
+           //just keep showing the first error in the ArrayList
+           
         }
         
     }//GEN-LAST:event_btnItemAddActionPerformed
