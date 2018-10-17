@@ -219,7 +219,7 @@ public class StaffLogin extends javax.swing.JFrame {
             this.dispose();
         } else {
             //throw warning
-            JOptionPane.showMessageDialog(null, "\nWrong credentials\n", "Please Note", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Wrong credentials", "Please Note", JOptionPane.WARNING_MESSAGE);
             //increase log in attempts
             logInAtempts++;
         }
