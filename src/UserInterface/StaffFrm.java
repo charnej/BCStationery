@@ -225,7 +225,7 @@ public class StaffFrm extends javax.swing.JFrame {
         for (Staff s : staffList) {
             rowData[0] = s.getStaffID();
             rowData[1] = s.getUsername();
-            rowData[2] = s.getPassword();
+            rowData[2] = s.getPasswordEncrypt();
             rowData[3] = s.getFirstName();
             rowData[4] = s.getLastName();
             rowData[5] = s.getEmail();

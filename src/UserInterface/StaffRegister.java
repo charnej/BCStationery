@@ -5,6 +5,9 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Staff;
+import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +21,18 @@ public class StaffRegister extends javax.swing.JFrame {
      */
     public StaffRegister() {
         initComponents();
+        //
+        Staff staffObj = new Staff();
+        //
+        ArrayList<String> campusList = staffObj.getCampusData();
+        for (String c : campusList) {
+            cmboCampusLocation1.addItem(c);
+        }
+        //
+        ArrayList<String> departmentList = staffObj.getDepartmentData();
+        for (String c : departmentList) {
+            cmboDepartment.addItem(c);
+        }
     }
 
     /**
@@ -63,7 +78,7 @@ public class StaffRegister extends javax.swing.JFrame {
         txtLastName.setBorder(null);
         txtLastName.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         getContentPane().add(txtLastName);
-        txtLastName.setBounds(110, 250, 200, 20);
+        txtLastName.setBounds(110, 247, 200, 20);
 
         txtEmail.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
         txtEmail.setToolTipText("Enter Email");
@@ -77,19 +92,19 @@ public class StaffRegister extends javax.swing.JFrame {
         txtCell.setBorder(null);
         txtCell.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         getContentPane().add(txtCell);
-        txtCell.setBounds(110, 390, 200, 20);
+        txtCell.setBounds(110, 393, 200, 20);
 
         txtStaffUsername.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
         txtStaffUsername.setToolTipText("Enter Username");
         txtStaffUsername.setBorder(null);
         txtStaffUsername.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         getContentPane().add(txtStaffUsername);
-        txtStaffUsername.setBounds(520, 250, 190, 20);
+        txtStaffUsername.setBounds(520, 247, 200, 20);
 
         txtStaffPassword.setToolTipText("Enter Password");
         txtStaffPassword.setBorder(null);
         getContentPane().add(txtStaffPassword);
-        txtStaffPassword.setBounds(520, 320, 190, 20);
+        txtStaffPassword.setBounds(520, 320, 200, 20);
 
         btnBack.setBackground(new java.awt.Color(226, 61, 57));
         btnBack.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -113,6 +128,16 @@ public class StaffRegister extends javax.swing.JFrame {
         btnRegister.setBorder(null);
         btnRegister.setBorderPainted(false);
         btnRegister.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegisterMouseClicked(evt);
+            }
+        });
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnRegister);
         btnRegister.setBounds(520, 400, 180, 40);
 
@@ -148,14 +173,14 @@ public class StaffRegister extends javax.swing.JFrame {
         btnExit.setBounds(760, 10, 30, 30);
 
         cmboDepartment.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
-        cmboDepartment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmboDepartment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Department" }));
         cmboDepartment.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         cmboDepartment.setOpaque(false);
         getContentPane().add(cmboDepartment);
         cmboDepartment.setBounds(510, 170, 210, 30);
 
         cmboCampusLocation1.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
-        cmboCampusLocation1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmboCampusLocation1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Campus" }));
         cmboCampusLocation1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         getContentPane().add(cmboCampusLocation1);
         cmboCampusLocation1.setBounds(100, 470, 210, 30);
@@ -176,12 +201,165 @@ public class StaffRegister extends javax.swing.JFrame {
         this.setState(this.ICONIFIED);
     }//GEN-LAST:event_btnMinimizeMouseClicked
 
-    private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+    private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {                                     
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
-    }//GEN-LAST:event_btnExitMouseClicked
+    }                                    
+
+    public Staff staffObj;
+    public boolean isValid;
+
+    private void btnRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegisterMouseClicked
+        staffObj = new Staff();
+        isValid = true;
+        //
+        validateFirstName();
+        validateLastName();
+        validateEmail();
+        validateCell();
+        validateUsername();
+        validatePassword();
+        validateDepartment();
+        validateCampus();
+        //
+        if (isValid) {
+            Staff.insertStaff(staffObj);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Please Fix the fields highlighted in red and register again");
+        }
+    }//GEN-LAST:event_btnRegisterMouseClicked
+
+    public void validateFirstName() {
+        staffObj.setFirstName(txtFirstName.getText());
+        if (staffObj.getFirstName() == "error") {
+            txtFirstName.setBackground(Color.red);
+            txtFirstName.setForeground(Color.white);
+            txtFirstName.setToolTipText("Between 1 - 50 characters, No digits or special characters");
+            isValid = false;
+        } else {
+            txtFirstName.setBackground(Color.white);
+            txtFirstName.setForeground(Color.black);
+            txtFirstName.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateLastName() {
+        staffObj.setLastName(txtLastName.getText());
+        if (staffObj.getLastName() == "error") {
+            txtLastName.setBackground(Color.red);
+            txtLastName.setForeground(Color.white);
+            txtLastName.setToolTipText("Between 1 - 50 characters, No digits or special characters");
+            isValid = false;
+        } else {
+            txtLastName.setBackground(Color.white);
+            txtLastName.setForeground(Color.black);
+            txtLastName.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateEmail() {
+        staffObj.setEmail(txtEmail.getText());
+        if (staffObj.getEmail() == "error") {
+            txtEmail.setBackground(Color.red);
+            txtEmail.setForeground(Color.white);
+            txtEmail.setToolTipText("Between 5 - 50 characters, must contain @ and . sign");
+            isValid = false;
+        } else {
+            txtEmail.setBackground(Color.white);
+            txtEmail.setForeground(Color.black);
+            txtEmail.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateCell() {
+        staffObj.setCellphone(txtCell.getText());
+        if (staffObj.getCellphone() == "error") {
+            txtCell.setBackground(Color.red);
+            txtCell.setForeground(Color.white);
+            txtCell.setToolTipText("only 10 digits, starting with a 0");
+            isValid = false;
+        } else {
+            txtCell.setBackground(Color.white);
+            txtCell.setForeground(Color.black);
+            txtCell.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateUsername() {
+        staffObj.setUsername(txtStaffUsername.getText());
+        if (staffObj.getUsername() == "error") {
+            txtStaffUsername.setBackground(Color.red);
+            txtStaffUsername.setForeground(Color.white);
+            txtStaffUsername.setToolTipText("Between 5 - 50 characters");
+            isValid = false;
+        } else if (!Staff.isUniqueUsername(txtStaffUsername.getText())) {
+            txtStaffUsername.setBackground(Color.red);
+            txtStaffUsername.setForeground(Color.white);
+            txtStaffUsername.setToolTipText("Username already exists");
+            isValid = false;
+        } else {
+            txtStaffUsername.setBackground(Color.white);
+            txtStaffUsername.setForeground(Color.black);
+            txtStaffUsername.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validatePassword() {
+        staffObj.setPassword(txtStaffPassword.getText());
+        if (staffObj.getPassword() == "error") {
+            txtStaffPassword.setBackground(Color.red);
+            txtStaffPassword.setForeground(Color.white);
+            txtStaffPassword.setToolTipText("Length between 5 and 50 characters");
+            isValid = false;
+        } else {
+            txtStaffPassword.setBackground(Color.white);
+            txtStaffPassword.setForeground(Color.black);
+            txtStaffPassword.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateDepartment() {
+        staffObj.setDepartment(cmboDepartment.getSelectedIndex());
+        if (cmboDepartment.getSelectedIndex() == 0) {
+            cmboDepartment.setBackground(Color.red);
+            cmboDepartment.setForeground(Color.white);
+            cmboDepartment.setToolTipText("Select a department");
+            isValid = false;
+        } else {
+            cmboDepartment.setBackground(Color.white);
+            cmboDepartment.setForeground(Color.black);
+            cmboDepartment.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateCampus() {
+        staffObj.setCampusLocation(cmboCampusLocation1.getSelectedIndex());
+        if (cmboCampusLocation1.getSelectedIndex() == 0) {
+            cmboCampusLocation1.setBackground(Color.red);
+            cmboCampusLocation1.setForeground(Color.white);
+            cmboCampusLocation1.setToolTipText("Select a location");
+            isValid = false;
+        } else {
+            cmboCampusLocation1.setBackground(Color.white);
+            cmboCampusLocation1.setForeground(Color.black);
+            cmboCampusLocation1.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**
      * @param args the command line arguments
