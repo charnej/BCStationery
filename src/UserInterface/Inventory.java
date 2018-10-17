@@ -252,6 +252,7 @@ public class Inventory extends javax.swing.JFrame {
     private void btnAddStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStockActionPerformed
         AddStock addStock = new AddStock();
         addStock.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnAddStockActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
