@@ -194,14 +194,14 @@ public class StaffFrm extends javax.swing.JFrame {
     private void btnViewAllStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllStaffMouseClicked
         btnAcceptStaff.setVisible(false);
 
-        ArrayList<Staff> staffList = Staff.getStaff();
+        ArrayList<Staff> staffList = Staff.getStaff("Accepted");
         addTableData(staffList);
     }//GEN-LAST:event_btnViewAllStaffMouseClicked
 
     private void btnViewPendingStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewPendingStaffMouseClicked
         btnAcceptStaff.setVisible(true);
 
-        ArrayList<Staff> staffList = Staff.getPendingStaff();
+        ArrayList<Staff> staffList = Staff.getStaff("Pending");
         addTableData(staffList);
     }//GEN-LAST:event_btnViewPendingStaffMouseClicked
 
@@ -211,7 +211,7 @@ public class StaffFrm extends javax.swing.JFrame {
             String name = tblStaff.getValueAt(tblStaff.getSelectedRow(), 3).toString();
             Staff.acceptPendingStaff(name, id);
             //
-            ArrayList<Staff> staffList = Staff.getPendingStaff();
+            ArrayList<Staff> staffList = Staff.getStaff("Pending");
             addTableData(staffList);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Please select a valid Staff Request to Accept");

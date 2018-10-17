@@ -280,11 +280,11 @@ public class Staff implements CampusLocation, Department {
     private static ResultSet rs = null;
 
     // Static as this functionality is not bound to each object, but to the class
-    // Get all the Staff members data ..
-    public static ArrayList<Staff> getStaff() {
+    // Get all the required Staff members data ..
+    public static ArrayList<Staff> getStaff(String staffType) {
         ArrayList<Staff> allStaff = new ArrayList<Staff>();
         try {
-            pst = StaffHandler.getStaff();
+            pst = StaffHandler.getStaff(staffType);
             rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {
                 allStaff.add(new Staff(rs.getInt("StaffID"),
@@ -306,7 +306,7 @@ public class Staff implements CampusLocation, Department {
     }
 
     public static boolean isUniqueUsername(String usernameInput) {
-        ArrayList<Staff> allStaff = getStaff();
+        ArrayList<Staff> allStaff = getStaff("All");
         //
         boolean isUnique = true;
         //
@@ -317,31 +317,6 @@ public class Staff implements CampusLocation, Department {
         }
         //
         return isUnique;
-    }
-
-    // Get all the Pending Staff member data ..
-    public static ArrayList<Staff> getPendingStaff() {
-        ArrayList<Staff> pendingStaff = new ArrayList<Staff>();
-        try {
-            pst = StaffHandler.getPendingStaff();
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                pendingStaff.add(new Staff(rs.getInt("StaffID"),
-                        rs.getString("FirstName"),
-                        rs.getString("LastName"),
-                        rs.getString("Email"),
-                        rs.getString("Cellphone"),
-                        rs.getString("Username"),
-                        rs.getString("Password"),
-                        rs.getString("DepartmentName"),
-                        rs.getString("CampusName"),
-                        rs.getInt("Accepted")));
-            }
-            return pendingStaff;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
     }
 
     //accept a pending staff member

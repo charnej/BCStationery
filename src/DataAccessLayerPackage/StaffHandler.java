@@ -24,31 +24,26 @@ public class StaffHandler {
     private static Statement st = null;
 
     //get Staff from db
-    public static PreparedStatement getStaff() {
+    public static PreparedStatement getStaff(String staffType) {
         try {
             con = JavaConnectDB.ConnectDB();
-            String sql = "SELECT * FROM staff "
-                    + "INNER JOIN department ON staff.Department = department.DepartmentID "
-                    + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
-                    + "WHERE Accepted = 1";
-            pst = (PreparedStatement) con.prepareStatement(sql);
+            String sql = "";
+            if (staffType == "All") {
+                sql = "SELECT * FROM staff "
+                        + "INNER JOIN department ON staff.Department = department.DepartmentID "
+                        + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID ";
+            } else if (staffType == "Accepted") {
+                sql = "SELECT * FROM staff "
+                        + "INNER JOIN department ON staff.Department = department.DepartmentID "
+                        + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
+                        + "WHERE Accepted = 1";
+            } else if (staffType == "Pending") {
+                sql = "SELECT * FROM staff "
+                        + "INNER JOIN department ON staff.Department = department.DepartmentID "
+                        + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
+                        + "WHERE Accepted = 0";
+            }
             //
-            return pst;
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-
-        return pst;
-    }
-
-    //get Pending Staff from db
-    public static PreparedStatement getPendingStaff() {
-        try {
-            con = JavaConnectDB.ConnectDB();
-            String sql = "SELECT * FROM staff "
-                    + "INNER JOIN department ON staff.Department = department.DepartmentID "
-                    + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
-                    + "WHERE Accepted = 0";
             pst = (PreparedStatement) con.prepareStatement(sql);
             //
             return pst;
