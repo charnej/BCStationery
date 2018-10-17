@@ -282,10 +282,11 @@ public class Inventory extends javax.swing.JFrame {
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
         //Iterate and search for specific stock
         String input =txtSearchStock.getText();
-        String inputCapital = input.substring(0, 1).toUpperCase()+input.substring(1).toLowerCase();
+        
         ArrayList<Stock> newListStock = new ArrayList<Stock>();
         if(!input.isEmpty())
         {
+            String inputCapital = input.substring(0, 1).toUpperCase()+input.substring(1).toLowerCase();
             for (Stock stock : allStock) {
                 if((stock.getProductName().contains(inputCapital))||(stock.getCategory().contains(inputCapital))){
                     newListStock.add(stock);
