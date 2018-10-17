@@ -8,6 +8,7 @@ package DataAccessLayerPackage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
@@ -21,7 +22,7 @@ public class StaffHandler {
     private static Connection con = null;
     private static PreparedStatement pst = null;
     private static Statement st = null;
-    
+
     //get Staff from db
     public static PreparedStatement getStaff() {
         try {
@@ -64,13 +65,29 @@ public class StaffHandler {
             con = JavaConnectDB.ConnectDB();
             try {
                 st = con.createStatement();
-                st.executeUpdate("UPDATE staff SET Accepted=1 WHERE StaffID="+id);
+                st.executeUpdate("UPDATE staff SET Accepted=1 WHERE StaffID=" + id);
                 JOptionPane.showMessageDialog(null, String.format("Successfully Added,\nMember: %s", name));
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+
+    // Insert Statement
+    public static void insertStaff(String FirstName, String LastName, String Email, String Cellphone, String Username, String Password, int DepartmentName, int CampusName) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            //
+            st = con.createStatement();
+            st.executeUpdate("insert into staff "
+                    + "(FirstName, LastName, Email, Cellphone, Username, Password, Department, CampusLocation, Accepted) "
+                    + "values ('" + FirstName + "', '" + LastName + "', '" + Email + "', '" + Cellphone + "', '" + Username + "', '" + Password + "', " + DepartmentName + ", " + CampusName + ", 0)");
+            //
+            JOptionPane.showMessageDialog(null, "Member Request sent,\nUsername: " + Username);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
     }
 
