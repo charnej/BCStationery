@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class Stock {
 
-    public Stock(int stockID, String productName, String manufacturer, Category category, double price, int Quantity, Date entryDate) {
+    public Stock(int stockID, String productName, String manufacturer, String category, double price, int Quantity, Date entryDate) {
         this.stockID = stockID;
         this.productName = productName;
         this.manufacturer = manufacturer;
@@ -28,7 +28,7 @@ public class Stock {
     private final int stockID;
     private String productName;
     private String manufacturer;
-    private Category category;
+    private String category;
     private double price;
     private int Quantity;
     private Date entryDate;
@@ -36,35 +36,24 @@ public class Stock {
        //populate list with stock from db;
         StockHandler dbHandler = new StockHandler();
         return  dbHandler.getStock();
-       //ArrayList<Stock> dummyData = new ArrayList<>();
        
-//       dummyData.add(new Stock(1, "Prod1", "man1", (new Category(1)), 150, 200, Date.valueOf("2018-10-13")));
-//       dummyData.add(new Stock(2, "Prod2", "man2", (new Category(2)), 200, 50, Date.valueOf("2018-10-13")));
-//       dummyData.add(new Stock(3, "Prod3", "man3", (new Category(3)), 250, 1000, Date.valueOf("2018-10-13")));
-//       dummyData.add(new Stock(4, "Prod4", "man4", (new Category(4)), 300, 15, Date.valueOf("2018-10-13")));
-      //return dummyData;
     }
-    public boolean addStock()
+    public boolean addStock(Stock stock)
     {
+        StockHandler dbHandler = new StockHandler();
         //new stock to db
         //get instance of dbHandler
         //insert new record
-        if (true) {
-           return true; 
-        }else{
-            return false;
-        }
+        return dbHandler.insertStock(stock);
+        
     }
-    public boolean updateStock()
+    public boolean updateStock(Stock stock)
     {
+        StockHandler dbHandler = new StockHandler();
         //alter stock to db
         //get instance of dbHandler
         //update record
-        if (true) {
-           return true; 
-        }else{
-           return false;
-        }
+        return dbHandler.updateStock(stock);
     }
     public String getProductName() {
         return productName;
@@ -82,11 +71,11 @@ public class Stock {
         this.manufacturer = manufacturer;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 

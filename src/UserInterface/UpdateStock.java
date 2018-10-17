@@ -8,7 +8,10 @@ package UserInterface;
 import BusinessLayerPackage.Category;
 import BusinessLayerPackage.Stock;
 import java.awt.List;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,8 +22,10 @@ public class UpdateStock extends javax.swing.JFrame {
     /**
      * Creates new form UpdateStock
      */
-    public UpdateStock() {
+    private Stock currStock;
+    public UpdateStock(Stock stock) {
         initComponents();
+        currStock=stock;
         //fill dropdown with possible catagories
             //get all catagories
         Category objCategoryHolder = new Category();
@@ -28,6 +33,16 @@ public class UpdateStock extends javax.swing.JFrame {
             //fill with all possible names
             cmboCategoryUpd.addItem(cat.getName());
         }
+        //fill fields with current stock values
+        txtProductNameUpd.setText(currStock.getProductName());
+        txtManufacturerUpd.setText(currStock.getManufacturer());
+        cmboCategoryUpd.setSelectedItem(currStock.getCategory());
+        spnPriceUpd.setValue(currStock.getPrice());
+        spnQuantityUpd.setValue(currStock.getQuantity());
+    }
+
+    private UpdateStock() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -153,19 +168,40 @@ public class UpdateStock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateItemActionPerformed
-       boolean prodName = (!txtProductNameUpd.getText().equals(""));
-        boolean manName = (!txtManufacturerUpd.getText().equals(""));
-        boolean catagoryName = (!cmboCategoryUpd.getSelectedItem().equals(""));
-        boolean prodPrice = ((int)spnPriceUpd.getValue()>0);
-        boolean prodQuantity = ((int)spnQuantityUpd.getValue()>0);
-        //create object of Stock
-        Stock currentStock = new Stock();
-        if (prodName&&manName&&catagoryName&&prodPrice&&prodQuantity) {
-            //get current object working on and try to update
+       String prodName =      (txtProductNameUpd.getText());
+        String manName =       (txtManufacturerUpd.getText());
+        String catagoryName =  (cmboCategoryUpd.getSelectedItem().toString());
+        Double prodPrice =     (Double.parseDouble((Integer.toString((int) spnPriceUpd.getValue()))));
+        int prodQuantity =  ((int)spnQuantityUpd.getValue());
+        ArrayList<String> errors = new ArrayList<>();
+        boolean bprodName =      (txtProductNameUpd.getText().isEmpty());
+        if(bprodName)errors.add("You cant have the name field empty");
+        boolean bmanName =       (txtManufacturerUpd.getText().equals(""));
+        if(bmanName)errors.add("You cant have the Manufacturer field empty");
+        boolean bcatagoryName =  (cmboCategoryUpd.getSelectedItem().equals(""));
+        if(bcatagoryName)errors.add("You cant have the Category Selection empty");
+        boolean bprodPrice =     !((int)spnPriceUpd.getValue()>0);
+        if(bprodPrice)errors.add("You cant have the Price field empty");
+        boolean bprodQuantity =  !((int)spnQuantityUpd.getValue()>0);
+        if(bprodQuantity)errors.add("You cant have the Quantity field empty");
+        if (!bprodName&&!bmanName&&!bcatagoryName&&!bprodPrice&&!bprodQuantity) {
+            //create object of Stock
+            //get id sent to form
             
-            //send object of stock to db for update
+            Stock stock = new Stock(currStock.getStockID(), prodName, manName, catagoryName, prodPrice, prodQuantity, Date.valueOf(LocalDate.now()));
+            boolean workDone =stock.updateStock(stock);
+            if (workDone) {
+                JOptionPane.showMessageDialog(null, "Stock Updated in inventory");
+            }else{
+                JOptionPane.showMessageDialog(null, "Something went wrong please contact you administrator");
+            }
+            
+            //send object of stock to db
         }else{
+            JOptionPane.showMessageDialog(null, errors.get(0), "Please Note", JOptionPane.WARNING_MESSAGE);
            //show error 
+           //just keep showing the first error in the ArrayList
+           
         }
     }//GEN-LAST:event_btnUpdateItemActionPerformed
 
@@ -178,6 +214,8 @@ public class UpdateStock extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMinimizeMouseClicked
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        Inventory menu = new Inventory();
+        menu.setVisible(true);;
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
