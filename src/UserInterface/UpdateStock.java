@@ -37,7 +37,7 @@ public class UpdateStock extends javax.swing.JFrame {
         txtProductNameUpd.setText(currStock.getProductName());
         txtManufacturerUpd.setText(currStock.getManufacturer());
         cmboCategoryUpd.setSelectedItem(currStock.getCategory());
-        spnPriceUpd.setValue(currStock.getPrice());
+        txtPriceUpd.setText(Double.toString(currStock.getPrice()));
         spnQuantityUpd.setValue(currStock.getQuantity());
     }
 
@@ -58,11 +58,11 @@ public class UpdateStock extends javax.swing.JFrame {
         txtManufacturerUpd = new javax.swing.JTextField();
         cmboCategoryUpd = new javax.swing.JComboBox<>();
         spnQuantityUpd = new javax.swing.JSpinner();
-        spnPriceUpd = new javax.swing.JSpinner();
         btnUpdateItem = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        txtPriceUpd = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -88,10 +88,6 @@ public class UpdateStock extends javax.swing.JFrame {
         spnQuantityUpd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         getContentPane().add(spnQuantityUpd);
         spnQuantityUpd.setBounds(500, 310, 120, 30);
-
-        spnPriceUpd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        getContentPane().add(spnPriceUpd);
-        spnPriceUpd.setBounds(500, 230, 120, 30);
 
         btnUpdateItem.setBackground(new java.awt.Color(226, 61, 57));
         btnUpdateItem.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -159,6 +155,10 @@ public class UpdateStock extends javax.swing.JFrame {
         getContentPane().add(btnBack);
         btnBack.setBounds(490, 450, 180, 40);
 
+        txtPriceUpd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        getContentPane().add(txtPriceUpd);
+        txtPriceUpd.setBounds(500, 220, 120, 30);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/stockUpdate.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 800, 600);
@@ -168,11 +168,22 @@ public class UpdateStock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateItemActionPerformed
-       String prodName =      (txtProductNameUpd.getText());
+        String prodName =      (txtProductNameUpd.getText());
         String manName =       (txtManufacturerUpd.getText());
         String catagoryName =  (cmboCategoryUpd.getSelectedItem().toString());
-        Double prodPrice =     (Double.parseDouble((Integer.toString((int) spnPriceUpd.getValue()))));
+        //Double prodPrice =     (Double.parseDouble((Integer.toString((int) spnPriceUpd.getValue()))));
         int prodQuantity =  ((int)spnQuantityUpd.getValue());
+        Double prodPrice = 0.0;
+        String priceString = txtPriceUpd.getText();
+        boolean isNumeric = false;
+        if (!priceString.isEmpty()) {
+             isNumeric = priceString.chars().allMatch(Character::isAlphabetic);
+            if (!isNumeric) {
+                prodPrice =  Double.parseDouble(txtPriceUpd.getText());         
+            }
+        }
+
+
         ArrayList<String> errors = new ArrayList<>();
         boolean bprodName =      (txtProductNameUpd.getText().isEmpty());
         if(bprodName)errors.add("You cant have the name field empty");
@@ -180,7 +191,10 @@ public class UpdateStock extends javax.swing.JFrame {
         if(bmanName)errors.add("You cant have the Manufacturer field empty");
         boolean bcatagoryName =  (cmboCategoryUpd.getSelectedItem().equals(""));
         if(bcatagoryName)errors.add("You cant have the Category Selection empty");
-        boolean bprodPrice =     !((int)spnPriceUpd.getValue()>0);
+        //boolean bprodPrice =     !((int)spnPriceUpd.getValue()>0);
+        
+        boolean bprodPrice =     (txtPriceUpd.getText().isEmpty() || txtPriceUpd.getText().chars().allMatch(Character::isAlphabetic) || prodPrice<=0);
+        
         if(bprodPrice)errors.add("You cant have the Price field empty");
         boolean bprodQuantity =  !((int)spnQuantityUpd.getValue()>0);
         if(bprodQuantity)errors.add("You cant have the Quantity field empty");
@@ -193,7 +207,7 @@ public class UpdateStock extends javax.swing.JFrame {
             if (workDone) {
                 JOptionPane.showMessageDialog(null, "Stock Updated in inventory");
             }else{
-                JOptionPane.showMessageDialog(null, "Something went wrong please contact you administrator");
+                JOptionPane.showMessageDialog(null, "Something went wrong please contact your administrator");
             }
             
             //send object of stock to db
@@ -206,7 +220,11 @@ public class UpdateStock extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateItemActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        System.exit(0);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+        
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
@@ -265,9 +283,9 @@ public class UpdateStock extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdateItem;
     private javax.swing.JComboBox<String> cmboCategoryUpd;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JSpinner spnPriceUpd;
     private javax.swing.JSpinner spnQuantityUpd;
     private javax.swing.JTextField txtManufacturerUpd;
+    private javax.swing.JTextField txtPriceUpd;
     private javax.swing.JTextField txtProductNameUpd;
     // End of variables declaration//GEN-END:variables
 }

@@ -48,11 +48,11 @@ public class AddStock extends javax.swing.JFrame {
         txtManufacturerAdd = new javax.swing.JTextField();
         cmboCategoryAdd = new javax.swing.JComboBox<>();
         spnQtyAdd = new javax.swing.JSpinner();
-        spnPriceAdd = new javax.swing.JSpinner();
         btnItemAdd = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        txtPriceAdd = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -83,11 +83,6 @@ public class AddStock extends javax.swing.JFrame {
         spnQtyAdd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         getContentPane().add(spnQtyAdd);
         spnQtyAdd.setBounds(500, 310, 130, 30);
-
-        spnPriceAdd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        spnPriceAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(spnPriceAdd);
-        spnPriceAdd.setBounds(500, 220, 130, 30);
 
         btnItemAdd.setBackground(new java.awt.Color(226, 61, 57));
         btnItemAdd.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -150,6 +145,10 @@ public class AddStock extends javax.swing.JFrame {
         getContentPane().add(btnBack);
         btnBack.setBounds(490, 450, 180, 40);
 
+        txtPriceAdd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        getContentPane().add(txtPriceAdd);
+        txtPriceAdd.setBounds(500, 220, 130, 30);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/AddSTock.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 800, 600);
@@ -163,8 +162,19 @@ public class AddStock extends javax.swing.JFrame {
         String prodName =      (txtProductNameAdd.getText());
         String manName =       (txtManufacturerAdd.getText());
         String catagoryName =  (cmboCategoryAdd.getSelectedItem().toString());
-        Double prodPrice =     (Double.parseDouble((Integer.toString((int) spnPriceAdd.getValue()))));
+        //Double prodPrice =     (Double.parseDouble((Integer.toString((int) spnPriceAdd.getValue()))));
         int prodQuantity =  ((int)spnQtyAdd.getValue());
+        
+        Double prodPrice = 0.0;
+        String priceString = txtPriceAdd.getText();
+        boolean isNumeric = false;
+        if (!priceString.isEmpty()) {
+             isNumeric = priceString.chars().allMatch(Character::isAlphabetic);
+            if (!isNumeric) {
+                prodPrice =  Double.parseDouble(txtPriceAdd.getText());         
+            }
+        }
+        
         ArrayList<String> errors = new ArrayList<>();
         boolean bprodName =      (txtProductNameAdd.getText().isEmpty());
         if(bprodName)errors.add("You cant have the name field empty");
@@ -172,7 +182,8 @@ public class AddStock extends javax.swing.JFrame {
         if(bmanName)errors.add("You cant have the Manufacturer field empty");
         boolean bcatagoryName =  (cmboCategoryAdd.getSelectedItem().equals(""));
         if(bcatagoryName)errors.add("You cant have the Category Selection empty");
-        boolean bprodPrice =     !((int)spnPriceAdd.getValue()>0);
+        //boolean bprodPrice =     !((int)spnPriceAdd.getValue()>0);
+        boolean bprodPrice =     (txtPriceAdd.getText().isEmpty() || txtPriceAdd.getText().chars().allMatch(Character::isAlphabetic) || prodPrice<=0);
         if(bprodPrice)errors.add("You cant have the Price field empty");
         boolean bprodQuantity =  !((int)spnQtyAdd.getValue()>0);
         if(bprodQuantity)errors.add("You cant have the Quantity field empty");
@@ -181,7 +192,7 @@ public class AddStock extends javax.swing.JFrame {
             Stock stock = new Stock(0, prodName, manName, catagoryName, prodPrice, prodQuantity, Date.valueOf(LocalDate.now()));
             boolean workDone =stock.addStock(stock);
             if (workDone) {
-                JOptionPane.showMessageDialog(null, "StockAdded to inventory");
+                JOptionPane.showMessageDialog(null, "Stock Added to inventory");
             }else{
                 JOptionPane.showMessageDialog(null, "Something went wrong please contact you administrator");
             }
@@ -197,7 +208,10 @@ public class AddStock extends javax.swing.JFrame {
     }//GEN-LAST:event_btnItemAddActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        System.exit(0);
+         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
@@ -254,9 +268,9 @@ public class AddStock extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JComboBox<String> cmboCategoryAdd;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JSpinner spnPriceAdd;
     private javax.swing.JSpinner spnQtyAdd;
     private javax.swing.JTextField txtManufacturerAdd;
+    private javax.swing.JTextField txtPriceAdd;
     private javax.swing.JTextField txtProductNameAdd;
     // End of variables declaration//GEN-END:variables
 }

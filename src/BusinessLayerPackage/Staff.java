@@ -6,6 +6,8 @@
  */
 package BusinessLayerPackage;
 
+import DataAccessLayerPackage.CampusHandler;
+import DataAccessLayerPackage.DepartmentHandler;
 import DataAccessLayerPackage.StaffHandler;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author Tyrone
  */
-public class Staff {
+public class Staff implements CampusLocation, Department {
 
     public Staff() {
         staffID = 0;
@@ -36,7 +38,7 @@ public class Staff {
         this.campusName = campusName;
         this.accepted = accepted;
     }
-    
+
     // this constructor is used to insert, update and delete information from staff table
     public Staff(int staffID, String firstName, String lastName, String email, String cellphone, String username, String password, int department, int campusLocation, int accepted) {
         this.staffID = staffID;
@@ -64,12 +66,33 @@ public class Staff {
     private int campusLocation;
     private int accepted;
 
+    public String getPasswordEncrypt() {
+        // encrypt password
+        String encryption = "";
+        for (int i = 0; i < password.length(); i++) {
+            encryption += "*";
+        }
+        password = encryption;
+
+        return password;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        boolean isValid = true;
+        //
+        if (password.length() < 5 || password.length() > 50) {
+            isValid = false;
+        }
+        //
+        if (isValid) {
+            this.password = password;
+        } else {
+            this.password = "error";
+        }
     }
 
     public int getStaffID() {
@@ -81,7 +104,23 @@ public class Staff {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        boolean isValid = true;
+        //
+        if (firstName.length() < 1 || firstName.length() > 50) {
+            isValid = false;
+        }
+        //
+        for (int i = 0; i < firstName.length(); i++) {
+            if (!(Character.isAlphabetic(firstName.charAt(i)) || Character.isSpaceChar(firstName.charAt(i)))) {
+                isValid = false;
+            }
+        }
+        //
+        if (isValid) {
+            this.firstName = firstName;
+        } else {
+            this.firstName = "error";
+        }
     }
 
     public String getLastName() {
@@ -89,7 +128,23 @@ public class Staff {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        boolean isValid = true;
+        //
+        if (lastName.length() < 1 || lastName.length() > 50) {
+            isValid = false;
+        }
+        //
+        for (int i = 0; i < lastName.length(); i++) {
+            if (!(Character.isAlphabetic(lastName.charAt(i)) || Character.isSpaceChar(lastName.charAt(i)))) {
+                isValid = false;
+            }
+        }
+        //
+        if (isValid) {
+            this.lastName = lastName;
+        } else {
+            this.lastName = "error";
+        }
     }
 
     public String getEmail() {
@@ -97,7 +152,35 @@ public class Staff {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        boolean isValid = true;
+        //
+        if (email.length() < 5 || email.length() > 50) {
+            isValid = false;
+        }
+        //
+        int sign = 0;
+        int period = 0;
+        for (int i = 0; i < email.length(); i++) {
+            if (email.charAt(i) == '@') {
+                sign++;
+            } else if (email.charAt(i) == '.') {
+                period++;
+            }
+        }
+        //
+        if (sign != 1) {
+            isValid = false;
+        }
+        //
+        if (period < 1) {
+            isValid = false;
+        }
+        //
+        if (isValid) {
+            this.email = email;
+        } else {
+            this.email = "error";
+        }
     }
 
     public String getCellphone() {
@@ -105,7 +188,29 @@ public class Staff {
     }
 
     public void setCellphone(String cellphone) {
-        this.cellphone = cellphone;
+        boolean isValid = true;
+        //
+        if (cellphone.length() != 10) {
+            isValid = false;
+        }
+        //
+        if (cellphone.length() > 0) {
+            if (cellphone.charAt(0) != '0') {
+                isValid = false;
+            }
+        }
+        //
+        for (int i = 0; i < cellphone.length(); i++) {
+            if (!(Character.isDigit(cellphone.charAt(i)))) {
+                isValid = false;
+            }
+        }
+        //
+        if (isValid) {
+            this.cellphone = cellphone;
+        } else {
+            this.cellphone = "error";
+        }
     }
 
     public String getUsername() {
@@ -113,7 +218,17 @@ public class Staff {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        boolean isValid = true;
+        //
+        if (username.length() < 5 || username.length() > 50) {
+            isValid = false;
+        }
+        //
+        if (isValid) {
+            this.username = username;
+        } else {
+            this.username = "error";
+        }
     }
 
     public int getDepartment() {
@@ -147,7 +262,7 @@ public class Staff {
     public void setCampusName(String campusName) {
         this.campusName = campusName;
     }
-    
+
     public int getAccepted() {
         return accepted;
     }
@@ -160,15 +275,16 @@ public class Staff {
     public String toString() {
         return "Staff{" + "staffID=" + staffID + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", cellphone=" + cellphone + ", username=" + username + ", department=" + department + ", campusLocation=" + campusLocation + ", accepted=" + accepted + '}';
     }
-    
+
     private static PreparedStatement pst = null;
     private static ResultSet rs = null;
+
     // Static as this functionality is not bound to each object, but to the class
-    // Get all the Staff members data ..
-    public static ArrayList<Staff> getStaff() {
+    // Get all the required Staff members data ..
+    public static ArrayList<Staff> getStaff(String staffType) {
         ArrayList<Staff> allStaff = new ArrayList<Staff>();
         try {
-            pst = StaffHandler.getStaff();
+            pst = StaffHandler.getStaff(staffType);
             rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {
                 allStaff.add(new Staff(rs.getInt("StaffID"),
@@ -189,33 +305,61 @@ public class Staff {
         return null;
     }
 
-    // Get all the Pending Staff member data ..
-    public static ArrayList<Staff> getPendingStaff() {
-        ArrayList<Staff> pendingStaff = new ArrayList<Staff>();
+    public static boolean isUniqueUsername(String usernameInput) {
+        ArrayList<Staff> allStaff = getStaff("All");
+        //
+        boolean isUnique = true;
+        //
+        for (Staff staff : allStaff) {
+            if (staff.username == usernameInput) {
+                isUnique = false;
+            }
+        }
+        //
+        return isUnique;
+    }
+
+    //accept a pending staff member
+    public static void acceptPendingStaff(String name, int id) {
+        StaffHandler.acceptPendingStaff(name, id);
+    }
+
+    // interface implementation
+    @Override
+    public ArrayList<String> getCampusData() {
+        ArrayList<String> campusList = new ArrayList<String>();
         try {
-            pst = StaffHandler.getPendingStaff();
+            pst = CampusHandler.getCampusData();
             rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {
-                pendingStaff.add(new Staff(rs.getInt("StaffID"),
-                        rs.getString("FirstName"),
-                        rs.getString("LastName"),
-                        rs.getString("Email"),
-                        rs.getString("Cellphone"),
-                        rs.getString("Username"),
-                        rs.getString("Password"),
-                        rs.getString("DepartmentName"),
-                        rs.getString("CampusName"),
-                        rs.getInt("Accepted")));
+                campusList.add(rs.getInt("CampusID") + ". " + rs.getString("CampusName"));
             }
-            return pendingStaff;
+            return campusList;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
         return null;
     }
-    
-    //accept a pending staff member
-    public static void acceptPendingStaff(String name, int id) {
-        StaffHandler.acceptPendingStaff(name, id);
+
+    @Override
+    public ArrayList<String> getDepartmentData() {
+        ArrayList<String> campusList = new ArrayList<String>();
+        try {
+            pst = DepartmentHandler.getDepartmentData();
+            rs = (ResultSet) pst.executeQuery();
+            while (rs.next()) {
+                campusList.add(rs.getInt("DepartmentID") + ". " + rs.getString("DepartmentName"));
+            }
+            return campusList;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        return null;
     }
+
+    // insert staff
+    public static void insertStaff(Staff s) {
+        StaffHandler.insertStaff(s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
+    }
+
 }

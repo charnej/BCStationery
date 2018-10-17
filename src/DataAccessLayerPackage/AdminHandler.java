@@ -32,7 +32,7 @@ public class AdminHandler {
             ArrayList<Admin> rsUsers= new ArrayList<>();
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                String url ="jdbc:mysql://localhost:3306/bcstationary?zeroDateTimeBehavior=convertToNull";
+                String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
                 Connection con =(Connection) DriverManager.getConnection(url,"root","");
                 Statement st = (Statement) con.createStatement();
                 String query = "SELECT * FROM admin";

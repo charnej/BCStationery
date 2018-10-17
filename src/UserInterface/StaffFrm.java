@@ -185,20 +185,23 @@ public class StaffFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        System.exit(0);
+         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnViewAllStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllStaffMouseClicked
         btnAcceptStaff.setVisible(false);
 
-        ArrayList<Staff> staffList = Staff.getStaff();
+        ArrayList<Staff> staffList = Staff.getStaff("Accepted");
         addTableData(staffList);
     }//GEN-LAST:event_btnViewAllStaffMouseClicked
 
     private void btnViewPendingStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewPendingStaffMouseClicked
         btnAcceptStaff.setVisible(true);
 
-        ArrayList<Staff> staffList = Staff.getPendingStaff();
+        ArrayList<Staff> staffList = Staff.getStaff("Pending");
         addTableData(staffList);
     }//GEN-LAST:event_btnViewPendingStaffMouseClicked
 
@@ -208,7 +211,7 @@ public class StaffFrm extends javax.swing.JFrame {
             String name = tblStaff.getValueAt(tblStaff.getSelectedRow(), 3).toString();
             Staff.acceptPendingStaff(name, id);
             //
-            ArrayList<Staff> staffList = Staff.getPendingStaff();
+            ArrayList<Staff> staffList = Staff.getStaff("Pending");
             addTableData(staffList);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Please select a valid Staff Request to Accept");
@@ -222,7 +225,7 @@ public class StaffFrm extends javax.swing.JFrame {
         for (Staff s : staffList) {
             rowData[0] = s.getStaffID();
             rowData[1] = s.getUsername();
-            rowData[2] = s.getPassword();
+            rowData[2] = s.getPasswordEncrypt();
             rowData[3] = s.getFirstName();
             rowData[4] = s.getLastName();
             rowData[5] = s.getEmail();

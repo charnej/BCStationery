@@ -6,9 +6,17 @@
 package UserInterface;
 
 import BusinessLayerPackage.Admin;
+import BusinessLayerPackage.LoginAttemptsException;
+import BusinessLayerPackage.WrongCredException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
@@ -122,7 +130,7 @@ public class AdminLogin extends javax.swing.JFrame {
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout1.png"))); // NOI18N
+        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
         btnBackLogout.setToolTipText("Back");
         btnBackLogout.setBorder(null);
         btnBackLogout.setBorderPainted(false);
@@ -154,7 +162,10 @@ public class AdminLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAdminUsernameMouseClicked
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        System.exit(0);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
@@ -174,48 +185,60 @@ public class AdminLogin extends javax.swing.JFrame {
         staffLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
-    private int logInAtempts=0;
+    private int logInAtempts = 0;
+    int k = 20;
+    Timer t;
     private void btnAdminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminLoginActionPerformed
 //T         
         //Get all staff user objects
-        Admin  objHolder = new Admin();
-        ArrayList<Admin> allAdmin =objHolder.getAdmin();//new ArrayList<>(); //
+        Admin objHolder = new Admin();
+        ArrayList<Admin> allAdmin = objHolder.getAdmin();//new ArrayList<>(); //
 //        allAdmin.add(new Admin(1, "Tyrone", "Du Plesis", "tyrone", "tyrone"));
 //        allAdmin.add(new Admin(1, "Charne", "Jordaan", "charne", "charne"));
 //        allAdmin.add(new Admin(1, "Jozehan", "Grobler", "jozehan", "jozehan"));
 //        allAdmin.add(new Admin(1, "Admin", "Admin", "admin", "admin"));
+
         boolean UserFound = false;
-        for (Admin adminItem : allAdmin) {
-            if(adminItem.getUsername().equals(txtAdminUsername.getText())){
-                if (adminItem.getPassword().equals(txtPassword.getText())) {
-                    //log in user user valid
-                    UserFound=true;
+        try {
+            for (Admin adminItem : allAdmin) {
+                if (adminItem.getUsername().equals(txtAdminUsername.getText())) {
+                    if (adminItem.getPassword().equals(txtPassword.getText())) {
+                        //log in user user valid
+                        UserFound = true;
+                    }
                 }
             }
+            if (UserFound) {
+                //log in user
+                // close current form
+                // re route to another form
+                Menu mainMenu = new Menu();
+                mainMenu.setVisible(true);
+                this.dispose();
+            } else if (logInAtempts < 3) {
+                //throw warning
+                logInAtempts++;
+                throw new WrongCredException("Wrong Credentials");
+                
+                //increase log in attempts
+                
+            } else if (logInAtempts == 3) {
+                //add waiting mechanism
+                //disable textboxes for certain time
+                //logInAtempts = 0;
+                
+                logInAtempts++; 
+
+                //throw warning
+                throw new LoginAttemptsException("You do not have any log in attempts left");
+  
+            }           
+            
+        } catch (WrongCredException | LoginAttemptsException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Please Note", JOptionPane.WARNING_MESSAGE);
         }
-        if (UserFound) {
-            //log in user
-            // close current form
-            // re route to another form
-            Menu mainMenu = new Menu();
-            mainMenu.setVisible(true);
-            this.dispose();
-        }else if (logInAtempts<3)
-        {
-            //throw warning
-            JOptionPane.showMessageDialog(null, "\n Wrong credentials \n", "Please Note", JOptionPane.WARNING_MESSAGE);
-            //increase log in attempts
-            logInAtempts++;
-        }else if (logInAtempts==3)
-        {
-            //add waiting mechanism
-            //disable textboxes for certain time
-            logInAtempts=0;
-            //throw warning
-            JOptionPane.showMessageDialog(null, "\n You do not have any log in attempts left \n", "Please Note", JOptionPane.WARNING_MESSAGE);
-            //increase log in attempts
-            logInAtempts++;
-        }
+
+
     }//GEN-LAST:event_btnAdminLoginActionPerformed
 
     private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed

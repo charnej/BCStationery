@@ -5,6 +5,8 @@
  */
 package UserInterface;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author User
@@ -147,13 +149,22 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutMouseClicked
 
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
-        StaffLogin staffLogin = new StaffLogin();
-        staffLogin.setVisible(true);
-        this.dispose();
+
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            StaffLogin staffLogin = new StaffLogin();
+            staffLogin.setVisible(true);
+            this.dispose();
+        }
+
+
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        System.exit(0);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventoryActionPerformed

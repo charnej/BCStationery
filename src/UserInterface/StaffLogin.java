@@ -45,7 +45,6 @@ public class StaffLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 628));
-        setPreferredSize(new java.awt.Dimension(800, 628));
         setResizable(false);
         setSize(new java.awt.Dimension(800, 628));
         getContentPane().setLayout(null);
@@ -120,6 +119,11 @@ public class StaffLogin extends javax.swing.JFrame {
         btnStaffLogin1.setBorder(null);
         btnStaffLogin1.setBorderPainted(false);
         btnStaffLogin1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnStaffLogin1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnStaffLogin1MouseClicked(evt);
+            }
+        });
         btnStaffLogin1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnStaffLogin1ActionPerformed(evt);
@@ -173,7 +177,10 @@ public class StaffLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMinimizeMouseClicked
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        System.exit(0);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void txtPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPasswordMouseClicked
@@ -190,26 +197,29 @@ public class StaffLogin extends javax.swing.JFrame {
         adminLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAdminActionPerformed
-    private int logInAtempts =0;
+    private int logInAtempts = 0;
     private void btnStaffLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffLogin1ActionPerformed
-         
+
         //Get all staff user objects
         Staff objHolder = new Staff();
-        List<Staff> allStaff = objHolder.getStaff();
+        List<Staff> allStaff = objHolder.getStaff("All");
         boolean UserFound = false;
         for (Staff staffItem : allStaff) {
-            if(staffItem.getUsername().equals(txtStaffUsername.getText())){
+            if (staffItem.getUsername().equals(txtStaffUsername.getText())) {
                 if (staffItem.getPassword().equals(txtPassword.getText())) {
                     //log in user user valid
-                    UserFound=true;
+                    UserFound = true;
                 }
             }
         }
         if (UserFound) {
             //log in user
-        }else{
+            StaffMenu staffMenu = new StaffMenu();
+            staffMenu.setVisible(true);
+            this.dispose();
+        } else {
             //throw warning
-            JOptionPane.showMessageDialog(null, "\nWrong credentials\n", "Please Note", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Wrong credentials", "Please Note", JOptionPane.WARNING_MESSAGE);
             //increase log in attempts
             logInAtempts++;
         }
@@ -218,6 +228,10 @@ public class StaffLogin extends javax.swing.JFrame {
     private void txtStaffUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStaffUsernameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStaffUsernameActionPerformed
+
+    private void btnStaffLogin1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStaffLogin1MouseClicked
+
+    }//GEN-LAST:event_btnStaffLogin1MouseClicked
 
     /**
      * @param args the command line arguments
