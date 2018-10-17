@@ -255,7 +255,10 @@ public class Inventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddStockActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        System.exit(0);
+         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnBackLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackLogoutMouseClicked
@@ -279,11 +282,13 @@ public class Inventory extends javax.swing.JFrame {
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
         //Iterate and search for specific stock
         String input =txtSearchStock.getText();
+        
         ArrayList<Stock> newListStock = new ArrayList<Stock>();
         if(!input.isEmpty())
         {
+            String inputCapital = input.substring(0, 1).toUpperCase()+input.substring(1).toLowerCase();
             for (Stock stock : allStock) {
-                if((stock.getProductName().contains(input))||(stock.getCategory().contains(input))){
+                if((stock.getProductName().contains(inputCapital))||(stock.getCategory().contains(inputCapital))){
                     newListStock.add(stock);
                 }
             }
