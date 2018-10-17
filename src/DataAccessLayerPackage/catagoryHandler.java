@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
@@ -21,30 +22,25 @@ import javax.sql.DataSource;
  */
 public class catagoryHandler {
     //Catagory is used to define a simple catagory of a product
-    //first the singleton pattern
-    private static catagoryHandler instance = new catagoryHandler();
-    private catagoryHandler() {}
-    public static catagoryHandler getInstance(){
-        return instance;
+    public  catagoryHandler() {
     }
-    private static ResultSet categories;
-    public  ResultSet getCatagories() throws SQLException{
-//        if (catagories==null) {
-//            
-//        }
+
+    public ArrayList<Category> getCatagories() {
+        ArrayList<Category> cats = new ArrayList<Category>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url ="jdbc:mysql://localhost:3306/bcstationary?";
-            Connection con = DriverManager.getConnection(url,"root","");
-            Statement st = con.createStatement();
-            String query = "Select CategoryID,Name,Description FROM category";
-            categories =st.executeQuery(query);
-            
+            String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
+            Connection con =(Connection) DriverManager.getConnection(url,"root","");
+            Statement st = (Statement) con.createStatement();
+            ResultSet rs =st.executeQuery("SELECT * FROM `category`");
+            while (rs.next()) {                
+                cats.add(new Category(rs.getInt("CategoryID"),rs.getString("Name")));
+            }
             con.close();
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(catagoryHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-      return categories;  
+        return cats;  
     }
     
 }
