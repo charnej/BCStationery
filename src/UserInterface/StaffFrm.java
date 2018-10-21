@@ -223,7 +223,7 @@ public class StaffFrm extends javax.swing.JFrame {
         model.setRowCount(0);
         Object rowData[] = new Object[9];
         for (Staff s : staffList) {
-            rowData[0] = s.getStaffID();
+            rowData[0] = s.getUserID();
             rowData[1] = s.getUsername();
             rowData[2] = s.getPasswordEncrypt();
             rowData[3] = s.getFirstName();
