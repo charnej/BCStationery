@@ -250,4 +250,9 @@ public class Staff extends User implements CampusLocation, Department {
         StaffHandler.insertStaff(s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
     }
 
+    // update staff
+    public static void updateStaff(Staff s) {
+        StaffHandler.updateStaff(s.userID, s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
+    }
+    
 }
