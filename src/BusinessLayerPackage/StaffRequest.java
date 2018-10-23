@@ -5,6 +5,7 @@
  */
 package BusinessLayerPackage;
 //T
+
 import java.sql.Date;
 
 /**
@@ -12,20 +13,21 @@ import java.sql.Date;
  * @author Jozehan
  */
 public class StaffRequest {
+
     private int requestNr;
     private Date requestDate;
-    private int staffID;//staff type staff
-    private Stock stock;//Stock type stock
-    private int quantity; 
-    private boolean Complete;// neem aan boolean
+    private int staffID;
+    private int stockID;
+    private int quantity;
+    private int complete;
 
-    public StaffRequest(int requestNr, Date requestDate, int staffID, Stock stock, int quantity, boolean Complete) {
+    public StaffRequest(int requestNr, Date requestDate, int staffID, int stockID, int quantity, int complete) {
         this.requestNr = requestNr;
         this.requestDate = requestDate;
         this.staffID = staffID;
-        this.stock = stock;
+        this.stockID = stockID;
         this.quantity = quantity;
-        this.Complete = Complete;
+        this.complete = complete;
     }
 
     public int getRequestNr() {
@@ -48,16 +50,8 @@ public class StaffRequest {
         return staffID;
     }
 
-    public void setStaffID(int staffID) {
-        this.staffID = staffID;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public int getStockID() {
+        return stockID;
     }
 
     public int getQuantity() {
@@ -68,12 +62,12 @@ public class StaffRequest {
         this.quantity = quantity;
     }
 
-    public boolean isComplete() {
-        return Complete;
+    public int getComplete() {
+        return complete;
     }
 
-    public void setComplete(boolean Complete) {
-        this.Complete = Complete;
+    public void setComplete(int complete) {
+        this.complete = complete;
     }
-    
+
 }
