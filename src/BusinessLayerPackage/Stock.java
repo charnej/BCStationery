@@ -5,6 +5,7 @@
  */
 package BusinessLayerPackage;
 //T
+
 import DataAccessLayerPackage.StockHandler;
 import java.awt.List;
 import java.sql.Date;
@@ -25,6 +26,7 @@ public class Stock {
         this.Quantity = Quantity;
         this.entryDate = entryDate;
     }
+    
     private final int stockID;
     private String productName;
     private String manufacturer;
@@ -32,29 +34,31 @@ public class Stock {
     private double price;
     private int Quantity;
     private Date entryDate;
-    public ArrayList<Stock> getStock(){
-       //populate list with stock from db;
+
+    public ArrayList<Stock> getStock() {
+        //populate list with stock from db;
         StockHandler dbHandler = new StockHandler();
-        return  dbHandler.getStock();
-       
+        return dbHandler.getStock();
+
     }
-    public boolean addStock(Stock stock)
-    {
+
+    public boolean addStock(Stock stock) {
         StockHandler dbHandler = new StockHandler();
         //new stock to db
         //get instance of dbHandler
         //insert new record
         return dbHandler.insertStock(stock);
-        
+
     }
-    public boolean updateStock(Stock stock)
-    {
+
+    public boolean updateStock(Stock stock) {
         StockHandler dbHandler = new StockHandler();
         //alter stock to db
         //get instance of dbHandler
         //update record
         return dbHandler.updateStock(stock);
     }
+
     public String getProductName() {
         return productName;
     }
@@ -106,10 +110,9 @@ public class Stock {
     public int getStockID() {
         return stockID;
     }
-    
-    
+
     public Stock() {
         this.stockID = 0;
     }
-    
+
 }

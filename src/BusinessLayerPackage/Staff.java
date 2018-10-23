@@ -19,133 +19,39 @@ import javax.swing.JOptionPane;
  *
  * @author Tyrone
  */
-public class Staff implements CampusLocation, Department {
+public class Staff extends User implements CampusLocation, Department {
 
     public Staff() {
-        staffID = 0;
+
     }
 
     // this constructor is used to show information to users
-    public Staff(int staffID, String firstName, String lastName, String email, String cellphone, String username, String password, String departmentName, String campusName, int accepted) {
-        this.staffID = staffID;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Staff(int userID, String firstName, String lastName, String email, String cellphone, String username, String password, String departmentName, String campusName, int accepted) {
+        super(userID, firstName, lastName, username, password);
         this.email = email;
         this.cellphone = cellphone;
-        this.username = username;
-        this.password = password;
         this.departmentName = departmentName;
         this.campusName = campusName;
         this.accepted = accepted;
     }
 
     // this constructor is used to insert, update and delete information from staff table
-    public Staff(int staffID, String firstName, String lastName, String email, String cellphone, String username, String password, int department, int campusLocation, int accepted) {
-        this.staffID = staffID;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Staff(int userID, String firstName, String lastName, String email, String cellphone, String username, String password, int department, int campusLocation, int accepted) {
+        super(userID, firstName, lastName, username, password);
         this.email = email;
         this.cellphone = cellphone;
-        this.username = username;
-        this.password = password;
         this.department = department;
         this.campusLocation = campusLocation;
         this.accepted = accepted;
     }
 
-    private final int staffID;
-    private String firstName;
-    private String lastName;
     private String email;
     private String cellphone;
-    private String username;
-    private String password;
     private String departmentName;
     private String campusName;
     private int department;
     private int campusLocation;
     private int accepted;
-
-    public String getPasswordEncrypt() {
-        // encrypt password
-        String encryption = "";
-        for (int i = 0; i < password.length(); i++) {
-            encryption += "*";
-        }
-        password = encryption;
-
-        return password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        boolean isValid = true;
-        //
-        if (password.length() < 5 || password.length() > 50) {
-            isValid = false;
-        }
-        //
-        if (isValid) {
-            this.password = password;
-        } else {
-            this.password = "error";
-        }
-    }
-
-    public int getStaffID() {
-        return staffID;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        boolean isValid = true;
-        //
-        if (firstName.length() < 1 || firstName.length() > 50) {
-            isValid = false;
-        }
-        //
-        for (int i = 0; i < firstName.length(); i++) {
-            if (!(Character.isAlphabetic(firstName.charAt(i)) || Character.isSpaceChar(firstName.charAt(i)))) {
-                isValid = false;
-            }
-        }
-        //
-        if (isValid) {
-            this.firstName = firstName;
-        } else {
-            this.firstName = "error";
-        }
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        boolean isValid = true;
-        //
-        if (lastName.length() < 1 || lastName.length() > 50) {
-            isValid = false;
-        }
-        //
-        for (int i = 0; i < lastName.length(); i++) {
-            if (!(Character.isAlphabetic(lastName.charAt(i)) || Character.isSpaceChar(lastName.charAt(i)))) {
-                isValid = false;
-            }
-        }
-        //
-        if (isValid) {
-            this.lastName = lastName;
-        } else {
-            this.lastName = "error";
-        }
-    }
 
     public String getEmail() {
         return email;
@@ -213,24 +119,6 @@ public class Staff implements CampusLocation, Department {
         }
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        boolean isValid = true;
-        //
-        if (username.length() < 5 || username.length() > 50) {
-            isValid = false;
-        }
-        //
-        if (isValid) {
-            this.username = username;
-        } else {
-            this.username = "error";
-        }
-    }
-
     public int getDepartment() {
         return department;
     }
@@ -273,7 +161,7 @@ public class Staff implements CampusLocation, Department {
 
     @Override
     public String toString() {
-        return "Staff{" + "staffID=" + staffID + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", cellphone=" + cellphone + ", username=" + username + ", department=" + department + ", campusLocation=" + campusLocation + ", accepted=" + accepted + '}';
+        return "Staff{" + "staffID=" + userID + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", cellphone=" + cellphone + ", username=" + username + ", department=" + department + ", campusLocation=" + campusLocation + ", accepted=" + accepted + '}';
     }
 
     private static PreparedStatement pst = null;
@@ -311,7 +199,7 @@ public class Staff implements CampusLocation, Department {
         boolean isUnique = true;
         //
         for (Staff staff : allStaff) {
-            if (staff.username == usernameInput) {
+            if (staff.username.equals(usernameInput)) {
                 isUnique = false;
             }
         }
@@ -362,4 +250,9 @@ public class Staff implements CampusLocation, Department {
         StaffHandler.insertStaff(s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
     }
 
+    // update staff
+    public static void updateStaff(Staff s) {
+        StaffHandler.updateStaff(s.userID, s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
+    }
+    
 }
