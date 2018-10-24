@@ -58,6 +58,11 @@ public class StaffFrm extends javax.swing.JFrame {
                 btnViewAllStaffMouseClicked(evt);
             }
         });
+        btnViewAllStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllStaffActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnViewAllStaff);
         btnViewAllStaff.setBounds(170, 170, 190, 37);
 
@@ -217,6 +222,10 @@ public class StaffFrm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please select a valid Staff Request to Accept");
         }
     }//GEN-LAST:event_btnAcceptStaffMouseClicked
+
+    private void btnViewAllStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllStaffActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnViewAllStaffActionPerformed
 
     public void addTableData(ArrayList<Staff> staffList) {
         DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
