@@ -28,7 +28,7 @@ public class Inventory extends javax.swing.JFrame {
     public Inventory() {
         initComponents();
         Stock objStockHolder = new Stock();
-        allStock =objStockHolder.getStock();
+        allStock = objStockHolder.getStock();
         populateTable(allStock);
         //event listener for sorting on column headers
         JTableHeader header = tblInventory.getTableHeader();
@@ -45,26 +45,27 @@ public class Inventory extends javax.swing.JFrame {
 //            }
 //            
 //        });
-        
+
     }
     private ArrayList<Stock> allStock;
-    private void populateTable(ArrayList<Stock> stockList){
-        
-        DefaultTableModel dmodel =  (DefaultTableModel)tblInventory.getModel();
+
+    private void populateTable(ArrayList<Stock> stockList) {
+
+        DefaultTableModel dmodel = (DefaultTableModel) tblInventory.getModel();
         Object[] row = new Object[5];
         //clearTable
         dmodel.setRowCount(0);
-        if(stockList.size()>0){
+        if (stockList.size() > 0) {
             for (Stock stc : stockList) {
-               row[0]= stc.getProductName();
-               row[1]= stc.getManufacturer();
-               row[2]= stc.getCategory();
-               row[3]= stc.getPrice();
-               row[4]= stc.getQuantity();
-               dmodel.addRow(row);
+                row[0] = stc.getProductName();
+                row[1] = stc.getManufacturer();
+                row[2] = stc.getCategory();
+                row[3] = stc.getPrice();
+                row[4] = stc.getQuantity();
+                dmodel.addRow(row);
             }
-        }else{
-            JOptionPane.showMessageDialog(null, "There is no Data that matches your search result","Attention",JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -77,10 +78,13 @@ public class Inventory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        SearchCriteriaGroup = new javax.swing.ButtonGroup();
         btnViewAllStock = new javax.swing.JButton();
         btnAddStock = new javax.swing.JButton();
         txtSearchStock = new javax.swing.JTextField();
         btnSearchStock = new javax.swing.JButton();
+        rbProdName = new javax.swing.JRadioButton();
+        rbCategory = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblInventory = new javax.swing.JTable();
         btnExit = new javax.swing.JButton();
@@ -141,6 +145,16 @@ public class Inventory extends javax.swing.JFrame {
         });
         getContentPane().add(btnSearchStock);
         btnSearchStock.setBounds(880, 140, 46, 49);
+
+        SearchCriteriaGroup.add(rbProdName);
+        rbProdName.setText("Product Name");
+        getContentPane().add(rbProdName);
+        rbProdName.setBounds(530, 150, 120, 25);
+
+        SearchCriteriaGroup.add(rbCategory);
+        rbCategory.setText("Category");
+        getContentPane().add(rbCategory);
+        rbCategory.setBounds(530, 180, 120, 25);
 
         tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -256,7 +270,7 @@ public class Inventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddStockActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
@@ -282,20 +296,31 @@ public class Inventory extends javax.swing.JFrame {
 
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
         //Iterate and search for specific stock
-        String input =txtSearchStock.getText();
-        
+        String input = txtSearchStock.getText();
+
         ArrayList<Stock> newListStock = new ArrayList<Stock>();
-        if(!input.isEmpty())
-        {
-            String inputCapital = input.substring(0, 1).toUpperCase()+input.substring(1).toLowerCase();
-            for (Stock stock : allStock) {
-                if((stock.getProductName().contains(inputCapital))||(stock.getCategory().contains(inputCapital))){
-                    newListStock.add(stock);
+        if (!input.isEmpty()) {
+            String inputCapital = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+            if (rbProdName.isSelected()) {
+                for (Stock stock : allStock) {
+                    if ((stock.getProductName().contains(inputCapital))) {
+                        newListStock.add(stock);
+                    }
                 }
+                populateTable(newListStock);
+            } else if (rbCategory.isSelected()) {
+                for (Stock stock : allStock) {
+                    if (stock.getCategory().contains(inputCapital)) {
+                        newListStock.add(stock);
+                    }
+                }
+                populateTable(newListStock);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a Search Criteria");
             }
-            populateTable(newListStock);
-        }else{
-            JOptionPane.showMessageDialog(null, "Please enter a keyword for the search","Attention",JOptionPane.INFORMATION_MESSAGE);
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Please enter a keyword for the search", "Attention", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchStockActionPerformed
 
@@ -306,14 +331,16 @@ public class Inventory extends javax.swing.JFrame {
     private void tblInventoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInventoryMouseClicked
         //Get selected value
         //Send object to update form.
-        DefaultTableModel dmodel =  (DefaultTableModel)tblInventory.getModel();
+        DefaultTableModel dmodel = (DefaultTableModel) tblInventory.getModel();
         Stock curStock = new Stock();
-        String CurrentPName= ((String) tblInventory.getValueAt(tblInventory.getSelectedRow(),0));
-        int selection =JOptionPane.showConfirmDialog(null, "Do you want to update "+CurrentPName
-                , "Please Note", JOptionPane.INFORMATION_MESSAGE);
-        if(selection==JOptionPane.YES_OPTION){
+        String CurrentPName = ((String) tblInventory.getValueAt(tblInventory.getSelectedRow(), 0));
+        int selection = JOptionPane.showConfirmDialog(null, "Do you want to update " + CurrentPName,
+                "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
             for (Stock stock : allStock) {
-                if(stock.getProductName().equals(CurrentPName))curStock=stock;
+                if (stock.getProductName().equals(CurrentPName)) {
+                    curStock = stock;
+                }
             }
             //new update page object
             UpdateStock newUpdateStock = new UpdateStock(curStock);
@@ -364,6 +391,7 @@ public class Inventory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BG;
+    private javax.swing.ButtonGroup SearchCriteriaGroup;
     private javax.swing.JButton btnAddStock;
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
@@ -371,6 +399,8 @@ public class Inventory extends javax.swing.JFrame {
     private javax.swing.JButton btnSearchStock;
     private javax.swing.JButton btnViewAllStock;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rbCategory;
+    private javax.swing.JRadioButton rbProdName;
     private javax.swing.JTable tblInventory;
     private javax.swing.JTextField txtSearchStock;
     // End of variables declaration//GEN-END:variables
