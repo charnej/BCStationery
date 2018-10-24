@@ -58,11 +58,6 @@ public class StaffFrm extends javax.swing.JFrame {
                 btnViewAllStaffMouseClicked(evt);
             }
         });
-        btnViewAllStaff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewAllStaffActionPerformed(evt);
-            }
-        });
         getContentPane().add(btnViewAllStaff);
         btnViewAllStaff.setBounds(170, 170, 190, 37);
 
@@ -223,16 +218,12 @@ public class StaffFrm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAcceptStaffMouseClicked
 
-    private void btnViewAllStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllStaffActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnViewAllStaffActionPerformed
-
     public void addTableData(ArrayList<Staff> staffList) {
         DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
         model.setRowCount(0);
         Object rowData[] = new Object[9];
         for (Staff s : staffList) {
-            rowData[0] = s.getStaffID();
+            rowData[0] = s.getUserID();
             rowData[1] = s.getUsername();
             rowData[2] = s.getPasswordEncrypt();
             rowData[3] = s.getFirstName();

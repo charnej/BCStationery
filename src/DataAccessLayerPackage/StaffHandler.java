@@ -85,5 +85,22 @@ public class StaffHandler {
             JOptionPane.showMessageDialog(null, e);
         }
     }
+    
+    // Update Statement
+    public static void updateStaff(int StaffID, String FirstName, String LastName, String Email, String Cellphone, String Username, String Password, int DepartmentName, int CampusName) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            //
+            st = con.createStatement();
+            st.executeUpdate("UPDATE staff "
+                    + "SET FirstName = '" + FirstName + "', LastName = '" + LastName + "', Email = '" + Email + "', Cellphone = '" + Cellphone + "', "
+                    + "Username = '" + Username + "', Password = '" + Password + "', Department " + DepartmentName + ", CampusLocation " + CampusName + " "
+                    + "WHERE StaffID = " + StaffID +"");
+            //
+            JOptionPane.showMessageDialog(null, "Member Profile, Updated!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
 
 }

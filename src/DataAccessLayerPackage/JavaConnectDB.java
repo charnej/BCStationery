@@ -22,7 +22,8 @@ public class JavaConnectDB {
             return con;
         }catch(Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
+            return null;
         }
-        return null;
+        
     }
 }
