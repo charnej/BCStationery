@@ -216,6 +216,7 @@ public class StaffLogin extends javax.swing.JFrame {
             //log in user
             StaffMenu staffMenu = new StaffMenu();
             staffMenu.setVisible(true);
+            
             this.dispose();
         } else {
             //throw warning
