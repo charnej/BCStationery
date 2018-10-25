@@ -219,6 +219,8 @@ public class AddStock extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMinimizeMouseClicked
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        Inventory inv  = new Inventory();
+        inv.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
