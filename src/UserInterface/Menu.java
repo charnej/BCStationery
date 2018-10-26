@@ -35,11 +35,11 @@ public class Menu extends javax.swing.JFrame {
         btnInventory = new javax.swing.JButton();
         btnStaff = new javax.swing.JButton();
         btnOrders = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(652, 459));
-        setPreferredSize(new java.awt.Dimension(652, 486));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -126,8 +126,21 @@ public class Menu extends javax.swing.JFrame {
         btnOrders.setBorderPainted(false);
         btnOrders.setContentAreaFilled(false);
         btnOrders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdersActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnOrders);
         btnOrders.setBounds(150, 270, 165, 55);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnReports.png"))); // NOI18N
+        jButton1.setToolTipText("View and Generate reports");
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(jButton1);
+        jButton1.setBounds(360, 270, 160, 50);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/adminMenu.png"))); // NOI18N
         jLabel2.setText("jLabel2");
@@ -179,6 +192,12 @@ public class Menu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnStaffActionPerformed
 
+    private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
+        AdminOrders orders = new AdminOrders();
+        orders.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnOrdersActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -221,6 +240,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnOrders;
     private javax.swing.JButton btnStaff;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

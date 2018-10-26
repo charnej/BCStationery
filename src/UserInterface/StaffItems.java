@@ -86,6 +86,7 @@ public class StaffItems extends javax.swing.JFrame {
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         cmboCategories = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -173,7 +174,7 @@ public class StaffItems extends javax.swing.JFrame {
         }
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(100, 220, 832, 310);
+        jScrollPane1.setBounds(100, 220, 832, 270);
 
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -230,6 +231,14 @@ public class StaffItems extends javax.swing.JFrame {
         cmboCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         getContentPane().add(cmboCategories);
         cmboCategories.setBounds(506, 160, 110, 30);
+
+        jButton1.setBackground(new java.awt.Color(254, 212, 29));
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton1.setText("View Request");
+        jButton1.setBorderPainted(false);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(jButton1);
+        jButton1.setBounds(783, 523, 150, 30);
 
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/InventoryBG.png"))); // NOI18N
         getContentPane().add(BG);
@@ -345,6 +354,7 @@ public class StaffItems extends javax.swing.JFrame {
     private javax.swing.JButton btnSearchStock;
     private javax.swing.JButton btnStaffViewAllStock;
     private javax.swing.JComboBox<String> cmboCategories;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblInventory;
     private javax.swing.JTextField txtSearchStock;

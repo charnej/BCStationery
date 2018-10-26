@@ -11,12 +11,12 @@ import javax.swing.JOptionPane;
  *
  * @author User
  */
-public class StaffPastRequests extends javax.swing.JFrame {
+public class AdminOrderCompletion extends javax.swing.JFrame {
 
     /**
-     * Creates new form StaffPastRequests
+     * Creates new form AdminOrderCompletion
      */
-    public StaffPastRequests() {
+    public AdminOrderCompletion() {
         initComponents();
     }
 
@@ -30,15 +30,11 @@ public class StaffPastRequests extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblRequests = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblRequestDetails = new javax.swing.JTable();
-        btnViewIncomRequests = new javax.swing.JButton();
-        btnViewAllRequests1 = new javax.swing.JButton();
-        btnViewDoneRequests1 = new javax.swing.JButton();
-        btnMinimize = new javax.swing.JButton();
+        tblRequestItems = new javax.swing.JTable();
         btnBackLogout = new javax.swing.JButton();
+        btnMinimize = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        btnSendPurchaseOrder = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -46,7 +42,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(null);
 
-        tblRequests.setModel(new javax.swing.table.DefaultTableModel(
+        tblRequestItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -57,66 +53,10 @@ public class StaffPastRequests extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblRequests);
+        jScrollPane1.setViewportView(tblRequestItems);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(110, 230, 390, 290);
-
-        tblRequestDetails.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(tblRequestDetails);
-
-        getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(560, 230, 370, 290);
-
-        btnViewIncomRequests.setBackground(new java.awt.Color(254, 212, 29));
-        btnViewIncomRequests.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnViewIncomRequests.setText("View Incomplete Requests");
-        btnViewIncomRequests.setBorderPainted(false);
-        btnViewIncomRequests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(btnViewIncomRequests);
-        btnViewIncomRequests.setBounds(510, 170, 220, 40);
-
-        btnViewAllRequests1.setBackground(new java.awt.Color(254, 212, 29));
-        btnViewAllRequests1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnViewAllRequests1.setText("View All Requests");
-        btnViewAllRequests1.setBorderPainted(false);
-        btnViewAllRequests1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(btnViewAllRequests1);
-        btnViewAllRequests1.setBounds(110, 170, 150, 40);
-
-        btnViewDoneRequests1.setBackground(new java.awt.Color(254, 212, 29));
-        btnViewDoneRequests1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnViewDoneRequests1.setText("View Complete Requests");
-        btnViewDoneRequests1.setBorderPainted(false);
-        btnViewDoneRequests1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(btnViewDoneRequests1);
-        btnViewDoneRequests1.setBounds(290, 170, 190, 40);
-
-        btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
-        btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
-        btnMinimize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/minimize.png"))); // NOI18N
-        btnMinimize.setToolTipText("Minimize");
-        btnMinimize.setBorder(null);
-        btnMinimize.setBorderPainted(false);
-        btnMinimize.setContentAreaFilled(false);
-        btnMinimize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnMinimizeMouseClicked(evt);
-            }
-        });
-        getContentPane().add(btnMinimize);
-        btnMinimize.setBounds(910, 10, 31, 31);
+        jScrollPane1.setBounds(120, 212, 790, 280);
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -139,6 +79,22 @@ public class StaffPastRequests extends javax.swing.JFrame {
         getContentPane().add(btnBackLogout);
         btnBackLogout.setBounds(950, 10, 31, 31);
 
+        btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
+        btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
+        btnMinimize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/minimize.png"))); // NOI18N
+        btnMinimize.setToolTipText("Minimize");
+        btnMinimize.setBorder(null);
+        btnMinimize.setBorderPainted(false);
+        btnMinimize.setContentAreaFilled(false);
+        btnMinimize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMinimizeMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnMinimize);
+        btnMinimize.setBounds(910, 10, 31, 31);
+
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
         btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/exit.png"))); // NOI18N
@@ -154,7 +110,21 @@ public class StaffPastRequests extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 10, 50, 30);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/requesthistory.png"))); // NOI18N
+        btnSendPurchaseOrder.setBackground(new java.awt.Color(254, 212, 29));
+        btnSendPurchaseOrder.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnSendPurchaseOrder.setText("Send Purchase Order");
+        btnSendPurchaseOrder.setToolTipText("Send purchase order to purchase manager");
+        btnSendPurchaseOrder.setBorderPainted(false);
+        btnSendPurchaseOrder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSendPurchaseOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSendPurchaseOrderActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSendPurchaseOrder);
+        btnSendPurchaseOrder.setBounds(680, 510, 230, 40);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/orderItemsAdmin.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 1030, 637);
 
@@ -162,19 +132,19 @@ public class StaffPastRequests extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
-        this.setState(this.ICONIFIED);
-    }//GEN-LAST:event_btnMinimizeMouseClicked
-
     private void btnBackLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackLogoutMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBackLogoutMouseClicked
 
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
-        StaffMenu menu = new StaffMenu();
-        menu.setVisible(true);;
+        AdminOrders orders = new AdminOrders();
+        orders.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
+
+    private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
+        this.setState(this.ICONIFIED);
+    }//GEN-LAST:event_btnMinimizeMouseClicked
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
@@ -182,6 +152,10 @@ public class StaffPastRequests extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
+
+    private void btnSendPurchaseOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendPurchaseOrderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSendPurchaseOrderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,26 +168,26 @@ public class StaffPastRequests extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows Classic".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StaffPastRequests.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminOrderCompletion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StaffPastRequests.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminOrderCompletion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StaffPastRequests.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminOrderCompletion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StaffPastRequests.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminOrderCompletion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StaffPastRequests().setVisible(true);
+                new AdminOrderCompletion().setVisible(true);
             }
         });
     }
@@ -222,13 +196,9 @@ public class StaffPastRequests extends javax.swing.JFrame {
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
-    private javax.swing.JButton btnViewAllRequests1;
-    private javax.swing.JButton btnViewDoneRequests1;
-    private javax.swing.JButton btnViewIncomRequests;
+    private javax.swing.JButton btnSendPurchaseOrder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tblRequestDetails;
-    private javax.swing.JTable tblRequests;
+    private javax.swing.JTable tblRequestItems;
     // End of variables declaration//GEN-END:variables
 }

@@ -43,6 +43,7 @@ public class StaffMenu extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         btnUpdateProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnUpdateProfile.png"))); // NOI18N
+        btnUpdateProfile.setToolTipText("View and update my profile");
         btnUpdateProfile.setBorderPainted(false);
         btnUpdateProfile.setContentAreaFilled(false);
         btnUpdateProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -55,13 +56,20 @@ public class StaffMenu extends javax.swing.JFrame {
         btnUpdateProfile.setBounds(140, 180, 170, 50);
 
         btnViewMyRequests.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnMyRequests.png"))); // NOI18N
+        btnViewMyRequests.setToolTipText("View request history");
         btnViewMyRequests.setBorderPainted(false);
         btnViewMyRequests.setContentAreaFilled(false);
         btnViewMyRequests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewMyRequests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewMyRequestsActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnViewMyRequests);
         btnViewMyRequests.setBounds(360, 180, 170, 50);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnRequestView.png"))); // NOI18N
+        jButton1.setToolTipText("View items and send item requests");
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -170,6 +178,12 @@ public class StaffMenu extends javax.swing.JFrame {
         staffViewItems.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnViewMyRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMyRequestsActionPerformed
+       StaffPastRequests requestHistory = new StaffPastRequests();
+       requestHistory.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btnViewMyRequestsActionPerformed
 
     /**
      * @param args the command line arguments
