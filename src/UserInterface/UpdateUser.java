@@ -5,6 +5,11 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Staff;
+import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author User
@@ -16,6 +21,49 @@ public class UpdateUser extends javax.swing.JFrame {
      */
     public UpdateUser() {
         initComponents();
+        // get database values
+        bindData();
+    }
+
+    public void bindData() {
+        // -- text field data
+        txtFirstName.setText(StaffLogin.activeUser.getFirstName());
+        txtLastName.setText(StaffLogin.activeUser.getLastName());
+        txtEmail.setText(StaffLogin.activeUser.getEmail());
+        txtCell.setText(StaffLogin.activeUser.getCellphone());
+        txtStaffUsername.setText(StaffLogin.activeUser.getUsername());
+        txtStaffPassword.setText(StaffLogin.activeUser.getPassword());
+        // -- combobox data
+        cmboUpdCampusLocation.removeAllItems();
+        cmboUpdDepartment.removeAllItems();
+        //
+        Staff staffObj = new Staff();
+        // all options
+        ArrayList<String> campusList = staffObj.getCampusData();
+        cmboUpdCampusLocation.addItem("Select Campus");
+        for (String c : campusList) {
+            cmboUpdCampusLocation.addItem(c);
+        }
+        // selected option
+        for (String c : campusList) {
+            String[] itemSplit = c.split(" ");
+            if (c.equals(itemSplit[0] + " " + StaffLogin.activeUser.getCampusName())) {
+                cmboUpdCampusLocation.setSelectedItem(c);
+            }
+        }
+        // all options
+        ArrayList<String> departmentList = staffObj.getDepartmentData();
+        cmboUpdDepartment.addItem("Select Department");
+        for (String c : departmentList) {
+            cmboUpdDepartment.addItem(c);
+        }
+        // selected option
+        for (String c : departmentList) {
+            String[] itemSplit = c.split(" ");
+            if (c.equals(itemSplit[0] + " " + StaffLogin.activeUser.getDepartmentName())) {
+                cmboUpdDepartment.setSelectedItem(c);
+            }
+        }
     }
 
     /**
@@ -29,6 +77,12 @@ public class UpdateUser extends javax.swing.JFrame {
 
         btnMinimize = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        txtFirstName = new javax.swing.JTextField();
+        txtLastName = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
+        txtCell = new javax.swing.JTextField();
+        txtStaffUsername = new javax.swing.JTextField();
+        txtStaffPassword = new javax.swing.JPasswordField();
         cmboUpdCampusLocation = new javax.swing.JComboBox<>();
         cmboUpdDepartment = new javax.swing.JComboBox<>();
         btnBack = new javax.swing.JButton();
@@ -72,6 +126,46 @@ public class UpdateUser extends javax.swing.JFrame {
         });
         getContentPane().add(btnExit);
         btnExit.setBounds(760, 10, 30, 30);
+
+        txtFirstName.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
+        txtFirstName.setToolTipText("Enter First Name");
+        txtFirstName.setBorder(null);
+        txtFirstName.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        getContentPane().add(txtFirstName);
+        txtFirstName.setBounds(110, 170, 200, 20);
+
+        txtLastName.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
+        txtLastName.setToolTipText("Enter Last Name");
+        txtLastName.setBorder(null);
+        txtLastName.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        getContentPane().add(txtLastName);
+        txtLastName.setBounds(110, 247, 200, 20);
+
+        txtEmail.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
+        txtEmail.setToolTipText("Enter Email");
+        txtEmail.setBorder(null);
+        txtEmail.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        getContentPane().add(txtEmail);
+        txtEmail.setBounds(110, 320, 200, 20);
+
+        txtCell.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
+        txtCell.setToolTipText("Enter Cellphone Number");
+        txtCell.setBorder(null);
+        txtCell.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        getContentPane().add(txtCell);
+        txtCell.setBounds(110, 393, 200, 20);
+
+        txtStaffUsername.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
+        txtStaffUsername.setToolTipText("Enter Username");
+        txtStaffUsername.setBorder(null);
+        txtStaffUsername.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        getContentPane().add(txtStaffUsername);
+        txtStaffUsername.setBounds(520, 247, 200, 20);
+
+        txtStaffPassword.setToolTipText("Enter Password");
+        txtStaffPassword.setBorder(null);
+        getContentPane().add(txtStaffPassword);
+        txtStaffPassword.setBounds(520, 320, 200, 20);
 
         cmboUpdCampusLocation.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
         cmboUpdCampusLocation.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Campus" }));
@@ -136,9 +230,161 @@ public class UpdateUser extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
+    public Staff staffObj;
+    public boolean isValid;
+
     private void btnUpdateProfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateProfileMouseClicked
-      
+        staffObj = new Staff();
+        isValid = true;
+        //
+        validateFirstName();
+        validateLastName();
+        validateEmail();
+        validateCell();
+        validateUsername();
+        validatePassword();
+        validateDepartment();
+        validateCampus();
+        //
+        if (isValid) {
+            staffObj.setUserID(StaffLogin.activeUser.getUserID());
+            Staff.updateStaff(staffObj);
+            StaffLogin.activeUser = Staff.getStaffMember(staffObj.getUsername());
+            bindData();
+            //
+        } else {
+            JOptionPane.showMessageDialog(null, "Please Fix the fields highlighted in red and update again");
+        }
     }//GEN-LAST:event_btnUpdateProfileMouseClicked
+
+    public void validateFirstName() {
+        staffObj.setFirstName(txtFirstName.getText());
+        if (staffObj.getFirstName() == "error") {
+            txtFirstName.setBackground(Color.red);
+            txtFirstName.setForeground(Color.white);
+            txtFirstName.setToolTipText("Between 1 - 50 characters, No digits or special characters");
+            isValid = false;
+        } else {
+            txtFirstName.setBackground(Color.white);
+            txtFirstName.setForeground(Color.black);
+            txtFirstName.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateLastName() {
+        staffObj.setLastName(txtLastName.getText());
+        if (staffObj.getLastName() == "error") {
+            txtLastName.setBackground(Color.red);
+            txtLastName.setForeground(Color.white);
+            txtLastName.setToolTipText("Between 1 - 50 characters, No digits or special characters");
+            isValid = false;
+        } else {
+            txtLastName.setBackground(Color.white);
+            txtLastName.setForeground(Color.black);
+            txtLastName.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateEmail() {
+        staffObj.setEmail(txtEmail.getText());
+        if (staffObj.getEmail() == "error") {
+            txtEmail.setBackground(Color.red);
+            txtEmail.setForeground(Color.white);
+            txtEmail.setToolTipText("Between 5 - 50 characters, must contain @ and . sign");
+            isValid = false;
+        } else {
+            txtEmail.setBackground(Color.white);
+            txtEmail.setForeground(Color.black);
+            txtEmail.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateCell() {
+        staffObj.setCellphone(txtCell.getText());
+        if (staffObj.getCellphone() == "error") {
+            txtCell.setBackground(Color.red);
+            txtCell.setForeground(Color.white);
+            txtCell.setToolTipText("only 10 digits, starting with a 0");
+            isValid = false;
+        } else {
+            txtCell.setBackground(Color.white);
+            txtCell.setForeground(Color.black);
+            txtCell.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateUsername() {
+        staffObj.setUsername(txtStaffUsername.getText());
+        if (!staffObj.getUsername().equals(StaffLogin.activeUser.getUsername())) {
+            if (staffObj.getUsername() == "error") {
+                txtStaffUsername.setBackground(Color.red);
+                txtStaffUsername.setForeground(Color.white);
+                txtStaffUsername.setToolTipText("Between 5 - 50 characters");
+                isValid = false;
+            } else if (!Staff.isUniqueUsername(txtStaffUsername.getText())) {
+                txtStaffUsername.setBackground(Color.red);
+                txtStaffUsername.setForeground(Color.white);
+                txtStaffUsername.setToolTipText("Username already exists");
+                isValid = false;
+            } else {
+                txtStaffUsername.setBackground(Color.white);
+                txtStaffUsername.setForeground(Color.black);
+                txtStaffUsername.setToolTipText("Validated!");
+            }
+        }
+        //
+    }
+
+    public void validatePassword() {
+        staffObj.setPassword(txtStaffPassword.getText());
+        if (!staffObj.getPassword().equals(StaffLogin.activeUser.getPassword())) {
+            if (staffObj.getPassword() == "error") {
+                txtStaffPassword.setBackground(Color.red);
+                txtStaffPassword.setForeground(Color.white);
+                txtStaffPassword.setToolTipText("Length between 5 and 50 characters");
+                isValid = false;
+            } else {
+                txtStaffPassword.setBackground(Color.white);
+                txtStaffPassword.setForeground(Color.black);
+                txtStaffPassword.setToolTipText("Validated!");
+            }
+            //
+        }
+    }
+
+    public void validateDepartment() {
+        staffObj.setDepartment(cmboUpdDepartment.getSelectedIndex());
+        if (cmboUpdDepartment.getSelectedIndex() == 0) {
+            cmboUpdDepartment.setBackground(Color.red);
+            cmboUpdDepartment.setForeground(Color.white);
+            cmboUpdDepartment.setToolTipText("Select a department");
+            isValid = false;
+        } else {
+            cmboUpdDepartment.setBackground(Color.white);
+            cmboUpdDepartment.setForeground(Color.black);
+            cmboUpdDepartment.setToolTipText("Validated!");
+        }
+        //
+    }
+
+    public void validateCampus() {
+        staffObj.setCampusLocation(cmboUpdCampusLocation.getSelectedIndex());
+        if (cmboUpdCampusLocation.getSelectedIndex() == 0) {
+            cmboUpdCampusLocation.setBackground(Color.red);
+            cmboUpdCampusLocation.setForeground(Color.white);
+            cmboUpdCampusLocation.setToolTipText("Select a location");
+            isValid = false;
+        } else {
+            cmboUpdCampusLocation.setBackground(Color.white);
+            cmboUpdCampusLocation.setForeground(Color.black);
+            cmboUpdCampusLocation.setToolTipText("Validated!");
+        }
+        //
+    }
 
     /**
      * @param args the command line arguments
@@ -183,5 +429,11 @@ public class UpdateUser extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmboUpdCampusLocation;
     private javax.swing.JComboBox<String> cmboUpdDepartment;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField txtCell;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtFirstName;
+    private javax.swing.JTextField txtLastName;
+    private javax.swing.JPasswordField txtStaffPassword;
+    private javax.swing.JTextField txtStaffUsername;
     // End of variables declaration//GEN-END:variables
 }

@@ -193,6 +193,31 @@ public class Staff extends User implements CampusLocation, Department {
         return null;
     }
 
+    // Get all the required Staff member data ..
+    public static Staff getStaffMember(String username) {
+        Staff staff = null;
+        try {
+            pst = StaffHandler.getStaffMember(username);
+            rs = (ResultSet) pst.executeQuery();
+            while (rs.next()) {
+                staff = new Staff(rs.getInt("StaffID"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("Email"),
+                        rs.getString("Cellphone"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getString("DepartmentName"),
+                        rs.getString("CampusName"),
+                        rs.getInt("Accepted"));
+            }
+            return staff;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        return null;
+    }
+
     public static boolean isUniqueUsername(String usernameInput) {
         ArrayList<Staff> allStaff = getStaff("All");
         //
@@ -254,5 +279,5 @@ public class Staff extends User implements CampusLocation, Department {
     public static void updateStaff(Staff s) {
         StaffHandler.updateStaff(s.userID, s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
     }
-    
+
 }

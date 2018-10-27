@@ -202,6 +202,7 @@ public class StaffLogin extends javax.swing.JFrame {
         adminLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAdminActionPerformed
+    public static Staff activeUser;
     private int logInAtempts = 0;
     private void btnStaffLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffLogin1ActionPerformed
 
@@ -219,9 +220,9 @@ public class StaffLogin extends javax.swing.JFrame {
         }
         if (UserFound) {
             //log in user
+            activeUser = Staff.getStaffMember(txtStaffUsername.getText());
             StaffMenu staffMenu = new StaffMenu();
             staffMenu.setVisible(true);
-            
             this.dispose();
         } else {
             //throw warning
@@ -240,7 +241,7 @@ public class StaffLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnStaffLogin1MouseClicked
 
     private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
-         txtPassword.setText("");
+        txtPassword.setText("");
     }//GEN-LAST:event_txtPasswordFocusGained
 
     /**

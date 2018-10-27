@@ -54,6 +54,26 @@ public class StaffHandler {
         return pst;
     }
 
+    //get Staff member from db
+    public static PreparedStatement getStaffMember(String username) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            String sql = "SELECT * FROM staff "
+                    + "INNER JOIN department ON staff.Department = department.DepartmentID "
+                    + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
+                    + "WHERE Username = ?";
+            //
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            pst.setString(1, username);
+            //
+            return pst;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        //
+        return pst;
+    }
+
     //accept a pending staff member
     public static void acceptPendingStaff(String name, int id) {
         try {
@@ -85,7 +105,7 @@ public class StaffHandler {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     // Update Statement
     public static void updateStaff(int StaffID, String FirstName, String LastName, String Email, String Cellphone, String Username, String Password, int DepartmentName, int CampusName) {
         try {
@@ -94,8 +114,8 @@ public class StaffHandler {
             st = con.createStatement();
             st.executeUpdate("UPDATE staff "
                     + "SET FirstName = '" + FirstName + "', LastName = '" + LastName + "', Email = '" + Email + "', Cellphone = '" + Cellphone + "', "
-                    + "Username = '" + Username + "', Password = '" + Password + "', Department " + DepartmentName + ", CampusLocation " + CampusName + " "
-                    + "WHERE StaffID = " + StaffID +"");
+                    + "Username = '" + Username + "', Password = '" + Password + "', Department = " + DepartmentName + ", CampusLocation = " + CampusName + " "
+                    + "WHERE StaffID = " + StaffID + "");
             //
             JOptionPane.showMessageDialog(null, "Member Profile, Updated!");
         } catch (Exception e) {
