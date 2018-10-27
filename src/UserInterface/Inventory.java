@@ -146,15 +146,17 @@ public class Inventory extends javax.swing.JFrame {
         getContentPane().add(btnSearchStock);
         btnSearchStock.setBounds(880, 140, 46, 49);
 
+        rbProdName.setBackground(new java.awt.Color(255, 255, 255));
         SearchCriteriaGroup.add(rbProdName);
         rbProdName.setText("Product Name");
         getContentPane().add(rbProdName);
-        rbProdName.setBounds(530, 150, 120, 25);
+        rbProdName.setBounds(530, 150, 120, 23);
 
+        rbCategory.setBackground(new java.awt.Color(255, 255, 255));
         SearchCriteriaGroup.add(rbCategory);
         rbCategory.setText("Category");
         getContentPane().add(rbCategory);
-        rbCategory.setBounds(530, 180, 120, 25);
+        rbCategory.setBounds(530, 180, 120, 23);
 
         tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

@@ -136,6 +136,11 @@ public class StaffLogin extends javax.swing.JFrame {
         txtPassword.setText("password");
         txtPassword.setToolTipText("Enter Password");
         txtPassword.setBorder(null);
+        txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtPasswordFocusGained(evt);
+            }
+        });
         txtPassword.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtPasswordMouseClicked(evt);
@@ -197,6 +202,7 @@ public class StaffLogin extends javax.swing.JFrame {
         adminLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAdminActionPerformed
+    public static Staff activeUser;
     private int logInAtempts = 0;
     private void btnStaffLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffLogin1ActionPerformed
 
@@ -214,6 +220,7 @@ public class StaffLogin extends javax.swing.JFrame {
         }
         if (UserFound) {
             //log in user
+            activeUser = Staff.getStaffMember(txtStaffUsername.getText());
             StaffMenu staffMenu = new StaffMenu();
             staffMenu.setVisible(true);
             this.dispose();
@@ -232,6 +239,10 @@ public class StaffLogin extends javax.swing.JFrame {
     private void btnStaffLogin1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStaffLogin1MouseClicked
 
     }//GEN-LAST:event_btnStaffLogin1MouseClicked
+
+    private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
+        txtPassword.setText("");
+    }//GEN-LAST:event_txtPasswordFocusGained
 
     /**
      * @param args the command line arguments

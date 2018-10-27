@@ -11,12 +11,12 @@ import javax.swing.JOptionPane;
  *
  * @author User
  */
-public class Menu extends javax.swing.JFrame {
+public class RequestItems extends javax.swing.JFrame {
 
     /**
-     * Creates new form Menu
+     * Creates new form RequestItems
      */
-    public Menu() {
+    public RequestItems() {
         initComponents();
     }
 
@@ -32,14 +32,13 @@ public class Menu extends javax.swing.JFrame {
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        btnInventory = new javax.swing.JButton();
-        btnStaff = new javax.swing.JButton();
-        btnOrders = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblRequestItems = new javax.swing.JTable();
+        btnSendRequest = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(652, 459));
+        setMinimumSize(new java.awt.Dimension(1031, 665));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -57,12 +56,12 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnMinimize);
-        btnMinimize.setBounds(550, 10, 30, 30);
+        btnMinimize.setBounds(910, 0, 31, 31);
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout1.png"))); // NOI18N
-        btnBackLogout.setToolTipText("Logout");
+        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        btnBackLogout.setToolTipText("Back");
         btnBackLogout.setBorder(null);
         btnBackLogout.setBorderPainted(false);
         btnBackLogout.setContentAreaFilled(false);
@@ -78,7 +77,7 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnBackLogout);
-        btnBackLogout.setBounds(580, 10, 30, 30);
+        btnBackLogout.setBounds(950, 0, 31, 31);
 
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -93,61 +92,39 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnExit);
-        btnExit.setBounds(610, 10, 30, 30);
+        btnExit.setBounds(980, 0, 50, 30);
 
-        btnInventory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/menubtn.png"))); // NOI18N
-        btnInventory.setToolTipText("Inventory ");
-        btnInventory.setBorderPainted(false);
-        btnInventory.setContentAreaFilled(false);
-        btnInventory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnInventory.addActionListener(new java.awt.event.ActionListener() {
+        tblRequestItems.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblRequestItems);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(120, 220, 810, 240);
+
+        btnSendRequest.setBackground(new java.awt.Color(254, 212, 29));
+        btnSendRequest.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSendRequest.setText("Send Request");
+        btnSendRequest.setBorderPainted(false);
+        btnSendRequest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInventoryActionPerformed(evt);
+                btnSendRequestActionPerformed(evt);
             }
         });
-        getContentPane().add(btnInventory);
-        btnInventory.setBounds(150, 190, 165, 56);
+        getContentPane().add(btnSendRequest);
+        btnSendRequest.setBounds(783, 513, 140, 30);
 
-        btnStaff.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnStaff.png"))); // NOI18N
-        btnStaff.setToolTipText("Staff");
-        btnStaff.setBorderPainted(false);
-        btnStaff.setContentAreaFilled(false);
-        btnStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnStaff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStaffActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnStaff);
-        btnStaff.setBounds(360, 190, 167, 55);
-
-        btnOrders.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnOrders.png"))); // NOI18N
-        btnOrders.setToolTipText("Orders");
-        btnOrders.setBorderPainted(false);
-        btnOrders.setContentAreaFilled(false);
-        btnOrders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnOrders.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOrdersActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnOrders);
-        btnOrders.setBounds(150, 270, 165, 55);
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnReports.png"))); // NOI18N
-        jButton1.setToolTipText("View and Generate reports");
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(jButton1);
-        jButton1.setBounds(360, 270, 160, 50);
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/adminMenu.png"))); // NOI18N
-        jLabel2.setText("jLabel2");
-        jLabel2.setMinimumSize(new java.awt.Dimension(652, 459));
-        jLabel2.setPreferredSize(new java.awt.Dimension(652, 459));
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(0, 0, 652, 459);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/itemRequestForm.png"))); // NOI18N
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 0, 1031, 637);
 
         pack();
         setLocationRelativeTo(null);
@@ -162,15 +139,9 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutMouseClicked
 
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
-
-        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
-        if (selection == JOptionPane.YES_OPTION) {
-            StaffLogin staffLogin = new StaffLogin();
-            staffLogin.setVisible(true);
-            this.dispose();
-        }
-
-
+        Menu menu = new Menu();
+        menu.setVisible(true);;
+        this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
@@ -180,23 +151,12 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
-    private void btnInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventoryActionPerformed
-        Inventory inventory = new Inventory();
-        inventory.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnInventoryActionPerformed
-
-    private void btnStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffActionPerformed
-        StaffFrm staffForm = new StaffFrm();
-        staffForm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnStaffActionPerformed
-
-    private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
-        AdminOrders orders = new AdminOrders();
-        orders.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnOrdersActionPerformed
+    private void btnSendRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendRequestActionPerformed
+//        int option = JOptionPane.showOptionDialog(null, "Edit quantity or remove?", "Option", JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Edit", "Remove"}, "default");
+//        if (option == JOptionPane.OK_OPTION) {
+//            String qty = JOptionPane.showInputDialog(null, "Enter new quantity","Quantity",JOptionPane.OK_CANCEL_OPTION);
+//        }
+    }//GEN-LAST:event_btnSendRequestActionPerformed
 
     /**
      * @param args the command line arguments
@@ -215,20 +175,20 @@ public class Menu extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RequestItems.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RequestItems.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RequestItems.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RequestItems.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu().setVisible(true);
+                new RequestItems().setVisible(true);
             }
         });
     }
@@ -236,11 +196,10 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
-    private javax.swing.JButton btnInventory;
     private javax.swing.JButton btnMinimize;
-    private javax.swing.JButton btnOrders;
-    private javax.swing.JButton btnStaff;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnSendRequest;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblRequestItems;
     // End of variables declaration//GEN-END:variables
 }

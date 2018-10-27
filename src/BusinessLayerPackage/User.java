@@ -12,7 +12,6 @@ package BusinessLayerPackage;
 public abstract class User {
 
     public User() {
-        userID = 0;
     }
 
     public User(int userID, String firstName, String lastName, String username, String password) {
@@ -23,7 +22,7 @@ public abstract class User {
         this.password = password;
     }
 
-    protected final int userID;
+    protected int userID;
     protected String firstName;
     protected String lastName;
     protected String username;
@@ -78,6 +77,10 @@ public abstract class User {
 
     public int getUserID() {
         return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getFirstName() {
