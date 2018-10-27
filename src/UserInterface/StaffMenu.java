@@ -18,8 +18,20 @@ public class StaffMenu extends javax.swing.JFrame {
      */
     public StaffMenu() {
         initComponents();
+        if (!checkAccept()) {
+            btnViewItems.setEnabled(false);
+            btnViewMyRequests.setEnabled(false);
+        }
     }
 
+    public boolean checkAccept(){
+        if (StaffLogin.activeUser.getAccepted() == 1) {
+            return true;
+        }
+        //
+        return false;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,7 +43,7 @@ public class StaffMenu extends javax.swing.JFrame {
 
         btnUpdateProfile = new javax.swing.JButton();
         btnViewMyRequests = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnViewItems = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
@@ -68,18 +80,18 @@ public class StaffMenu extends javax.swing.JFrame {
         getContentPane().add(btnViewMyRequests);
         btnViewMyRequests.setBounds(360, 180, 170, 50);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnRequestView.png"))); // NOI18N
-        jButton1.setToolTipText("View items and send item requests");
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnViewItems.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnRequestView.png"))); // NOI18N
+        btnViewItems.setToolTipText("View items and send item requests");
+        btnViewItems.setBorderPainted(false);
+        btnViewItems.setContentAreaFilled(false);
+        btnViewItems.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewItems.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnViewItemsActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(140, 240, 390, 50);
+        getContentPane().add(btnViewItems);
+        btnViewItems.setBounds(140, 240, 390, 50);
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
         btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
@@ -173,11 +185,11 @@ public class StaffMenu extends javax.swing.JFrame {
        
     }//GEN-LAST:event_btnUpdateProfileActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnViewItemsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewItemsActionPerformed
         StaffItems staffViewItems = new StaffItems();
         staffViewItems.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnViewItemsActionPerformed
 
     private void btnViewMyRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMyRequestsActionPerformed
        StaffPastRequests requestHistory = new StaffPastRequests();
@@ -225,8 +237,8 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnUpdateProfile;
+    private javax.swing.JButton btnViewItems;
     private javax.swing.JButton btnViewMyRequests;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
