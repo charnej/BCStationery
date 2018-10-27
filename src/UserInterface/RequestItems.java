@@ -18,6 +18,14 @@ public class RequestItems extends javax.swing.JFrame {
      */
     public RequestItems() {
         initComponents();
+        //
+        bindData();
+    }
+
+    public void bindData() {
+        txtProductName.setText(StaffItems.chosenItem.getProductName());
+        txtManufacturer.setText(StaffItems.chosenItem.getManufacturer());
+        txtCategory.setText(StaffItems.chosenItem.getCategory());
     }
 
     /**
@@ -32,9 +40,11 @@ public class RequestItems extends javax.swing.JFrame {
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblRequestItems = new javax.swing.JTable();
         btnSendRequest = new javax.swing.JButton();
+        txtManufacturer = new javax.swing.JTextField();
+        spnQtyAdd = new javax.swing.JSpinner();
+        txtProductName = new javax.swing.JTextField();
+        txtCategory = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -94,22 +104,6 @@ public class RequestItems extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 0, 50, 30);
 
-        tblRequestItems.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tblRequestItems);
-
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(120, 220, 810, 240);
-
         btnSendRequest.setBackground(new java.awt.Color(254, 212, 29));
         btnSendRequest.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnSendRequest.setText("Send Request");
@@ -120,7 +114,26 @@ public class RequestItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnSendRequest);
-        btnSendRequest.setBounds(783, 513, 140, 30);
+        btnSendRequest.setBounds(140, 340, 140, 30);
+
+        txtManufacturer.setEditable(false);
+        txtManufacturer.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        getContentPane().add(txtManufacturer);
+        txtManufacturer.setBounds(140, 200, 130, 30);
+
+        spnQtyAdd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        getContentPane().add(spnQtyAdd);
+        spnQtyAdd.setBounds(140, 300, 130, 30);
+
+        txtProductName.setEditable(false);
+        txtProductName.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        getContentPane().add(txtProductName);
+        txtProductName.setBounds(140, 150, 130, 30);
+
+        txtCategory.setEditable(false);
+        txtCategory.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        getContentPane().add(txtCategory);
+        txtCategory.setBounds(140, 250, 130, 30);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/itemRequestForm.png"))); // NOI18N
         getContentPane().add(jLabel1);
@@ -139,8 +152,8 @@ public class RequestItems extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutMouseClicked
 
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
-        Menu menu = new Menu();
-        menu.setVisible(true);;
+        StaffItems staffItems = new StaffItems();
+        staffItems.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
@@ -152,10 +165,10 @@ public class RequestItems extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnSendRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendRequestActionPerformed
-//        int option = JOptionPane.showOptionDialog(null, "Edit quantity or remove?", "Option", JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Edit", "Remove"}, "default");
-//        if (option == JOptionPane.OK_OPTION) {
-//            String qty = JOptionPane.showInputDialog(null, "Enter new quantity","Quantity",JOptionPane.OK_CANCEL_OPTION);
-//        }
+        int selection = JOptionPane.showConfirmDialog(null, "Send Request", "Done ", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            // insert informasie in request en request details ..
+        }
     }//GEN-LAST:event_btnSendRequestActionPerformed
 
     /**
@@ -199,7 +212,9 @@ public class RequestItems extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSendRequest;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblRequestItems;
+    private javax.swing.JSpinner spnQtyAdd;
+    private javax.swing.JTextField txtCategory;
+    private javax.swing.JTextField txtManufacturer;
+    private javax.swing.JTextField txtProductName;
     // End of variables declaration//GEN-END:variables
 }

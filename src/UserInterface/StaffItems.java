@@ -28,7 +28,7 @@ public class StaffItems extends javax.swing.JFrame {
     public StaffItems() {
         initComponents();
         Stock objStockHolder = new Stock();
-        allStock =objStockHolder.getStock();
+        allStock = objStockHolder.getStock();
         populateTable(allStock);
         //event listener for sorting on column headers
         JTableHeader header = tblInventory.getTableHeader();
@@ -45,26 +45,27 @@ public class StaffItems extends javax.swing.JFrame {
 //            }
 //            
 //        });
-        
+
     }
     private ArrayList<Stock> allStock;
-    private void populateTable(ArrayList<Stock> stockList){
-        
-        DefaultTableModel dmodel =  (DefaultTableModel)tblInventory.getModel();
+
+    private void populateTable(ArrayList<Stock> stockList) {
+
+        DefaultTableModel dmodel = (DefaultTableModel) tblInventory.getModel();
         Object[] row = new Object[5];
         //clearTable
         dmodel.setRowCount(0);
-        if(stockList.size()>0){
+        if (stockList.size() > 0) {
             for (Stock stc : stockList) {
-               row[0]= stc.getProductName();
-               row[1]= stc.getManufacturer();
-               row[2]= stc.getCategory();
-               row[3]= stc.getPrice();
-               row[4]= stc.getQuantity();
-               dmodel.addRow(row);
+                row[0] = stc.getStockID();
+                row[1] = stc.getProductName();
+                row[2] = stc.getManufacturer();
+                row[3] = stc.getCategory();
+                row[4] = stc.getQuantity();
+                dmodel.addRow(row);
             }
-        }else{
-            JOptionPane.showMessageDialog(null, "There is no Data that matches your search result","Attention",JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -86,7 +87,7 @@ public class StaffItems extends javax.swing.JFrame {
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         cmboCategories = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        btnChoose = new javax.swing.JButton();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -134,11 +135,11 @@ public class StaffItems extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ProductName", "Manufacturer", "Category", "Price", "Quantity"
+                "ID", "ProductName", "Manufacturer", "Category", "Quantity"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -232,13 +233,18 @@ public class StaffItems extends javax.swing.JFrame {
         getContentPane().add(cmboCategories);
         cmboCategories.setBounds(506, 160, 110, 30);
 
-        jButton1.setBackground(new java.awt.Color(254, 212, 29));
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("View Request");
-        jButton1.setBorderPainted(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(jButton1);
-        jButton1.setBounds(783, 523, 150, 30);
+        btnChoose.setBackground(new java.awt.Color(254, 212, 29));
+        btnChoose.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnChoose.setText("Choose Item");
+        btnChoose.setBorderPainted(false);
+        btnChoose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnChoose.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnChooseMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnChoose);
+        btnChoose.setBounds(783, 523, 150, 30);
 
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/InventoryBG.png"))); // NOI18N
         getContentPane().add(BG);
@@ -249,7 +255,7 @@ public class StaffItems extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
@@ -275,20 +281,19 @@ public class StaffItems extends javax.swing.JFrame {
 
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
         //Iterate and search for specific stock
-        String input =txtSearchStock.getText();
-        
+        String input = txtSearchStock.getText();
+
         ArrayList<Stock> newListStock = new ArrayList<Stock>();
-        if(!input.isEmpty())
-        {
-            String inputCapital = input.substring(0, 1).toUpperCase()+input.substring(1).toLowerCase();
+        if (!input.isEmpty()) {
+            String inputCapital = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
             for (Stock stock : allStock) {
-                if((stock.getProductName().contains(inputCapital))||(stock.getCategory().contains(inputCapital))){
+                if ((stock.getProductName().contains(inputCapital)) || (stock.getCategory().contains(inputCapital))) {
                     newListStock.add(stock);
                 }
             }
             populateTable(newListStock);
-        }else{
-            JOptionPane.showMessageDialog(null, "Please enter a keyword for the search","Attention",JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Please enter a keyword for the search", "Attention", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchStockActionPerformed
 
@@ -297,12 +302,31 @@ public class StaffItems extends javax.swing.JFrame {
     }//GEN-LAST:event_btnStaffViewAllStockActionPerformed
 
     private void tblInventoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInventoryMouseClicked
-        
+
     }//GEN-LAST:event_tblInventoryMouseClicked
 
     private void tblInventoryKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblInventoryKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_tblInventoryKeyPressed
+
+    public static Stock chosenItem;
+
+    private void btnChooseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseMouseClicked
+        try {
+            int stockID = (int) tblInventory.getValueAt(tblInventory.getSelectedRow(), 0);
+            //
+            int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want request this item?", "Request ", JOptionPane.INFORMATION_MESSAGE);
+            if (selection == JOptionPane.YES_OPTION) {
+                chosenItem = Stock.getStockItem(stockID);
+                //
+                RequestItems requestItem = new RequestItems();
+                requestItem.setVisible(true);
+                this.dispose();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Please select a valid Item to Request");
+        }
+    }//GEN-LAST:event_btnChooseMouseClicked
 
     /**
      * @param args the command line arguments
@@ -349,12 +373,12 @@ public class StaffItems extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BG;
     private javax.swing.JButton btnBackLogout;
+    private javax.swing.JButton btnChoose;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSearchStock;
     private javax.swing.JButton btnStaffViewAllStock;
     private javax.swing.JComboBox<String> cmboCategories;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblInventory;
     private javax.swing.JTextField txtSearchStock;

@@ -9,13 +9,28 @@ package BusinessLayerPackage;
 import DataAccessLayerPackage.StockHandler;
 import java.awt.List;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Jozehan
  */
 public class Stock {
+
+    public Stock() {
+    }
+
+    // constructor used in Request Details
+    public Stock(int stockID, String productName, String manufacturer, String category) {
+        this.stockID = stockID;
+        this.productName = productName;
+        this.manufacturer = manufacturer;
+        this.category = category;
+    }
 
     public Stock(int stockID, String productName, String manufacturer, String category, double price, int Quantity, Date entryDate) {
         this.stockID = stockID;
@@ -26,8 +41,8 @@ public class Stock {
         this.Quantity = Quantity;
         this.entryDate = entryDate;
     }
-    
-    private final int stockID;
+
+    private int stockID;
     private String productName;
     private String manufacturer;
     private String category;
@@ -111,8 +126,30 @@ public class Stock {
         return stockID;
     }
 
-    public Stock() {
-        this.stockID = 0;
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+
+    private static PreparedStatement pst = null;
+    private static ResultSet rs = null;
+
+    // Get all the required Stock Item data ..
+    public static Stock getStockItem(int stockID) {
+        Stock stock = null;
+        try {
+            pst = StockHandler.getStockItem(stockID);
+            rs = (ResultSet) pst.executeQuery();
+            while (rs.next()) {
+                stock = new Stock(rs.getInt("StockID"),
+                        rs.getString("ProductName"),
+                        rs.getString("Manufacturer"),
+                        rs.getString("Name"));
+            }
+            return stock;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        return null;
     }
 
 }
