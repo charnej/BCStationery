@@ -11,12 +11,12 @@ import javax.swing.JOptionPane;
  *
  * @author User
  */
-public class StaffMenu extends javax.swing.JFrame {
+public class StaffPastRequests extends javax.swing.JFrame {
 
     /**
-     * Creates new form StaffMenu
+     * Creates new form StaffPastRequests
      */
-    public StaffMenu() {
+    public StaffPastRequests() {
         initComponents();
     }
 
@@ -29,57 +29,78 @@ public class StaffMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnUpdateProfile = new javax.swing.JButton();
-        btnViewMyRequests = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblRequests = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblRequestDetails = new javax.swing.JTable();
+        btnViewIncomRequests = new javax.swing.JButton();
+        btnViewAllRequests1 = new javax.swing.JButton();
+        btnViewDoneRequests1 = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(652, 459));
+        setMinimumSize(new java.awt.Dimension(1031, 665));
         setResizable(false);
         getContentPane().setLayout(null);
 
-        btnUpdateProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnUpdateProfile.png"))); // NOI18N
-        btnUpdateProfile.setToolTipText("View and update my profile");
-        btnUpdateProfile.setBorderPainted(false);
-        btnUpdateProfile.setContentAreaFilled(false);
-        btnUpdateProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdateProfile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateProfileActionPerformed(evt);
+        tblRequests.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        });
-        getContentPane().add(btnUpdateProfile);
-        btnUpdateProfile.setBounds(140, 180, 170, 50);
+        ));
+        jScrollPane1.setViewportView(tblRequests);
 
-        btnViewMyRequests.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnMyRequests.png"))); // NOI18N
-        btnViewMyRequests.setToolTipText("View request history");
-        btnViewMyRequests.setBorderPainted(false);
-        btnViewMyRequests.setContentAreaFilled(false);
-        btnViewMyRequests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewMyRequests.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewMyRequestsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnViewMyRequests);
-        btnViewMyRequests.setBounds(360, 180, 170, 50);
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(110, 230, 390, 290);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnRequestView.png"))); // NOI18N
-        jButton1.setToolTipText("View items and send item requests");
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        tblRequestDetails.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(140, 240, 390, 50);
+        ));
+        jScrollPane2.setViewportView(tblRequestDetails);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(560, 230, 370, 290);
+
+        btnViewIncomRequests.setBackground(new java.awt.Color(254, 212, 29));
+        btnViewIncomRequests.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnViewIncomRequests.setText("View Incomplete Requests");
+        btnViewIncomRequests.setBorderPainted(false);
+        btnViewIncomRequests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnViewIncomRequests);
+        btnViewIncomRequests.setBounds(510, 170, 220, 40);
+
+        btnViewAllRequests1.setBackground(new java.awt.Color(254, 212, 29));
+        btnViewAllRequests1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnViewAllRequests1.setText("View All Requests");
+        btnViewAllRequests1.setBorderPainted(false);
+        btnViewAllRequests1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnViewAllRequests1);
+        btnViewAllRequests1.setBounds(110, 170, 150, 40);
+
+        btnViewDoneRequests1.setBackground(new java.awt.Color(254, 212, 29));
+        btnViewDoneRequests1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnViewDoneRequests1.setText("View Complete Requests");
+        btnViewDoneRequests1.setBorderPainted(false);
+        btnViewDoneRequests1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnViewDoneRequests1);
+        btnViewDoneRequests1.setBounds(290, 170, 190, 40);
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
         btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
@@ -95,12 +116,12 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnMinimize);
-        btnMinimize.setBounds(550, 10, 30, 30);
+        btnMinimize.setBounds(910, 10, 31, 31);
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout1.png"))); // NOI18N
-        btnBackLogout.setToolTipText("Logout");
+        btnBackLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        btnBackLogout.setToolTipText("Back");
         btnBackLogout.setBorder(null);
         btnBackLogout.setBorderPainted(false);
         btnBackLogout.setContentAreaFilled(false);
@@ -116,7 +137,7 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnBackLogout);
-        btnBackLogout.setBounds(580, 10, 30, 30);
+        btnBackLogout.setBounds(950, 10, 31, 31);
 
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -131,11 +152,11 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnExit);
-        btnExit.setBounds(610, 10, 30, 30);
+        btnExit.setBounds(980, 10, 50, 30);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/staffMenu.png"))); // NOI18N
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(0, 0, 650, 450);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/requesthistory.png"))); // NOI18N
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 0, 1030, 637);
 
         pack();
         setLocationRelativeTo(null);
@@ -150,14 +171,9 @@ public class StaffMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutMouseClicked
 
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
-
-        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
-        if (selection == JOptionPane.YES_OPTION) {
-            StaffLogin staffLogin = new StaffLogin();
-            staffLogin.setVisible(true);
-            this.dispose();
-        }
-
+        StaffMenu menu = new StaffMenu();
+        menu.setVisible(true);;
+        this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
@@ -166,24 +182,6 @@ public class StaffMenu extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
-
-    private void btnUpdateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateProfileActionPerformed
-        UpdateUser updateUser = new UpdateUser();
-        updateUser.setVisible(true);
-       
-    }//GEN-LAST:event_btnUpdateProfileActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        StaffItems staffViewItems = new StaffItems();
-        staffViewItems.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void btnViewMyRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMyRequestsActionPerformed
-       StaffPastRequests requestHistory = new StaffPastRequests();
-       requestHistory.setVisible(true);
-       this.dispose();
-    }//GEN-LAST:event_btnViewMyRequestsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,20 +200,20 @@ public class StaffMenu extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StaffMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffPastRequests.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StaffMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffPastRequests.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StaffMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffPastRequests.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StaffMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffPastRequests.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StaffMenu().setVisible(true);
+                new StaffPastRequests().setVisible(true);
             }
         });
     }
@@ -224,9 +222,13 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
-    private javax.swing.JButton btnUpdateProfile;
-    private javax.swing.JButton btnViewMyRequests;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnViewAllRequests1;
+    private javax.swing.JButton btnViewDoneRequests1;
+    private javax.swing.JButton btnViewIncomRequests;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblRequestDetails;
+    private javax.swing.JTable tblRequests;
     // End of variables declaration//GEN-END:variables
 }
