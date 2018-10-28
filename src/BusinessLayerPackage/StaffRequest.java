@@ -11,6 +11,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -24,6 +26,8 @@ public class StaffRequest {
     private Date requestDate;
     private int staffID;
     private int complete;
+    //
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     // used to read staff request data
     public StaffRequest(int requestNr, Date requestDate) {
@@ -83,8 +87,8 @@ public class StaffRequest {
             pst = StaffRequestHandler.getStaffRequests(requestType, staffID);
             rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {
-                allRequests.add(new StaffRequest(rs.getInt("RequestNr"), 
-                rs.getDate("RequestDate")));
+                allRequests.add(new StaffRequest(rs.getInt("RequestNr"),
+                        rs.getDate("RequestDate")));
             }
             return allRequests;
         } catch (SQLException ex) {
@@ -92,5 +96,24 @@ public class StaffRequest {
         }
         return null;
     }
-    
+
+    // used to insert new Staff request
+    public static void insertStaffRequest(Date requestDate, int staffID) {
+        StaffRequestHandler.insertStaffRequest(sdf.format(requestDate), staffID);
+    }
+
+    // check to see if package exists
+    public static int isPackage(Date d, int staffID) {
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests("All", staffID);
+        String df = sdf.format(d); // ensure that date format remains constant
+        for (StaffRequest staffRequest : staffRequests) {
+            String staffDate = staffRequest.getRequestDate().toString();
+            if (staffDate.equals(df)) {
+                return staffRequest.getRequestNr();
+            }
+        }
+        //
+        return -1;
+    }
+
 }
