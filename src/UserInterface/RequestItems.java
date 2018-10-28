@@ -53,7 +53,7 @@ public class RequestItems extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setMinimumSize(new java.awt.Dimension(800, 628));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -71,7 +71,7 @@ public class RequestItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnMinimize);
-        btnMinimize.setBounds(910, 0, 31, 31);
+        btnMinimize.setBounds(680, 10, 31, 31);
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -92,7 +92,7 @@ public class RequestItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnBackLogout);
-        btnBackLogout.setBounds(950, 0, 31, 31);
+        btnBackLogout.setBounds(720, 10, 31, 31);
 
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -107,10 +107,10 @@ public class RequestItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnExit);
-        btnExit.setBounds(980, 0, 50, 30);
+        btnExit.setBounds(750, 10, 50, 30);
 
         btnSendRequest.setBackground(new java.awt.Color(254, 212, 29));
-        btnSendRequest.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSendRequest.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSendRequest.setText("Send Request");
         btnSendRequest.setBorderPainted(false);
         btnSendRequest.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -124,31 +124,34 @@ public class RequestItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnSendRequest);
-        btnSendRequest.setBounds(140, 340, 140, 30);
+        btnSendRequest.setBounds(500, 390, 140, 30);
 
         txtManufacturer.setEditable(false);
-        txtManufacturer.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        txtManufacturer.setBackground(new java.awt.Color(255, 255, 255));
+        txtManufacturer.setBorder(null);
         getContentPane().add(txtManufacturer);
-        txtManufacturer.setBounds(140, 200, 130, 30);
+        txtManufacturer.setBounds(140, 310, 200, 30);
 
         spnQtyAdd.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
         spnQtyAdd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         getContentPane().add(spnQtyAdd);
-        spnQtyAdd.setBounds(140, 300, 130, 30);
+        spnQtyAdd.setBounds(500, 220, 130, 30);
 
         txtProductName.setEditable(false);
-        txtProductName.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        txtProductName.setBackground(new java.awt.Color(255, 255, 255));
+        txtProductName.setBorder(null);
         getContentPane().add(txtProductName);
-        txtProductName.setBounds(140, 150, 130, 30);
+        txtProductName.setBounds(140, 220, 190, 30);
 
         txtCategory.setEditable(false);
-        txtCategory.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        txtCategory.setBackground(new java.awt.Color(255, 255, 255));
+        txtCategory.setBorder(null);
         getContentPane().add(txtCategory);
-        txtCategory.setBounds(140, 250, 130, 30);
+        txtCategory.setBounds(140, 400, 200, 30);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/itemRequestForm.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/itemRequestForm1.png"))); // NOI18N
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 1031, 637);
+        jLabel1.setBounds(0, 0, 800, 600);
 
         pack();
         setLocationRelativeTo(null);
