@@ -18,11 +18,11 @@ public class Reports extends javax.swing.JFrame {
      */
     public Reports() {
         initComponents();
-       ArrayList<RequestDetails> staffRequests = RequestDetails.selectRequestDetails();
+        //ArrayList<RequestDetails> staffRequests = RequestDetails.selectRequestDetails();
        
-        for (RequestDetails staffRequest : staffRequests) {
-            jTextArea1.append(staffRequest.toString()+"\n");
-        }
+//        for (RequestDetails staffRequest : staffRequests) {
+//            jTextArea1.append(staffRequest.toString()+"\n");
+//        }
     }
 
     /**

@@ -8,28 +8,50 @@ package BusinessLayerPackage;
 import java.sql.Date;
 import java.util.ArrayList;
 import DataAccessLayerPackage.RequestDetailsHandler;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author User
  */
-public class RequestDetails {    
-    private int requestNr;
-    private String productName;    
-    private int quantity;
-    private Date requestDate;
-    String firstName;
-    String lastName;
-    private int complete;
+public class RequestDetails extends Stock{
 
-    public RequestDetails(int requestNr, String productName, int quantity, Date requestDate, String firstName, String lastName, int complete) {
-        this.requestNr = requestNr;
-        this.productName = productName;
+    // fields needed
+    private int requestDetailsID;
+    private int requestNr;
+    private int stockID;
+    private int quantity;
+    private int complete;
+    private Date dateComplete;
+
+    // constructor used to display Request Details 
+    public RequestDetails(int requestDetailsID, int quantity, int complete, Date dateComplete, int stockID, String productName, String manufacturer, String category) {
+        super(stockID, productName, manufacturer, category);
+        this.requestDetailsID = requestDetailsID;
         this.quantity = quantity;
-        this.requestDate = requestDate;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.complete = complete;
+        this.dateComplete = dateComplete;
+    }
+    
+    // used to insert request details
+    public RequestDetails(int requestDetailsID, int requestNr, int stockID, int quantity, int complete, Date dateComplete) {
+        this.requestDetailsID = requestDetailsID;
+        this.requestNr = requestNr;
+        this.stockID = stockID;
+        this.quantity = quantity;
+        this.complete = complete;
+        this.dateComplete = dateComplete;
+    }
+
+    public int getRequestDetailsID() {
+        return requestDetailsID;
+    }
+
+    public void setRequestDetailsID(int requestDetailsID) {
+        this.requestDetailsID = requestDetailsID;
     }
 
     public int getRequestNr() {
@@ -40,12 +62,12 @@ public class RequestDetails {
         this.requestNr = requestNr;
     }
 
-    public String getProductName() {
-        return productName;
+    public int getStockID() {
+        return stockID;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
     }
 
     public int getQuantity() {
@@ -56,30 +78,6 @@ public class RequestDetails {
         this.quantity = quantity;
     }
 
-    public Date getRequestDate() {
-        return requestDate;
-    }
-
-    public void setRequestDate(Date requestDate) {
-        this.requestDate = requestDate;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public int getComplete() {
         return complete;
     }
@@ -88,24 +86,49 @@ public class RequestDetails {
         this.complete = complete;
     }
 
-    public static ArrayList<RequestDetails> selectRequestDetails(){
-        ArrayList<RequestDetails> requestDetailsList = RequestDetailsHandler.getRequestDetails();
-        return requestDetailsList;
+    public Date getDateComplete() {
+        return dateComplete;
+    }
+
+    public void setDateComplete(Date dateComplete) {
+        this.dateComplete = dateComplete;
+    }
+
+    //  -- database operations
+    private static PreparedStatement pst = null;
+    private static ResultSet rs = null;
+
+    // Static as this functionality is not bound to each object, but to the class
+    // Get all the required request data ..
+    public static ArrayList<RequestDetails> getRequestDetails(String requestType, int staffID, int requestNr) {
+        ArrayList<RequestDetails> allRequests = new ArrayList<RequestDetails>();
+        try {
+            pst = RequestDetailsHandler.getRequestDetails(requestType, staffID, requestNr);
+            rs = (ResultSet) pst.executeQuery();
+            while (rs.next()) {
+                allRequests.add(new RequestDetails(rs.getInt("RequestDetailsID"),
+                        rs.getInt("Quantity"), 
+                        rs.getInt("Complete"),
+                        rs.getDate("DateComplete"), 
+                        rs.getInt("StockID"), 
+                        rs.getString("ProductName"), 
+                        rs.getString("Manufacturer"), 
+                        rs.getString("Name")));
+            }
+            return allRequests;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        return null;
     }
     
-    public static RequestDetails[] toArray() {
-        RequestDetails[] it = new RequestDetails[selectRequestDetails().size()];
-        for (int i = 0; i < selectRequestDetails().size(); i++) {
-            it[i] = selectRequestDetails().get(i);
-        }
-        return it;
-
+    // delete operation
+    public static void deleteRequest(int detailID){
+        RequestDetailsHandler.deleteRequest(detailID);
     }
-
-    @Override
-    public String toString() {
-        //return requestNr + " " + productName + " " + quantity + " " + requestDate + " " + firstName + " " + lastName + " " + complete;
-        return String.format("%-5d %-5s\t %-10s %-20s %-10s %-10s %-10s", requestNr, productName, quantity, requestDate, firstName, lastName, complete);
+    
+    // used to insert new request details
+    public static void insertRequestDetails(int requestNr, int stockID, int Quantity) {
+        RequestDetailsHandler.insertRequestDetails(requestNr, stockID, Quantity);
     }
-  
 }
