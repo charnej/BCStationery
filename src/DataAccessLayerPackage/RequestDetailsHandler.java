@@ -28,11 +28,11 @@ public class RequestDetailsHandler {
     private static Statement st = null;
 
     //get Request Details from db
-    public static PreparedStatement getRequestDetails(String requestType, int staffID, int requestNr) {
+    public static PreparedStatement getRequestDetails(StaffRequestHandler.requestType requestType, int staffID, int requestNr) {
         try {
             con = JavaConnectDB.ConnectDB();
             String sql = "";
-            if (requestType == "All") {
+            if (requestType == StaffRequestHandler.requestType.All) {
                 sql = "SELECT requestdetails.RequestDetailsID, requestdetails.Quantity, requestdetails.Complete, requestdetails.DateComplete, requestdetails.StockID, ProductName, Manufacturer, category.Name FROM staffrequest "
                         + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
                         + "INNER JOIN requestdetails ON staffrequest.RequestNr = requestdetails.RequestNr "
@@ -40,7 +40,7 @@ public class RequestDetailsHandler {
                         + "INNER JOIN category ON stock.Category = category.CategoryID "
                         + "WHERE staffrequest.StaffID = " + staffID + " "
                         + "AND requestdetails.RequestNr = " + requestNr + " ";
-            } else if (requestType == "Complete") {
+            } else if (requestType == StaffRequestHandler.requestType.Complete) {
                 sql = "SELECT requestdetails.RequestDetailsID, requestdetails.Quantity, requestdetails.Complete, requestdetails.DateComplete, requestdetails.StockID, ProductName, Manufacturer, category.Name FROM staffrequest "
                         + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
                         + "INNER JOIN requestdetails ON staffrequest.RequestNr = requestdetails.RequestNr "
@@ -49,7 +49,7 @@ public class RequestDetailsHandler {
                         + "WHERE staffrequest.StaffID = " + staffID + " "
                         + "AND requestdetails.RequestNr = " + requestNr + " "
                         + "AND requestdetails.Complete = 1";
-            } else if (requestType == "Incomplete") {
+            } else if (requestType == StaffRequestHandler.requestType.Incomplete) {
                 sql = "SELECT requestdetails.RequestDetailsID, requestdetails.Quantity, requestdetails.Complete, requestdetails.DateComplete, requestdetails.StockID, ProductName, Manufacturer, category.Name FROM staffrequest "
                         + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
                         + "INNER JOIN requestdetails ON staffrequest.RequestNr = requestdetails.RequestNr "

@@ -81,7 +81,7 @@ public class StaffRequest {
 
     // Static as this functionality is not bound to each object, but to the class
     // Get all the required Staff request data ..
-    public static ArrayList<StaffRequest> getStaffRequests(String requestType, int staffID) {
+    public static ArrayList<StaffRequest> getStaffRequests(StaffRequestHandler.requestType requestType, int staffID) {
         ArrayList<StaffRequest> allRequests = new ArrayList<StaffRequest>();
         try {
             pst = StaffRequestHandler.getStaffRequests(requestType, staffID);
@@ -104,7 +104,7 @@ public class StaffRequest {
 
     // check to see if package exists
     public static int isPackage(Date d, int staffID) {
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests("All", staffID);
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, staffID);
         String df = sdf.format(d); // ensure that date format remains constant
         for (StaffRequest staffRequest : staffRequests) {
             String staffDate = staffRequest.getRequestDate().toString();

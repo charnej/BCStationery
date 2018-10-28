@@ -243,6 +243,11 @@ public class StaffItems extends javax.swing.JFrame {
                 btnChooseMouseClicked(evt);
             }
         });
+        btnChoose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooseActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnChoose);
         btnChoose.setBounds(783, 523, 150, 30);
 
@@ -327,6 +332,10 @@ public class StaffItems extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please select a valid Item to Request");
         }
     }//GEN-LAST:event_btnChooseMouseClicked
+
+    private void btnChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnChooseActionPerformed
 
     /**
      * @param args the command line arguments

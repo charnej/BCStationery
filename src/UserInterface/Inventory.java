@@ -34,17 +34,7 @@ public class Inventory extends javax.swing.JFrame {
         JTableHeader header = tblInventory.getTableHeader();
         //using built in function
         tblInventory.setAutoCreateRowSorter(true);
-        //using comparator
-        //header.addMouseListener(new headerSortMouseListener(tblInventory));
-//        JTable dmodel = new JTable(tblInventory.getModel());
-//        dmodel.getTableHeader().addMouseListener(new MouseAdapter () { 
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                int colSelected = dmodel.columnAtPoint(e.getPoint());
-//                JOptionPane.showMessageDialog(null,colSelected);
-//            }
-//            
-//        });
+
 
     }
     private ArrayList<Stock> allStock;

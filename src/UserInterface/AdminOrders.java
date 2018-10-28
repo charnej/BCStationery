@@ -5,7 +5,10 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.StaffRequest;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,7 +22,25 @@ public class AdminOrders extends javax.swing.JFrame {
     public AdminOrders() {
         initComponents();
     }
+ private void populateTable(ArrayList<StaffRequest> requestList) {
 
+        DefaultTableModel dmodel = (DefaultTableModel) tblStaffRequests.getModel();
+        Object[] row = new Object[5];
+        //clearTable
+        dmodel.setRowCount(0);
+        if (requestList.size() > 0) {
+            for (StaffRequest stc : requestList) {
+//                row[0] = stc.get();
+//                row[1] = stc.getManufacturer();
+//                row[2] = stc.getCategory();
+//                row[3] = stc.getPrice();
+//                row[4] = stc.getQuantity();
+                dmodel.addRow(row);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,6 +90,11 @@ public class AdminOrders extends javax.swing.JFrame {
         btnViewIncomStaffRequests.setToolTipText("View incomplete requests from staff");
         btnViewIncomStaffRequests.setBorderPainted(false);
         btnViewIncomStaffRequests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewIncomStaffRequests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewIncomStaffRequestsActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnViewIncomStaffRequests);
         btnViewIncomStaffRequests.setBounds(510, 170, 220, 40);
 
@@ -175,6 +201,11 @@ public class AdminOrders extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
+
+    private void btnViewIncomStaffRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewIncomStaffRequestsActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnViewIncomStaffRequestsActionPerformed
 
     /**
      * @param args the command line arguments
