@@ -127,4 +127,8 @@ public class RequestDetails extends Stock{
         RequestDetailsHandler.deleteRequest(detailID);
     }
     
+    // used to insert new request details
+    public static void insertRequestDetails(int requestNr, int stockID, int Quantity) {
+        RequestDetailsHandler.insertRequestDetails(requestNr, stockID, Quantity);
+    }
 }

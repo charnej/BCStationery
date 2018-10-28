@@ -6,6 +6,7 @@
 package DataAccessLayerPackage;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -51,4 +52,21 @@ public class StaffRequestHandler {
 
         return pst;
     }
+    
+    // used to insert new Staff request
+    public static void insertStaffRequest(String requestDate, int staffID) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            //
+            st = con.createStatement();
+            st.executeUpdate("insert into staffrequest "
+                    + "(RequestDate, StaffID, Complete) "
+                    + "values ('" + requestDate + "', " + staffID + ", 0)");
+            //
+            JOptionPane.showMessageDialog(null, "Staff Request sent");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
 }

@@ -5,6 +5,11 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.RequestDetails;
+import BusinessLayerPackage.StaffRequest;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -108,6 +113,11 @@ public class RequestItems extends javax.swing.JFrame {
         btnSendRequest.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnSendRequest.setText("Send Request");
         btnSendRequest.setBorderPainted(false);
+        btnSendRequest.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSendRequestMouseClicked(evt);
+            }
+        });
         btnSendRequest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSendRequestActionPerformed(evt);
@@ -121,6 +131,7 @@ public class RequestItems extends javax.swing.JFrame {
         getContentPane().add(txtManufacturer);
         txtManufacturer.setBounds(140, 200, 130, 30);
 
+        spnQtyAdd.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
         spnQtyAdd.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         getContentPane().add(spnQtyAdd);
         spnQtyAdd.setBounds(140, 300, 130, 30);
@@ -165,11 +176,23 @@ public class RequestItems extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnSendRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendRequestActionPerformed
-        int selection = JOptionPane.showConfirmDialog(null, "Send Request", "Done ", JOptionPane.INFORMATION_MESSAGE);
-        if (selection == JOptionPane.YES_OPTION) {
-            // insert informasie in request en request details ..
-        }
+
     }//GEN-LAST:event_btnSendRequestActionPerformed
+
+    private void btnSendRequestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSendRequestMouseClicked
+        int selection = JOptionPane.showConfirmDialog(null, "Send Item Request", "Item Request", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            int packageNum = StaffRequest.isPackage(Date.valueOf(LocalDate.now()), StaffLogin.activeUser.getUserID());
+            if (packageNum == -1) { // packages created based on dates
+                StaffRequest.insertStaffRequest(Date.valueOf(LocalDate.now()), StaffLogin.activeUser.getUserID());
+                packageNum = StaffRequest.isPackage(Date.valueOf(LocalDate.now()), StaffLogin.activeUser.getUserID());
+            }
+            //
+            int qty = (int) spnQtyAdd.getValue();
+            RequestDetails.insertRequestDetails(packageNum, StaffItems.chosenItem.getStockID(), qty);
+
+        }
+    }//GEN-LAST:event_btnSendRequestMouseClicked
 
     /**
      * @param args the command line arguments

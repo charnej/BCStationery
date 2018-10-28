@@ -69,9 +69,9 @@ public class RequestDetailsHandler {
 
         return pst;
     }
-    
+
     // delete operation
-    public static void deleteRequest(int detailID){
+    public static void deleteRequest(int detailID) {
         try {
             st = con.createStatement();
             st.executeUpdate("DELETE FROM requestdetails "
@@ -79,6 +79,22 @@ public class RequestDetailsHandler {
             JOptionPane.showMessageDialog(null, "Delete Successfull");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    // used to insert new Request Details
+    public static void insertRequestDetails(int requestNr, int stockID, int Quantity) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            //
+            st = con.createStatement();
+            st.executeUpdate("insert into requestdetails "
+                    + "(RequestNr, StockID, Quantity, Complete, DateComplete) "
+                    + "values (" + requestNr + ", " + stockID + ", " + Quantity + ", 0, " + null + ")");
+            //
+            JOptionPane.showMessageDialog(null, "Request Details Sent");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
     }
 
