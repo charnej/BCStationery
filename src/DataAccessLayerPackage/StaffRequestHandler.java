@@ -21,22 +21,24 @@ public class StaffRequestHandler {
     private static Connection con = null;
     private static PreparedStatement pst = null;
     private static Statement st = null;
-
+    public static enum requestType{
+        All,Complete,Incomplete
+    }
     //get Requests from db
-    public static PreparedStatement getStaffRequests(String requestType, int staffID) {
+    public static PreparedStatement getStaffRequests(requestType requestType, int staffID) {
         try {
             con = JavaConnectDB.ConnectDB();
             String sql = "";
-            if (requestType == "All") {
+            if (requestType == requestType.All) {
                 sql = "SELECT * FROM staffrequest "
                         + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
                         + "WHERE staffrequest.StaffID = " + staffID + " ";
-            } else if (requestType == "Complete") {
+            } else if (requestType == requestType.Complete) {
                 sql = "SELECT * FROM staffrequest "
                         + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
                         + "WHERE staffrequest.StaffID = " + staffID + " "
                         + "AND staffrequest.Complete = 1";
-            } else if (requestType == "Incomplete") {
+            } else if (requestType == requestType.Incomplete) {
                 sql = "SELECT * FROM staffrequest "
                         + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
                         + "WHERE staffrequest.StaffID = " + staffID + " "

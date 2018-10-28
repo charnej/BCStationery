@@ -7,6 +7,7 @@ package UserInterface;
 
 import BusinessLayerPackage.RequestDetails;
 import BusinessLayerPackage.StaffRequest;
+import DataAccessLayerPackage.StaffRequestHandler;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -35,7 +36,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
         tblRequestDetails.setVisible(false);
         btnCloseRequestPackage.setVisible(false);
         //
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests("All", StaffLogin.activeUser.getUserID());
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
         addParentTableData(staffRequests);
         //
         mode = "p";
@@ -48,7 +49,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
         tblRequestDetails.setVisible(true);
         btnCloseRequestPackage.setVisible(true);
         //
-        ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails("All", StaffLogin.activeUser.getUserID(), requestNr);
+        ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
         addChildTableData(requestDetails);
         //
         mode = "c";
@@ -130,6 +131,11 @@ public class StaffPastRequests extends javax.swing.JFrame {
         btnViewAllRequests1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnViewAllRequests1MouseClicked(evt);
+            }
+        });
+        btnViewAllRequests1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllRequests1ActionPerformed(evt);
             }
         });
         getContentPane().add(btnViewAllRequests1);
@@ -294,10 +300,10 @@ public class StaffPastRequests extends javax.swing.JFrame {
 
     private void btnViewAllRequests1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllRequests1MouseClicked
         if (mode.equals("p")) {
-            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests("All", StaffLogin.activeUser.getUserID());
+            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
             addParentTableData(staffRequests);
         } else if (mode.equals("c")) {
-            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails("All", StaffLogin.activeUser.getUserID(), requestNr);
+            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
             addChildTableData(requestDetails);
             btnRemoveRequest.setVisible(false);
         }
@@ -305,10 +311,10 @@ public class StaffPastRequests extends javax.swing.JFrame {
 
     private void btnViewDoneRequests1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewDoneRequests1MouseClicked
         if (mode.equals("p")) {
-            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests("Complete", StaffLogin.activeUser.getUserID());
+            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Complete, StaffLogin.activeUser.getUserID());
             addParentTableData(staffRequests);
         } else if (mode.equals("c")) {
-            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails("Complete", StaffLogin.activeUser.getUserID(), requestNr);
+            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.Complete, StaffLogin.activeUser.getUserID(), requestNr);
             addChildTableData(requestDetails);
             btnRemoveRequest.setVisible(false);
         }
@@ -316,10 +322,10 @@ public class StaffPastRequests extends javax.swing.JFrame {
 
     private void btnViewIncomRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewIncomRequestsMouseClicked
         if (mode.equals("p")) {
-            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests("Incomplete", StaffLogin.activeUser.getUserID());
+            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Incomplete, StaffLogin.activeUser.getUserID());
             addParentTableData(staffRequests);
         } else if (mode.equals("c")) {
-            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails("Incomplete", StaffLogin.activeUser.getUserID(), requestNr);
+            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.Incomplete, StaffLogin.activeUser.getUserID(), requestNr);
             addChildTableData(requestDetails);
             btnRemoveRequest.setVisible(true);
         }
@@ -354,7 +360,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
             if (selection == JOptionPane.YES_OPTION) {
                 RequestDetails.deleteRequest(DetailID);
                 //
-                ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails("All", StaffLogin.activeUser.getUserID(), requestNr);
+                ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
                 addChildTableData(requestDetails);
                 btnRemoveRequest.setVisible(false);
             }
@@ -362,6 +368,10 @@ public class StaffPastRequests extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please select a valid Request to Remove");
         }
     }//GEN-LAST:event_btnRemoveRequestMouseClicked
+
+    private void btnViewAllRequests1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllRequests1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnViewAllRequests1ActionPerformed
 
     public void addParentTableData(ArrayList<StaffRequest> staffRequests) {
         DefaultTableModel model = (DefaultTableModel) tblRequests.getModel();

@@ -182,7 +182,7 @@ public class RequestItems extends javax.swing.JFrame {
     private void btnSendRequestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSendRequestMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Send Item Request", "Item Request", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            int packageNum = StaffRequest.isPackage(Date.valueOf(LocalDate.now()), StaffLogin.activeUser.getUserID());
+            int packageNum = StaffRequest.isPackage(Date.valueOf(LocalDate.now()), StaffLogin.activeUser.getUserID());//checks if a package has been created already
             if (packageNum == -1) { // packages created based on dates
                 StaffRequest.insertStaffRequest(Date.valueOf(LocalDate.now()), StaffLogin.activeUser.getUserID());
                 packageNum = StaffRequest.isPackage(Date.valueOf(LocalDate.now()), StaffLogin.activeUser.getUserID());
