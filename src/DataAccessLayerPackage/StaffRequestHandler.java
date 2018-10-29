@@ -26,6 +26,10 @@ public class StaffRequestHandler {
     public static enum requestType {
         All, Complete, Incomplete
     }
+    
+    public static enum stateType {
+        Complete, Incomplete
+    }
 
     //get Requests from db
     public static PreparedStatement getStaffRequests(requestType requestType, int staffID) {
@@ -101,4 +105,29 @@ public class StaffRequestHandler {
         }
     }
 
+    // used to update the Staff request state
+    public static void updateState(StaffRequestHandler.stateType stateType, int requestNr) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            //
+            st = con.createStatement();
+            //
+            switch(stateType){
+                case Complete:
+                    st.executeUpdate("UPDATE staffrequest "
+                    + "SET Complete = 1 "
+                    + "WHERE RequestNr = " + requestNr + "");
+                    break;
+                case Incomplete:
+                    st.executeUpdate("UPDATE staffrequest "
+                    + "SET Complete = 0 "
+                    + "WHERE RequestNr = " + requestNr + "");
+                    break;
+            }
+            //
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
 }
