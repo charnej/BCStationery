@@ -8,6 +8,7 @@ package BusinessLayerPackage;
 import java.sql.Date;
 import java.util.ArrayList;
 import DataAccessLayerPackage.RequestDetailsHandler;
+import DataAccessLayerPackage.StaffRequestHandler;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -100,7 +101,7 @@ public class RequestDetails extends Stock{
 
     // Static as this functionality is not bound to each object, but to the class
     // Get all the required request data ..
-    public static ArrayList<RequestDetails> getRequestDetails(String requestType, int staffID, int requestNr) {
+    public static ArrayList<RequestDetails> getRequestDetails(StaffRequestHandler.requestType requestType, int staffID, int requestNr) {
         ArrayList<RequestDetails> allRequests = new ArrayList<RequestDetails>();
         try {
             pst = RequestDetailsHandler.getRequestDetails(requestType, staffID, requestNr);

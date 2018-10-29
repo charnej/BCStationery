@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package DataAccessLayerPackage;
+//t
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,25 +23,56 @@ public class StaffRequestHandler {
     private static PreparedStatement pst = null;
     private static Statement st = null;
 
+    public static enum requestType {
+        All, Complete, Incomplete
+    }
+
     //get Requests from db
-    public static PreparedStatement getStaffRequests(String requestType, int staffID) {
+    public static PreparedStatement getStaffRequests(requestType requestType, int staffID) {
         try {
             con = JavaConnectDB.ConnectDB();
             String sql = "";
-            if (requestType == "All") {
-                sql = "SELECT * FROM staffrequest "
-                        + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
-                        + "WHERE staffrequest.StaffID = " + staffID + " ";
-            } else if (requestType == "Complete") {
-                sql = "SELECT * FROM staffrequest "
-                        + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
-                        + "WHERE staffrequest.StaffID = " + staffID + " "
-                        + "AND staffrequest.Complete = 1";
-            } else if (requestType == "Incomplete") {
-                sql = "SELECT * FROM staffrequest "
-                        + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
-                        + "WHERE staffrequest.StaffID = " + staffID + " "
-                        + "AND staffrequest.Complete = 0";
+            if (staffID != 0) {
+                 switch (requestType) {
+                    case All:
+                        sql = "SELECT * FROM staffrequest "
+                                + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
+                                + "WHERE staffrequest.StaffID = " + staffID + " ";
+                        break;
+                    case Complete:
+                        sql = "SELECT * FROM staffrequest "
+                                + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
+                                + "WHERE staffrequest.StaffID = " + staffID + " "
+                                + "AND staffrequest.Complete = 1";
+                        break;
+                    case Incomplete:
+                        sql = "SELECT * FROM staffrequest "
+                                + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
+                                + "WHERE staffrequest.StaffID = " + staffID + " "
+                                + "AND staffrequest.Complete = 0";
+                        break;
+                    default:
+                        break;
+                }
+            }else{
+                 switch (requestType) {
+                    case All:
+                        sql = "SELECT * FROM staffrequest "
+                                + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID ";
+                        break;
+                    case Complete:
+                        sql = "SELECT * FROM staffrequest "
+                                + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
+                                + "WHERE staffrequest.Complete = 1";
+                        break;
+                    case Incomplete:
+                        sql = "SELECT * FROM staffrequest "
+                                + "INNER JOIN staff ON staffrequest.StaffID = staff.StaffID "
+                                + "WHERE staffrequest.Complete = 0";
+                        break;
+                    default:
+                        break;
+                }
             }
             //
             pst = (PreparedStatement) con.prepareStatement(sql);
@@ -52,7 +84,7 @@ public class StaffRequestHandler {
 
         return pst;
     }
-    
+
     // used to insert new Staff request
     public static void insertStaffRequest(String requestDate, int staffID) {
         try {
@@ -68,5 +100,5 @@ public class StaffRequestHandler {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
 }
