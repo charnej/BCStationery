@@ -70,6 +70,24 @@ public class RequestDetailsHandler {
         return pst;
     }
 
+    // select package items
+    public static PreparedStatement getPackageItems(int requestNr) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            String sql = "SELECT requestdetails.Complete, requestdetails.StockID FROM staffrequest "
+                    + "INNER JOIN requestdetails ON staffrequest.RequestNr = requestdetails.RequestNr "
+                    + "WHERE requestdetails.RequestNr = " + requestNr + " ";
+            //
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            //
+            return pst;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+
+        return pst;
+    }
+
     // delete operation
     public static void deleteRequest(int detailID) {
         try {
