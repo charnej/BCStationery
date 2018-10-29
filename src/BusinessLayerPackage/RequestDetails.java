@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -52,6 +53,12 @@ public class RequestDetails extends Stock{
         this.quantity = quantity;
         this.complete = complete;
         this.dateComplete = dateComplete;
+    }
+        // used to check if package is complete 
+    // OR if package contains specified item
+    public RequestDetails(int stockID, int complete) {
+        super(stockID);
+        this.complete = complete;
     }
 
     public int getRequestDetailsID() {
@@ -122,7 +129,44 @@ public class RequestDetails extends Stock{
         }
         return null;
     }
-    
+        // get package items
+    public static ArrayList<RequestDetails> getPackageItems(int requestNr) {
+        ArrayList<RequestDetails> allRequests = new ArrayList<RequestDetails>();
+        try {
+            pst = RequestDetailsHandler.getPackageItems(requestNr);
+            rs = (ResultSet) pst.executeQuery();
+            while (rs.next()) {
+                allRequests.add(new RequestDetails(rs.getInt("StockID"),
+                        rs.getInt("Complete")));
+            }
+            return allRequests;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        return null;
+    }
+    // set the state of the package
+    public static boolean testPackageState(int requestNr){
+        ArrayList<RequestDetails> allRequests = getPackageItems(requestNr);
+        for (RequestDetails allRequest : allRequests) {
+            if (allRequest.getComplete() == 0) {
+                return false;
+            }
+        }
+        //
+        return true;
+    }
+    // test if package already contains item
+    public static boolean testPackageItem(int requestNr, int stockID){
+        ArrayList<RequestDetails> allRequests = getPackageItems(requestNr);
+        for (RequestDetails allRequest : allRequests) {
+            if (allRequest.getStockID()== stockID) {
+                return false;
+            }
+        }
+        //
+        return true;
+    }
     // delete operation
     public static void deleteRequest(int detailID){
         RequestDetailsHandler.deleteRequest(detailID);
@@ -137,3 +181,5 @@ public class RequestDetails extends Stock{
        
     }
 }
+
+

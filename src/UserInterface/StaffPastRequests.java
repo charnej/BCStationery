@@ -5,6 +5,7 @@
  */
 package UserInterface;
 //t
+
 import BusinessLayerPackage.RequestDetails;
 import BusinessLayerPackage.StaffRequest;
 import DataAccessLayerPackage.StaffRequestHandler;
@@ -25,6 +26,16 @@ public class StaffPastRequests extends javax.swing.JFrame {
         initComponents();
         btnRemoveRequest.setVisible(false);
         parentMode();
+    }
+
+    public void testState(ArrayList<StaffRequest> staffRequests) {
+        for (StaffRequest staffRequest : staffRequests) {
+            if (RequestDetails.testPackageState(staffRequest.getRequestNr())) {
+                staffRequest.updateState(StaffRequestHandler.stateType.Complete, staffRequest.getRequestNr());
+            } else {
+                staffRequest.updateState(StaffRequestHandler.stateType.Incomplete, staffRequest.getRequestNr());
+            }
+        }
     }
 
     public String mode = "";
@@ -297,6 +308,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoveRequestActionPerformed
 
     public int requestNr;
+    public ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
 
     private void btnViewAllRequests1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllRequests1MouseClicked
         if (mode.equals("p")) {
@@ -311,6 +323,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
 
     private void btnViewDoneRequests1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewDoneRequests1MouseClicked
         if (mode.equals("p")) {
+            testState(staffRequests);
             ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Complete, StaffLogin.activeUser.getUserID());
             addParentTableData(staffRequests);
         } else if (mode.equals("c")) {
@@ -322,6 +335,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
 
     private void btnViewIncomRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewIncomRequestsMouseClicked
         if (mode.equals("p")) {
+            testState(staffRequests);
             ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Incomplete, StaffLogin.activeUser.getUserID());
             addParentTableData(staffRequests);
         } else if (mode.equals("c")) {
@@ -349,6 +363,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEnterRequestPackageMouseClicked
 
     private void btnCloseRequestPackageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseRequestPackageMouseClicked
+        testState(staffRequests);
         parentMode();
     }//GEN-LAST:event_btnCloseRequestPackageMouseClicked
 

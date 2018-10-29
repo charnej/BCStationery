@@ -30,11 +30,12 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
         initComponents();
         RequestDetails rd = new RequestDetails();
         ArrayList<RequestDetails> detailsPackage = rd.getRequestDetails(StaffRequestHandler.requestType.Incomplete, rec.getStaffID(), rec.getRequestNr());
-        currentRequest=rec;
+        currentRequest = rec;
         populateTable(detailsPackage);
     }
-    private StaffRequest currentRequest= new StaffRequest();
+    private StaffRequest currentRequest = new StaffRequest();
     private ArrayList<Stock> outOfStock = new ArrayList<>();
+
     private void populateTable(ArrayList<RequestDetails> requestList) {
 
         DefaultTableModel dmodel = (DefaultTableModel) tblRequestItems.getModel();
@@ -122,6 +123,11 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblRequestItems.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblRequestItemsMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblRequestItems);
@@ -247,24 +253,57 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSendPurchaseOrderActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //  check if all items are in stock
-        if (outOfStock.size()==0) {
-            // update complete: items have been given
-            RequestDetails recD = new RequestDetails();
-            ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
-            int RequestDetailsID=0;
-            Stock stockHolder = new Stock();
-            for (RequestDetails rdp : detailsPackage) {
-                recD.CompleteTransaction(rdp.getRequestDetailsID(),1,Date.valueOf(LocalDate.now()));
-                stockHolder.removeStock(rdp.getStockID(), rdp.getQuantity());
-            }
-            //remove items from inventory
-        }else{
-            JOptionPane.showMessageDialog(null, "You do nat have the required items in your inventory", "Attention", JOptionPane.INFORMATION_MESSAGE);
-        }
-        
-        
+//        //  check if all items are in stock
+//        if (outOfStock.size()==0) {
+        // update complete: items have been given
+//            RequestDetails recD = new RequestDetails();
+//            ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+//            int RequestDetailsID=0;
+//            Stock stockHolder = new Stock();
+//            for (RequestDetails rdp : detailsPackage) {
+//                recD.CompleteTransaction(rdp.getRequestDetailsID(),1,Date.valueOf(LocalDate.now()));
+//                stockHolder.removeStock(rdp.getStockID(), rdp.getQuantity());
+//            }
+        //remove items from inventory
+//        }else{
+//            JOptionPane.showMessageDialog(null, "You do nat have the required items in your inventory", "Attention", JOptionPane.INFORMATION_MESSAGE);
+//        }
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tblRequestItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRequestItemsMouseClicked
+        //check quantities   
+        int currentItemId = (int) tblRequestItems.getValueAt(tblRequestItems.getSelectedRow(), 0);
+        int InventoryQty = (int) tblRequestItems.getValueAt(tblRequestItems.getSelectedRow(), 4);
+        int requestedQty = (int) tblRequestItems.getValueAt(tblRequestItems.getSelectedRow(), 5);
+        if (InventoryQty < requestedQty) {
+            //if not send purchase order
+            int selection = JOptionPane.showConfirmDialog(null, "You do not meet requirements, do you want to send purchase order",
+                    "Please Note", JOptionPane.INFORMATION_MESSAGE);
+            if (selection == JOptionPane.YES_OPTION) {
+                
+            }
+        } else if (InventoryQty >= requestedQty) {
+            int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to complete transaction ",
+                    "Please Note", JOptionPane.INFORMATION_MESSAGE);
+            if (selection == JOptionPane.YES_OPTION) {
+
+                //if in stock dilver items
+                RequestDetails recD = new RequestDetails();
+                //getting all requested items--final check if user did not remove the items
+                ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                int RequestDetailsID = 0;
+                Stock stockHolder = new Stock();
+                for (RequestDetails rdp : detailsPackage) {
+                    if (currentItemId == rdp.getStockID()) {
+                        recD.CompleteTransaction(rdp.getRequestDetailsID(), 1, Date.valueOf(LocalDate.now()));
+                        stockHolder.removeStock(rdp.getStockID(), rdp.getQuantity());
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_tblRequestItemsMouseClicked
 
     /**
      * @param args the command line arguments

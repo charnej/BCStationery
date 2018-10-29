@@ -335,6 +335,10 @@ public class UpdateUser extends javax.swing.JFrame {
                 txtStaffUsername.setForeground(Color.black);
                 txtStaffUsername.setToolTipText("Validated!");
             }
+        } else {
+            txtStaffUsername.setBackground(Color.white);
+            txtStaffUsername.setForeground(Color.black);
+            txtStaffUsername.setToolTipText("Validated!");
         }
         //
     }
@@ -353,6 +357,10 @@ public class UpdateUser extends javax.swing.JFrame {
                 txtStaffPassword.setToolTipText("Validated!");
             }
             //
+        } else {
+            txtStaffPassword.setBackground(Color.white);
+            txtStaffPassword.setForeground(Color.black);
+            txtStaffPassword.setToolTipText("Validated!");
         }
     }
 
