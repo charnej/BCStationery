@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package BusinessLayerPackage;
-
+//t
 import java.sql.Date;
 import java.util.ArrayList;
 import DataAccessLayerPackage.RequestDetailsHandler;
@@ -12,6 +12,8 @@ import DataAccessLayerPackage.StaffRequestHandler;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,14 +25,18 @@ public class RequestDetails extends Stock{
     // fields needed
     private int requestDetailsID;
     private int requestNr;
-    private int stockID;
+    //private int stockID;
     private int quantity;
     private int complete;
     private Date dateComplete;
 
+    public RequestDetails() {
+    }
+    
     // constructor used to display Request Details 
     public RequestDetails(int requestDetailsID, int quantity, int complete, Date dateComplete, int stockID, String productName, String manufacturer, String category) {
         super(stockID, productName, manufacturer, category);
+        //this.stockID=stockID;
         this.requestDetailsID = requestDetailsID;
         this.quantity = quantity;
         this.complete = complete;
@@ -39,9 +45,10 @@ public class RequestDetails extends Stock{
     
     // used to insert request details
     public RequestDetails(int requestDetailsID, int requestNr, int stockID, int quantity, int complete, Date dateComplete) {
+        super(stockID);
         this.requestDetailsID = requestDetailsID;
         this.requestNr = requestNr;
-        this.stockID = stockID;
+        //this.stockID = stockID;
         this.quantity = quantity;
         this.complete = complete;
         this.dateComplete = dateComplete;
@@ -62,14 +69,7 @@ public class RequestDetails extends Stock{
     public void setRequestNr(int requestNr) {
         this.requestNr = requestNr;
     }
-
-    public int getStockID() {
-        return stockID;
-    }
-
-    public void setStockID(int stockID) {
-        this.stockID = stockID;
-    }
+    
 
     public int getQuantity() {
         return quantity;
@@ -111,7 +111,7 @@ public class RequestDetails extends Stock{
                         rs.getInt("Quantity"), 
                         rs.getInt("Complete"),
                         rs.getDate("DateComplete"), 
-                        rs.getInt("StockID"), 
+                        rs.getInt("requestdetails.StockID"), 
                         rs.getString("ProductName"), 
                         rs.getString("Manufacturer"), 
                         rs.getString("Name")));
@@ -131,5 +131,9 @@ public class RequestDetails extends Stock{
     // used to insert new request details
     public static void insertRequestDetails(int requestNr, int stockID, int Quantity) {
         RequestDetailsHandler.insertRequestDetails(requestNr, stockID, Quantity);
+    }
+    public static void CompleteTransaction(int requestDetailsID,int complete,Date dComplete){
+        RequestDetailsHandler.CompleteTransaction(requestDetailsID,complete,dComplete);
+       
     }
 }

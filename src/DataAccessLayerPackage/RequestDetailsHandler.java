@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
 import BusinessLayerPackage.RequestDetails;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -26,7 +27,26 @@ public class RequestDetailsHandler {
     private static Connection con = null;
     private static PreparedStatement pst = null;
     private static Statement st = null;
-
+    //set Request as Done
+    public static void CompleteTransaction(int requestDetailsID,int complete,Date dComplete){
+        try {
+            con = JavaConnectDB.ConnectDB();
+            //
+            pst = con.prepareStatement("UPDATE `requestdetails` "
+                    + "SET `Complete` = ?,"
+                    + " `DateComplete` = ? "
+                    + "WHERE `requestdetails`.`RequestDetailsID` = ?");
+            pst.setInt(1, complete);
+            pst.setDate(2, dComplete);
+            pst.setInt(3, requestDetailsID);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Request Complete");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+            
+        }
+    }
     //get Request Details from db
     public static PreparedStatement getRequestDetails(StaffRequestHandler.requestType requestType, int staffID, int requestNr) {
         try {

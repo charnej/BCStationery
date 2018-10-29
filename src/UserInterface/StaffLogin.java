@@ -6,6 +6,7 @@
 package UserInterface;
 
 import BusinessLayerPackage.Staff;
+import DataAccessLayerPackage.StaffHandler;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -208,7 +209,7 @@ public class StaffLogin extends javax.swing.JFrame {
 
         //Get all staff user objects
         Staff objHolder = new Staff();
-        List<Staff> allStaff = objHolder.getStaff("All");
+        List<Staff> allStaff = objHolder.getStaff(StaffHandler.staffType.All);
         boolean UserFound = false;
         for (Staff staffItem : allStaff) {
             if (staffItem.getUsername().equals(txtStaffUsername.getText())) {

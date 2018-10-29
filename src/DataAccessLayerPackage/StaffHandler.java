@@ -22,22 +22,24 @@ public class StaffHandler {
     private static Connection con = null;
     private static PreparedStatement pst = null;
     private static Statement st = null;
-
+public static enum staffType{
+    All,Accepted,Pending
+}
     //get Staff from db
-    public static PreparedStatement getStaff(String staffType) {
+    public static PreparedStatement getStaff(staffType staffType) {
         try {
             con = JavaConnectDB.ConnectDB();
             String sql = "";
-            if (staffType == "All") {
+            if (staffType == staffType.All) {
                 sql = "SELECT * FROM staff "
                         + "INNER JOIN department ON staff.Department = department.DepartmentID "
                         + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID ";
-            } else if (staffType == "Accepted") {
+            } else if (staffType == staffType.Accepted) {
                 sql = "SELECT * FROM staff "
                         + "INNER JOIN department ON staff.Department = department.DepartmentID "
                         + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
                         + "WHERE Accepted = 1";
-            } else if (staffType == "Pending") {
+            } else if (staffType == staffType.Pending) {
                 sql = "SELECT * FROM staff "
                         + "INNER JOIN department ON staff.Department = department.DepartmentID "
                         + "INNER JOIN campuslocation ON staff.CampusLocation = campuslocation.CampusID "
