@@ -46,6 +46,13 @@ public class RequestDetails extends Stock{
         this.complete = complete;
         this.dateComplete = dateComplete;
     }
+    
+    // used to check if package is complete 
+    // OR if package contains specified item
+    public RequestDetails(int stockID, int complete) {
+        this.stockID = stockID;
+        this.complete = complete;
+    }
 
     public int getRequestDetailsID() {
         return requestDetailsID;
@@ -121,6 +128,47 @@ public class RequestDetails extends Stock{
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
         return null;
+    }
+    
+    // get package items
+    public static ArrayList<RequestDetails> getPackageItems(int requestNr) {
+        ArrayList<RequestDetails> allRequests = new ArrayList<RequestDetails>();
+        try {
+            pst = RequestDetailsHandler.getPackageItems(requestNr);
+            rs = (ResultSet) pst.executeQuery();
+            while (rs.next()) {
+                allRequests.add(new RequestDetails(rs.getInt("StockID"),
+                        rs.getInt("Complete")));
+            }
+            return allRequests;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        return null;
+    }
+    
+    // set the state of the package
+    public static boolean testPackageState(int requestNr){
+        ArrayList<RequestDetails> allRequests = getPackageItems(requestNr);
+        for (RequestDetails allRequest : allRequests) {
+            if (allRequest.getComplete() == 0) {
+                return false;
+            }
+        }
+        //
+        return true;
+    }
+    
+    // test if package already contains item
+    public static boolean testPackageItem(int requestNr, int stockID){
+        ArrayList<RequestDetails> allRequests = getPackageItems(requestNr);
+        for (RequestDetails allRequest : allRequests) {
+            if (allRequest.getStockID()== stockID) {
+                return false;
+            }
+        }
+        //
+        return true;
     }
     
     // delete operation

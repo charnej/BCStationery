@@ -191,8 +191,12 @@ public class RequestItems extends javax.swing.JFrame {
                 packageNum = StaffRequest.isPackage(Date.valueOf(LocalDate.now()), StaffLogin.activeUser.getUserID());
             }
             //
-            int qty = (int) spnQtyAdd.getValue();
-            RequestDetails.insertRequestDetails(packageNum, StaffItems.chosenItem.getStockID(), qty);
+            if (RequestDetails.testPackageItem(packageNum, StaffItems.chosenItem.getStockID())) {
+                int qty = (int) spnQtyAdd.getValue();
+                RequestDetails.insertRequestDetails(packageNum, StaffItems.chosenItem.getStockID(), qty);
+            } else {
+                JOptionPane.showMessageDialog(null, "This Package already contains this Item\nYou can Request this Item again Tomorrow");
+            }
 
         }
     }//GEN-LAST:event_btnSendRequestMouseClicked
