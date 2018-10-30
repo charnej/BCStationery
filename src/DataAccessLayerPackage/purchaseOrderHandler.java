@@ -32,7 +32,7 @@ public class purchaseOrderHandler {
             Statement st = (Statement) con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM `purchaseOrders`");
             while (rs.next()) {
-                pOrders.add(new purchaseOrder(rs.getInt(" "), rs.getInt(" "), rs.getInt(" ")));
+                pOrders.add(new purchaseOrder(rs.getInt("OrderNr"), rs.getInt("Quantity"), rs.getInt("StockID")));
             }
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
@@ -47,10 +47,11 @@ public class purchaseOrderHandler {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
             Connection con = (Connection) DriverManager.getConnection(url, "root", "");
-            PreparedStatement ps = con.prepareStatement("UPDATE ");//continue when db done
-            ps.setInt(1, pOrderID);
-            ps.setInt(2, stockID);
-            ps.setInt(3, quantity);
+            PreparedStatement ps = con.prepareStatement("UPDATE `purchaseorders` "
+                    + "SET `StockID` = ?, `Quantity` = ? WHERE `purchaseorders`.`OrderNr` = ? ");//continue when db done
+            ps.setInt(1, stockID);
+            ps.setInt(2, quantity);
+            ps.setInt(3, pOrderID);
             ps.executeUpdate();
             con.close();
         } catch (ClassNotFoundException ex) {
