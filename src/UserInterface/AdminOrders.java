@@ -4,8 +4,12 @@
  * and open the template in the editor.
  */
 package UserInterface;
+//t
 
+import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.StaffRequest;
+import DataAccessLayerPackage.StaffHandler;
+import DataAccessLayerPackage.StaffRequestHandler;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,26 +25,41 @@ public class AdminOrders extends javax.swing.JFrame {
      */
     public AdminOrders() {
         initComponents();
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+        populateTable(staffRequests);
+        tblStaffRequests.setAutoCreateRowSorter(true);
     }
- private void populateTable(ArrayList<StaffRequest> requestList) {
+
+    private void populateTable(ArrayList<StaffRequest> requestList) {
 
         DefaultTableModel dmodel = (DefaultTableModel) tblStaffRequests.getModel();
         Object[] row = new Object[5];
+        //get all staff
+        ArrayList<Staff> allStaff = (new Staff()).getStaff(StaffHandler.staffType.All);
+//        for (Staff s : allStaff) {
+//                    System.out.println(s.toString());
+//                }
         //clearTable
         dmodel.setRowCount(0);
         if (requestList.size() > 0) {
             for (StaffRequest stc : requestList) {
-//                row[0] = stc.get();
-//                row[1] = stc.getManufacturer();
-//                row[2] = stc.getCategory();
-//                row[3] = stc.getPrice();
-//                row[4] = stc.getQuantity();
+                row[0] = stc.getRequestNr();
+                for (Staff s : allStaff) {
+                    if (s.getUserID() == stc.getStaffID()) {
+
+                        row[1] = s.getFirstName() + " " + s.getLastName();
+                    }
+                }
+                row[2] = stc.getRequestDate().getDate();
+                row[3] = stc.getRequestDate().getMonth() + 1;
+                row[4] = stc.getRequestDate().getYear() + 1900;
                 dmodel.addRow(row);
             }
         } else {
             JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,6 +91,11 @@ public class AdminOrders extends javax.swing.JFrame {
         btnViewAllStaffReq.setToolTipText("View all requests from staff");
         btnViewAllStaffReq.setBorderPainted(false);
         btnViewAllStaffReq.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewAllStaffReq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllStaffReqActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnViewAllStaffReq);
         btnViewAllStaffReq.setBounds(110, 170, 150, 40);
 
@@ -81,6 +105,11 @@ public class AdminOrders extends javax.swing.JFrame {
         btnViewComplStaffRequests.setToolTipText("View completed requests from staff");
         btnViewComplStaffRequests.setBorderPainted(false);
         btnViewComplStaffRequests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewComplStaffRequests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewComplStaffRequestsActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnViewComplStaffRequests);
         btnViewComplStaffRequests.setBounds(290, 170, 190, 40);
 
@@ -100,16 +129,43 @@ public class AdminOrders extends javax.swing.JFrame {
 
         tblStaffRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Request", "Staff Name", "Day", "Month", "Year"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblStaffRequests.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblStaffRequestsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblStaffRequests);
+        if (tblStaffRequests.getColumnModel().getColumnCount() > 0) {
+            tblStaffRequests.getColumnModel().getColumn(0).setResizable(false);
+            tblStaffRequests.getColumnModel().getColumn(1).setResizable(false);
+            tblStaffRequests.getColumnModel().getColumn(2).setResizable(false);
+            tblStaffRequests.getColumnModel().getColumn(3).setResizable(false);
+            tblStaffRequests.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(110, 240, 820, 300);
@@ -203,9 +259,53 @@ public class AdminOrders extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnViewIncomStaffRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewIncomStaffRequestsActionPerformed
-        // TODO add your handling code here:
-        
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Incomplete, 0);
+        populateTable(staffRequests);
+
     }//GEN-LAST:event_btnViewIncomStaffRequestsActionPerformed
+
+    private void btnViewAllStaffReqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllStaffReqActionPerformed
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+        populateTable(staffRequests);
+    }//GEN-LAST:event_btnViewAllStaffReqActionPerformed
+
+    private void btnViewComplStaffRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewComplStaffRequestsActionPerformed
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Complete, 0);
+        populateTable(staffRequests);
+    }//GEN-LAST:event_btnViewComplStaffRequestsActionPerformed
+
+    private void tblStaffRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStaffRequestsMouseClicked
+        //Get selected value
+        //Send object to update form.
+        DefaultTableModel dmodel = (DefaultTableModel) tblStaffRequests.getModel();
+        StaffRequest curRequest = new StaffRequest();
+        int CurrentPackage
+                = ((int) tblStaffRequests.getValueAt(
+                        tblStaffRequests.getSelectedRow(), 0));
+        //check that it is an unmanaged package
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+        boolean checkIncomplete = false;
+        for (StaffRequest st : staffRequests) {
+            if (CurrentPackage == st.getRequestNr() && st.getComplete() == 0) {
+                checkIncomplete = true;
+            }
+        }
+        if (checkIncomplete) {
+            int selection = JOptionPane.showConfirmDialog(null, "Do you want to handle request " + CurrentPackage,
+                    "Please Note", JOptionPane.INFORMATION_MESSAGE);
+            if (selection == JOptionPane.YES_OPTION) {
+                for (StaffRequest request : staffRequests) {
+                    if (request.getRequestNr() == CurrentPackage) {
+                        curRequest = request;
+                    }
+                }
+                //new update page object
+                AdminOrderCompletion newAdminOrderCompletion = new AdminOrderCompletion(curRequest);
+                newAdminOrderCompletion.setVisible(true);;
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_tblStaffRequestsMouseClicked
 
     /**
      * @param args the command line arguments

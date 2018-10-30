@@ -4,8 +4,18 @@
  * and open the template in the editor.
  */
 package UserInterface;
+//t
 
+import BusinessLayerPackage.RequestDetails;
+import BusinessLayerPackage.StaffRequest;
+import BusinessLayerPackage.Stock;
+import DataAccessLayerPackage.StaffRequestHandler;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.OptionPaneUI;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,8 +26,54 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
     /**
      * Creates new form AdminOrderCompletion
      */
-    public AdminOrderCompletion() {
+    public AdminOrderCompletion(StaffRequest rec) {
         initComponents();
+        RequestDetails rd = new RequestDetails();
+        ArrayList<RequestDetails> detailsPackage = rd.getRequestDetails(StaffRequestHandler.requestType.Incomplete, rec.getStaffID(), rec.getRequestNr());
+        currentRequest = rec;
+        populateTable(detailsPackage);
+    }
+    private StaffRequest currentRequest = new StaffRequest();
+    private ArrayList<Stock> outOfStock = new ArrayList<>();
+
+    private void populateTable(ArrayList<RequestDetails> requestList) {
+
+        DefaultTableModel dmodel = (DefaultTableModel) tblRequestItems.getModel();
+        Object[] row = new Object[7];
+        //clearTable
+        dmodel.setRowCount(0);
+        Stock s = new Stock();
+        ArrayList<Stock> inventory = s.getStock();
+        if (requestList.size() > 0) {
+            for (RequestDetails stc : requestList) {
+                row[0] = stc.getStockID();
+                row[1] = stc.getProductName();
+                row[2] = stc.getManufacturer();
+                row[3] = stc.getCategory();
+                row[4] = stc.getQuantity();
+                int qty = 0;
+                for (Stock ss : inventory) {
+                    if (ss.getStockID() == stc.getStockID()) {
+                        row[5] = ss.getQuantity();
+                        qty = ss.getQuantity();
+                        if (qty < stc.getQuantity()) {
+                            row[6] = "Not Enough Stock";
+                            outOfStock.add(ss);
+                        } else {
+                            row[6] = "In Stock";
+                        }
+                    }
+                }
+
+                dmodel.addRow(row);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private AdminOrderCompletion() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -34,6 +90,7 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         btnSendPurchaseOrder = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -44,19 +101,48 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
 
         tblRequestItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Product ID", "Product", "Manufacturer", "Category", "Quantity", "Qty In Stock", "Meet Requirements"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblRequestItems.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblRequestItemsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblRequestItems);
+        if (tblRequestItems.getColumnModel().getColumnCount() > 0) {
+            tblRequestItems.getColumnModel().getColumn(0).setResizable(false);
+            tblRequestItems.getColumnModel().getColumn(1).setResizable(false);
+            tblRequestItems.getColumnModel().getColumn(2).setResizable(false);
+            tblRequestItems.getColumnModel().getColumn(3).setResizable(false);
+            tblRequestItems.getColumnModel().getColumn(4).setResizable(false);
+            tblRequestItems.getColumnModel().getColumn(5).setResizable(false);
+            tblRequestItems.getColumnModel().getColumn(6).setResizable(false);
+        }
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(120, 212, 790, 280);
+        jScrollPane1.setBounds(110, 160, 820, 280);
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -110,6 +196,15 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 10, 50, 30);
 
+        jButton1.setText("Deliver Requested Items");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(480, 510, 180, 40);
+
         btnSendPurchaseOrder.setBackground(new java.awt.Color(254, 212, 29));
         btnSendPurchaseOrder.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSendPurchaseOrder.setText("Send Purchase Order");
@@ -157,6 +252,59 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSendPurchaseOrderActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+//        //  check if all items are in stock
+//        if (outOfStock.size()==0) {
+        // update complete: items have been given
+//            RequestDetails recD = new RequestDetails();
+//            ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+//            int RequestDetailsID=0;
+//            Stock stockHolder = new Stock();
+//            for (RequestDetails rdp : detailsPackage) {
+//                recD.CompleteTransaction(rdp.getRequestDetailsID(),1,Date.valueOf(LocalDate.now()));
+//                stockHolder.removeStock(rdp.getStockID(), rdp.getQuantity());
+//            }
+        //remove items from inventory
+//        }else{
+//            JOptionPane.showMessageDialog(null, "You do nat have the required items in your inventory", "Attention", JOptionPane.INFORMATION_MESSAGE);
+//        }
+
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tblRequestItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRequestItemsMouseClicked
+        //check quantities   
+        int currentItemId = (int) tblRequestItems.getValueAt(tblRequestItems.getSelectedRow(), 0);
+        int InventoryQty = (int) tblRequestItems.getValueAt(tblRequestItems.getSelectedRow(), 4);
+        int requestedQty = (int) tblRequestItems.getValueAt(tblRequestItems.getSelectedRow(), 5);
+        if (InventoryQty < requestedQty) {
+            //if not send purchase order
+            int selection = JOptionPane.showConfirmDialog(null, "You do not meet requirements, do you want to send purchase order",
+                    "Please Note", JOptionPane.INFORMATION_MESSAGE);
+            if (selection == JOptionPane.YES_OPTION) {
+                
+            }
+        } else if (InventoryQty >= requestedQty) {
+            int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to complete transaction ",
+                    "Please Note", JOptionPane.INFORMATION_MESSAGE);
+            if (selection == JOptionPane.YES_OPTION) {
+
+                //if in stock dilver items
+                RequestDetails recD = new RequestDetails();
+                //getting all requested items--final check if user did not remove the items
+                ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                int RequestDetailsID = 0;
+                Stock stockHolder = new Stock();
+                for (RequestDetails rdp : detailsPackage) {
+                    if (currentItemId == rdp.getStockID()) {
+                        recD.CompleteTransaction(rdp.getRequestDetailsID(), 1, Date.valueOf(LocalDate.now()));
+                        stockHolder.removeStock(rdp.getStockID(), rdp.getQuantity());
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_tblRequestItemsMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -197,6 +345,7 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSendPurchaseOrder;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblRequestItems;

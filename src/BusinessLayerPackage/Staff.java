@@ -53,6 +53,10 @@ public class Staff extends User implements CampusLocation, Department {
     private int campusLocation;
     private int accepted;
 
+    public int getUserID() {
+        return userID;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -169,7 +173,7 @@ public class Staff extends User implements CampusLocation, Department {
 
     // Static as this functionality is not bound to each object, but to the class
     // Get all the required Staff members data ..
-    public static ArrayList<Staff> getStaff(String staffType) {
+    public static ArrayList<Staff> getStaff(StaffHandler.staffType staffType) {
         ArrayList<Staff> allStaff = new ArrayList<Staff>();
         try {
             pst = StaffHandler.getStaff(staffType);
@@ -219,7 +223,7 @@ public class Staff extends User implements CampusLocation, Department {
     }
 
     public static boolean isUniqueUsername(String usernameInput) {
-        ArrayList<Staff> allStaff = getStaff("All");
+        ArrayList<Staff> allStaff = getStaff(StaffHandler.staffType.All);
         //
         boolean isUnique = true;
         //

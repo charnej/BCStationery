@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,6 +24,10 @@ import javax.swing.JOptionPane;
 public class Stock {
 
     public Stock() {
+    }
+
+    public Stock(int StockID) {
+        this.stockID = stockID;
     }
 
     // constructor used in Request Details
@@ -150,6 +156,20 @@ public class Stock {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
         return null;
+    }
+
+    public static void removeStock(int stockID, int qty) {
+        
+            //get current inventory
+            ArrayList<Stock> AllStock = (new Stock()).getStock();
+            for (Stock stock : AllStock) {
+                if (stock.getStockID() == stockID) {
+                    StockHandler.removeStock(stockID,(stock.getQuantity()- qty));
+                }
+            }
+
+            System.out.println("Stock Quantity update complete");
+        
     }
 
 }

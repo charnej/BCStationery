@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
 import BusinessLayerPackage.RequestDetails;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -26,7 +27,26 @@ public class RequestDetailsHandler {
     private static Connection con = null;
     private static PreparedStatement pst = null;
     private static Statement st = null;
-
+    //set Request as Done
+    public static void CompleteTransaction(int requestDetailsID,int complete,Date dComplete){
+        try {
+            con = JavaConnectDB.ConnectDB();
+            //
+            pst = con.prepareStatement("UPDATE `requestdetails` "
+                    + "SET `Complete` = ?,"
+                    + " `DateComplete` = ? "
+                    + "WHERE `requestdetails`.`RequestDetailsID` = ?");
+            pst.setInt(1, complete);
+            pst.setDate(2, dComplete);
+            pst.setInt(3, requestDetailsID);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Request Complete");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+            
+        }
+    }
     //get Request Details from db
     public static PreparedStatement getRequestDetails(StaffRequestHandler.requestType requestType, int staffID, int requestNr) {
         try {
@@ -70,7 +90,18 @@ public class RequestDetailsHandler {
         return pst;
     }
 
-    // select package items
+    // delete operation
+    public static void deleteRequest(int detailID) {
+        try {
+            st = con.createStatement();
+            st.executeUpdate("DELETE FROM requestdetails "
+                    + "WHERE RequestDetailsID = " + detailID + "");
+            JOptionPane.showMessageDialog(null, "Delete Successfull");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+        // select package items
     public static PreparedStatement getPackageItems(int requestNr) {
         try {
             con = JavaConnectDB.ConnectDB();
@@ -87,19 +118,6 @@ public class RequestDetailsHandler {
 
         return pst;
     }
-
-    // delete operation
-    public static void deleteRequest(int detailID) {
-        try {
-            st = con.createStatement();
-            st.executeUpdate("DELETE FROM requestdetails "
-                    + "WHERE RequestDetailsID = " + detailID + "");
-            JOptionPane.showMessageDialog(null, "Delete Successfull");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
-
     // used to insert new Request Details
     public static void insertRequestDetails(int requestNr, int stockID, int Quantity) {
         try {
@@ -115,26 +133,7 @@ public class RequestDetailsHandler {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-
-//    public static ArrayList<RequestDetails> getRequestDetails() {
-//        ArrayList<RequestDetails> requestDetails = new ArrayList<>();
-//        try {
-//            con = JavaConnectDB.ConnectDB();
-//            st = con.createStatement();
-//            String sql = "select staffrequest.RequestNr, stock.ProductName, requestdetails.Quantity,RequestDate, staff.FirstName, staff.LastName, Complete\n"
-//                    + "from staffrequest\n"
-//                    + "inner join requestdetails on staffrequest.RequestNr = requestdetails.RequestNr\n"
-//                    + "inner join stock on requestdetails.StockID = stock.StockID\n"
-//                    + "inner join staff on staffrequest.StaffID = staff.StaffID";
-//            ResultSet rs = st.executeQuery(sql);
-//            while (rs.next()) {
-//                requestDetails.add(new RequestDetails(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getInt(7)));
-//            }
-//            return requestDetails;
-//
-//        } catch (SQLException ex) {
-//            Logger.getLogger(RequestDetailsHandler.class.getName()).log(Level.SEVERE, null, ex);
-//            return null;
-//        }
-//    }
 }
+
+
+
