@@ -1,10 +1,11 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package BusinessLayerPackage;
-//T
+//t
 
 import DataAccessLayerPackage.StaffRequestHandler;
 import java.sql.Date;
@@ -29,6 +30,9 @@ public class StaffRequest {
     //
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+    public StaffRequest() {
+    }
+    
     // used to read staff request data
     public StaffRequest(int requestNr, Date requestDate) {
         this.requestNr = requestNr;
@@ -88,7 +92,7 @@ public class StaffRequest {
             rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {
                 allRequests.add(new StaffRequest(rs.getInt("RequestNr"),
-                        rs.getDate("RequestDate")));
+                        rs.getDate("RequestDate"),rs.getInt("StaffID"),rs.getInt("Complete")));
             }
             return allRequests;
         } catch (SQLException ex) {
@@ -115,10 +119,10 @@ public class StaffRequest {
         //
         return -1;
     }
-    
     // change completion state of package
     public static void updateState(StaffRequestHandler.stateType stateType, int requestNr){
         StaffRequestHandler.updateState(stateType, requestNr);
     }
 
 }
+

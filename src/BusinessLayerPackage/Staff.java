@@ -26,13 +26,14 @@ public class Staff extends User implements CampusLocation, Department {
     }
 
     // this constructor is used to show information to users
-    public Staff(int userID, String firstName, String lastName, String email, String cellphone, String username, String password, String departmentName, String campusName, int accepted) {
+    public Staff(int userID, String firstName, String lastName, String email, String cellphone, String username, String password, String departmentName, String campusName, int accepted, int loggedIn) {
         super(userID, firstName, lastName, username, password);
         this.email = email;
         this.cellphone = cellphone;
         this.departmentName = departmentName;
         this.campusName = campusName;
         this.accepted = accepted;
+        this.loggedIn = loggedIn;
     }
 
     // this constructor is used to insert, update and delete information from staff table
@@ -52,6 +53,19 @@ public class Staff extends User implements CampusLocation, Department {
     private int department;
     private int campusLocation;
     private int accepted;
+    private int loggedIn;
+
+    public int getLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(int loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
 
     public String getEmail() {
         return email;
@@ -169,7 +183,7 @@ public class Staff extends User implements CampusLocation, Department {
 
     // Static as this functionality is not bound to each object, but to the class
     // Get all the required Staff members data ..
-    public static ArrayList<Staff> getStaff(String staffType) {
+    public static ArrayList<Staff> getStaff(StaffHandler.staffType staffType) {
         ArrayList<Staff> allStaff = new ArrayList<Staff>();
         try {
             pst = StaffHandler.getStaff(staffType);
@@ -184,7 +198,8 @@ public class Staff extends User implements CampusLocation, Department {
                         rs.getString("Password"),
                         rs.getString("DepartmentName"),
                         rs.getString("CampusName"),
-                        rs.getInt("Accepted")));
+                        rs.getInt("Accepted"),
+                        rs.getInt("LoggedIn")));
             }
             return allStaff;
         } catch (SQLException ex) {
@@ -209,7 +224,8 @@ public class Staff extends User implements CampusLocation, Department {
                         rs.getString("Password"),
                         rs.getString("DepartmentName"),
                         rs.getString("CampusName"),
-                        rs.getInt("Accepted"));
+                        rs.getInt("Accepted"),
+                        rs.getInt("LoggedIn"));
             }
             return staff;
         } catch (SQLException ex) {
@@ -219,7 +235,7 @@ public class Staff extends User implements CampusLocation, Department {
     }
 
     public static boolean isUniqueUsername(String usernameInput) {
-        ArrayList<Staff> allStaff = getStaff("All");
+        ArrayList<Staff> allStaff = getStaff(StaffHandler.staffType.All);
         //
         boolean isUnique = true;
         //
@@ -278,6 +294,10 @@ public class Staff extends User implements CampusLocation, Department {
     // update staff
     public static void updateStaff(Staff s) {
         StaffHandler.updateStaff(s.userID, s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
+    }
+    
+     public static void updateStaffLoggedIn(String userName, int loggedIn) {
+        StaffHandler.updateStaffLoggedIN(userName, loggedIn);
     }
 
 }

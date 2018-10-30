@@ -51,6 +51,22 @@ public class StockHandler {
 
     }
 
+    public static void removeStock(int stockID, int qty) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            String sql = "UPDATE `stock` "
+                    + "SET `Quantity` = ? WHERE `stock`.`StockID` = ?";
+            //
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            pst.setInt(1, qty);
+            pst.setInt(2, stockID);
+            pst.executeUpdate();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+
+        }
+    }
     // Public variables
     private static Connection con = null;
     private static PreparedStatement pst = null;

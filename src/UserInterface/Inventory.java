@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package UserInterface;
-
+//t
 import BusinessLayerPackage.Stock;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;

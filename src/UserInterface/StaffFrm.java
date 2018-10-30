@@ -6,6 +6,7 @@
 package UserInterface;
 
 import BusinessLayerPackage.Staff;
+import DataAccessLayerPackage.StaffHandler;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -194,14 +195,14 @@ public class StaffFrm extends javax.swing.JFrame {
     private void btnViewAllStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllStaffMouseClicked
         btnAcceptStaff.setVisible(false);
 
-        ArrayList<Staff> staffList = Staff.getStaff("Accepted");
+        ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Accepted);
         addTableData(staffList);
     }//GEN-LAST:event_btnViewAllStaffMouseClicked
 
     private void btnViewPendingStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewPendingStaffMouseClicked
         btnAcceptStaff.setVisible(true);
 
-        ArrayList<Staff> staffList = Staff.getStaff("Pending");
+        ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Pending);
         addTableData(staffList);
     }//GEN-LAST:event_btnViewPendingStaffMouseClicked
 
@@ -211,7 +212,7 @@ public class StaffFrm extends javax.swing.JFrame {
             String name = tblStaff.getValueAt(tblStaff.getSelectedRow(), 3).toString();
             Staff.acceptPendingStaff(name, id);
             //
-            ArrayList<Staff> staffList = Staff.getStaff("Pending");
+            ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Pending);
             addTableData(staffList);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Please select a valid Staff Request to Accept");

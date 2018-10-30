@@ -6,6 +6,7 @@
 package UserInterface;
 
 import BusinessLayerPackage.Staff;
+import DataAccessLayerPackage.StaffHandler;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -208,7 +209,7 @@ public class StaffLogin extends javax.swing.JFrame {
 
         //Get all staff user objects
         Staff objHolder = new Staff();
-        List<Staff> allStaff = objHolder.getStaff("All");
+        List<Staff> allStaff = objHolder.getStaff(StaffHandler.staffType.All);
         boolean UserFound = false;
         for (Staff staffItem : allStaff) {
             if (staffItem.getUsername().equals(txtStaffUsername.getText())) {
@@ -219,11 +220,20 @@ public class StaffLogin extends javax.swing.JFrame {
             }
         }
         if (UserFound) {
-            //log in user
-            activeUser = Staff.getStaffMember(txtStaffUsername.getText());
+             if (Staff.getStaffMember(txtStaffUsername.getText()).getLoggedIn() == 1) {
+                JOptionPane.showMessageDialog(null, "USer is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+            }else{
+               activeUser = Staff.getStaffMember(txtStaffUsername.getText());
+             //JOptionPane.showMessageDialog(null, Staff.getStaffMember(txtStaffUsername.getText()).getUsername(), "Please Note", JOptionPane.WARNING_MESSAGE);
+            //Staff.updateStaffLoggedIn(Staff.getStaffMember(txtStaffUsername.getText()).getUsername(), 1);
+            Staff.updateStaffLoggedIn(activeUser.getUsername(), 1);
+            
+            //JOptionPane.showMessageDialog(null, activeUser.getUsername(), "Please Note", JOptionPane.WARNING_MESSAGE);
+           //Staff.updateStaffLoggedIn(activeUser.getUsername(), 0);
             StaffMenu staffMenu = new StaffMenu();
             staffMenu.setVisible(true);
-            this.dispose();
+            this.dispose(); 
+            }
         } else {
             //throw warning
             JOptionPane.showMessageDialog(null, "Wrong credentials", "Please Note", JOptionPane.WARNING_MESSAGE);
