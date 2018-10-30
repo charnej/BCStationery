@@ -6,6 +6,7 @@
  */
 package BusinessLayerPackage;
 //t
+
 import java.sql.Date;
 import java.util.ArrayList;
 import DataAccessLayerPackage.RequestDetailsHandler;
@@ -21,41 +22,39 @@ import javax.swing.JOptionPane;
  *
  * @author User
  */
-public class RequestDetails extends Stock{
+public class RequestDetails extends Stock {
 
     // fields needed
     private int requestDetailsID;
     private int requestNr;
-    //private int stockID;
     private int quantity;
     private int complete;
     private Date dateComplete;
 
     public RequestDetails() {
     }
-    
+
     // constructor used to display Request Details 
     public RequestDetails(int requestDetailsID, int quantity, int complete, Date dateComplete, int stockID, String productName, String manufacturer, String category) {
         super(stockID, productName, manufacturer, category);
-        //this.stockID=stockID;
         this.requestDetailsID = requestDetailsID;
         this.quantity = quantity;
         this.complete = complete;
         this.dateComplete = dateComplete;
     }
-    
+
     // used to insert request details
     public RequestDetails(int requestDetailsID, int requestNr, int stockID, int quantity, int complete, Date dateComplete) {
         super(stockID);
         this.requestDetailsID = requestDetailsID;
         this.requestNr = requestNr;
-        //this.stockID = stockID;
         this.quantity = quantity;
         this.complete = complete;
         this.dateComplete = dateComplete;
     }
-        // used to check if package is complete 
+    // used to check if package is complete 
     // OR if package contains specified item
+
     public RequestDetails(int stockID, int complete) {
         super(stockID);
         this.complete = complete;
@@ -76,7 +75,6 @@ public class RequestDetails extends Stock{
     public void setRequestNr(int requestNr) {
         this.requestNr = requestNr;
     }
-    
 
     public int getQuantity() {
         return quantity;
@@ -115,12 +113,12 @@ public class RequestDetails extends Stock{
             rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {
                 allRequests.add(new RequestDetails(rs.getInt("RequestDetailsID"),
-                        rs.getInt("Quantity"), 
+                        rs.getInt("Quantity"),
                         rs.getInt("Complete"),
-                        rs.getDate("DateComplete"), 
-                        rs.getInt("requestdetails.StockID"), 
-                        rs.getString("ProductName"), 
-                        rs.getString("Manufacturer"), 
+                        rs.getDate("DateComplete"),
+                        rs.getInt("requestdetails.StockID"),
+                        rs.getString("ProductName"),
+                        rs.getString("Manufacturer"),
                         rs.getString("Name")));
             }
             return allRequests;
@@ -129,7 +127,8 @@ public class RequestDetails extends Stock{
         }
         return null;
     }
-        // get package items
+    // get package items
+
     public static ArrayList<RequestDetails> getPackageItems(int requestNr) {
         ArrayList<RequestDetails> allRequests = new ArrayList<RequestDetails>();
         try {
@@ -145,8 +144,9 @@ public class RequestDetails extends Stock{
         }
         return null;
     }
+
     // set the state of the package
-    public static boolean testPackageState(int requestNr){
+    public static boolean testPackageState(int requestNr) {
         ArrayList<RequestDetails> allRequests = getPackageItems(requestNr);
         for (RequestDetails allRequest : allRequests) {
             if (allRequest.getComplete() == 0) {
@@ -156,30 +156,31 @@ public class RequestDetails extends Stock{
         //
         return true;
     }
+
     // test if package already contains item
-    public static boolean testPackageItem(int requestNr, int stockID){
+    public static boolean testPackageItem(int requestNr, int stockID) {
         ArrayList<RequestDetails> allRequests = getPackageItems(requestNr);
         for (RequestDetails allRequest : allRequests) {
-            if (allRequest.getStockID()== stockID) {
+            if (allRequest.getStockID() == stockID) {
                 return false;
             }
         }
         //
         return true;
     }
+
     // delete operation
-    public static void deleteRequest(int detailID){
+    public static void deleteRequest(int detailID) {
         RequestDetailsHandler.deleteRequest(detailID);
     }
-    
+
     // used to insert new request details
     public static void insertRequestDetails(int requestNr, int stockID, int Quantity) {
         RequestDetailsHandler.insertRequestDetails(requestNr, stockID, Quantity);
     }
-    public static void CompleteTransaction(int requestDetailsID,int complete,Date dComplete){
-        RequestDetailsHandler.CompleteTransaction(requestDetailsID,complete,dComplete);
-       
+
+    public static void CompleteTransaction(int requestDetailsID, int complete, Date dComplete) {
+        RequestDetailsHandler.CompleteTransaction(requestDetailsID, complete, dComplete);
+
     }
 }
-
-
