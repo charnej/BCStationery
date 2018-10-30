@@ -124,5 +124,17 @@ public static enum staffType{
             JOptionPane.showMessageDialog(null, e);
         }
     }
+    
+    public static void updateStaffLoggedIN(String UserName, int LoggedIn) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            String sql = "UPDATE staff SET LoggedIn = '"+LoggedIn+"' WHERE Username = '"+UserName+"'";
+            st = con.createStatement();
+            st.executeUpdate(sql);
+            //
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
 
 }

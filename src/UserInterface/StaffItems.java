@@ -5,6 +5,7 @@
  */
 package UserInterface;
 //t
+import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.Stock;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -86,8 +87,9 @@ public class StaffItems extends javax.swing.JFrame {
         btnExit = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
-        cmboCategories = new javax.swing.JComboBox<>();
         btnChoose = new javax.swing.JButton();
+        rbProdName = new javax.swing.JRadioButton();
+        rbCategory = new javax.swing.JRadioButton();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -229,10 +231,6 @@ public class StaffItems extends javax.swing.JFrame {
         getContentPane().add(btnMinimize);
         btnMinimize.setBounds(910, 10, 31, 31);
 
-        cmboCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(cmboCategories);
-        cmboCategories.setBounds(506, 160, 110, 30);
-
         btnChoose.setBackground(new java.awt.Color(254, 212, 29));
         btnChoose.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnChoose.setText("Choose Item");
@@ -251,6 +249,16 @@ public class StaffItems extends javax.swing.JFrame {
         getContentPane().add(btnChoose);
         btnChoose.setBounds(783, 523, 150, 30);
 
+        rbProdName.setBackground(new java.awt.Color(255, 255, 255));
+        rbProdName.setText("Product Name");
+        getContentPane().add(rbProdName);
+        rbProdName.setBounds(530, 150, 120, 23);
+
+        rbCategory.setBackground(new java.awt.Color(255, 255, 255));
+        rbCategory.setText("Category");
+        getContentPane().add(rbCategory);
+        rbCategory.setBounds(530, 180, 120, 23);
+
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/InventoryBG.png"))); // NOI18N
         getContentPane().add(BG);
         BG.setBounds(0, 0, 1030, 637);
@@ -262,6 +270,7 @@ public class StaffItems extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+           Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -291,12 +300,24 @@ public class StaffItems extends javax.swing.JFrame {
         ArrayList<Stock> newListStock = new ArrayList<Stock>();
         if (!input.isEmpty()) {
             String inputCapital = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
-            for (Stock stock : allStock) {
-                if ((stock.getProductName().contains(inputCapital)) || (stock.getCategory().contains(inputCapital))) {
-                    newListStock.add(stock);
+            if (rbProdName.isSelected()) {
+                for (Stock stock : allStock) {
+                    if ((stock.getProductName().contains(inputCapital))) {
+                        newListStock.add(stock);
+                    }
                 }
+                populateTable(newListStock);
+            } else if (rbCategory.isSelected()) {
+                for (Stock stock : allStock) {
+                    if (stock.getCategory().contains(inputCapital)) {
+                        newListStock.add(stock);
+                    }
+                }
+                populateTable(newListStock);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a Search Criteria");
             }
-            populateTable(newListStock);
+            
         } else {
             JOptionPane.showMessageDialog(null, "Please enter a keyword for the search", "Attention", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -387,8 +408,9 @@ public class StaffItems extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSearchStock;
     private javax.swing.JButton btnStaffViewAllStock;
-    private javax.swing.JComboBox<String> cmboCategories;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rbCategory;
+    private javax.swing.JRadioButton rbProdName;
     private javax.swing.JTable tblInventory;
     private javax.swing.JTextField txtSearchStock;
     // End of variables declaration//GEN-END:variables

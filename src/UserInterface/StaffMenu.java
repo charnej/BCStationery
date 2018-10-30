@@ -5,6 +5,7 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Staff;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,14 +25,14 @@ public class StaffMenu extends javax.swing.JFrame {
         }
     }
 
-    public boolean checkAccept(){
+    public boolean checkAccept() {
         if (StaffLogin.activeUser.getAccepted() == 1) {
             return true;
         }
         //
         return false;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -160,11 +161,12 @@ public class StaffMenu extends javax.swing.JFrame {
     private void btnBackLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackLogoutMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBackLogoutMouseClicked
-
+    private static int logIn = 0;
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
 
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), logIn);
             StaffLogin staffLogin = new StaffLogin();
             staffLogin.setVisible(true);
             this.dispose();
@@ -175,6 +177,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), logIn);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -182,7 +185,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private void btnUpdateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateProfileActionPerformed
         UpdateUser updateUser = new UpdateUser();
         updateUser.setVisible(true);
-       
+
     }//GEN-LAST:event_btnUpdateProfileActionPerformed
 
     private void btnViewItemsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewItemsActionPerformed
@@ -192,9 +195,9 @@ public class StaffMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewItemsActionPerformed
 
     private void btnViewMyRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMyRequestsActionPerformed
-       StaffPastRequests requestHistory = new StaffPastRequests();
-       requestHistory.setVisible(true);
-       this.dispose();
+        StaffPastRequests requestHistory = new StaffPastRequests();
+        requestHistory.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnViewMyRequestsActionPerformed
 
     /**

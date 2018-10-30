@@ -7,6 +7,7 @@ package UserInterface;
 //t
 
 import BusinessLayerPackage.RequestDetails;
+import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.StaffRequest;
 import DataAccessLayerPackage.StaffRequestHandler;
 import java.util.ArrayList;
@@ -296,6 +297,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
