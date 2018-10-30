@@ -26,7 +26,7 @@ public class Stock {
     public Stock() {
     }
 
-    public Stock(int StockID) {
+    public Stock(int stockID) {
         this.stockID = stockID;
     }
 
