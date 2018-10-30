@@ -29,7 +29,7 @@ public class Stock {
     public Stock() {
     }
 
-    public Stock(int StockID) {
+    public Stock(int stockID) {
         this.stockID = stockID;
     }
 
@@ -41,6 +41,15 @@ public class Stock {
         this.category = category;
     }
 
+    // constructor used in Request Details
+    public Stock(int stockID, String productName, String manufacturer, String category, int quantity) {
+        this.stockID = stockID;
+        this.productName = productName;
+        this.manufacturer = manufacturer;
+        this.category = category;
+        this.Quantity = quantity;
+    }
+    
     public Stock(int stockID, String productName, String manufacturer, String category, double price, int Quantity, Date entryDate) {
         this.stockID = stockID;
         this.productName = productName;
@@ -172,6 +181,27 @@ public class Stock {
         return null;
     }
 
+    // Get all the required Stock filtered Item data ..
+    public static ArrayList<Stock> getStockByCategory(String categoryName) {
+        ArrayList<Stock> stock = null;
+        try {
+            pst = StockHandler.getStockByCategory(categoryName);
+            rs = (ResultSet) pst.executeQuery();
+            while (rs.next()) {
+                stock.add(new Stock(rs.getInt("StockID"),
+                        rs.getString("ProductName"),
+                        rs.getString("Manufacturer"),
+                        rs.getString("Name"),
+                        rs.getInt("Quantity")));
+            }
+            //
+            return stock;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        return null;
+    }
+    
     public static void removeStock(int stockID, int qty) {
         
             //get current inventory

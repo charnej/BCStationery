@@ -5,12 +5,16 @@
  */
 package UserInterface;
 //t
+
+import BusinessLayerPackage.Category;
 import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.Stock;
+import BusinessLayerPackage.sortQty;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +32,13 @@ public class StaffItems extends javax.swing.JFrame {
      */
     public StaffItems() {
         initComponents();
+        //
+        Category objCategoryHolder = new Category();
+        for (Category cat : objCategoryHolder.getCategories()) {
+            //fill with all possible names
+            cmboCategory.addItem(cat.getName());
+        }
+        //
         Stock objStockHolder = new Stock();
         allStock = objStockHolder.getStock();
         populateTable(allStock);
@@ -79,6 +90,7 @@ public class StaffItems extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        cmboCategory = new javax.swing.JComboBox<>();
         btnStaffViewAllStock = new javax.swing.JButton();
         txtSearchStock = new javax.swing.JTextField();
         btnSearchStock = new javax.swing.JButton();
@@ -88,6 +100,8 @@ public class StaffItems extends javax.swing.JFrame {
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnChoose = new javax.swing.JButton();
+        btnSortQty = new javax.swing.JButton();
+        btnFilterCategory = new javax.swing.JButton();
         rbProdName = new javax.swing.JRadioButton();
         rbCategory = new javax.swing.JRadioButton();
         BG = new javax.swing.JLabel();
@@ -96,6 +110,11 @@ public class StaffItems extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1031, 665));
         setResizable(false);
         getContentPane().setLayout(null);
+
+        cmboCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Category" }));
+        cmboCategory.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        getContentPane().add(cmboCategory);
+        cmboCategory.setBounds(240, 160, 210, 30);
 
         btnStaffViewAllStock.setBackground(new java.awt.Color(254, 212, 29));
         btnStaffViewAllStock.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -109,7 +128,7 @@ public class StaffItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnStaffViewAllStock);
-        btnStaffViewAllStock.setBounds(130, 160, 109, 31);
+        btnStaffViewAllStock.setBounds(100, 120, 130, 31);
 
         txtSearchStock.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         txtSearchStock.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +137,7 @@ public class StaffItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtSearchStock);
-        txtSearchStock.setBounds(660, 160, 202, 36);
+        txtSearchStock.setBounds(660, 120, 202, 36);
 
         btnSearchStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/searchIcon.png"))); // NOI18N
         btnSearchStock.setBorderPainted(false);
@@ -130,7 +149,7 @@ public class StaffItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnSearchStock);
-        btnSearchStock.setBounds(880, 140, 46, 49);
+        btnSearchStock.setBounds(880, 110, 46, 49);
 
         tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -247,17 +266,65 @@ public class StaffItems extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnChoose);
-        btnChoose.setBounds(783, 523, 150, 30);
+        btnChoose.setBounds(780, 520, 150, 30);
+
+        btnSortQty.setBackground(new java.awt.Color(254, 212, 29));
+        btnSortQty.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnSortQty.setText("Sort by Quantity");
+        btnSortQty.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(254, 212, 29), 1, true));
+        btnSortQty.setBorderPainted(false);
+        btnSortQty.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSortQty.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSortQtyMouseClicked(evt);
+            }
+        });
+        btnSortQty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSortQtyActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSortQty);
+        btnSortQty.setBounds(640, 520, 130, 31);
+
+        btnFilterCategory.setBackground(new java.awt.Color(254, 212, 29));
+        btnFilterCategory.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnFilterCategory.setText("Filter by Category");
+        btnFilterCategory.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(254, 212, 29), 1, true));
+        btnFilterCategory.setBorderPainted(false);
+        btnFilterCategory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterCategory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnFilterCategoryMouseClicked(evt);
+            }
+        });
+        btnFilterCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterCategoryActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnFilterCategory);
+        btnFilterCategory.setBounds(100, 160, 130, 31);
 
         rbProdName.setBackground(new java.awt.Color(255, 255, 255));
         rbProdName.setText("Product Name");
+        rbProdName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbProdNameMouseClicked(evt);
+            }
+        });
         getContentPane().add(rbProdName);
-        rbProdName.setBounds(530, 150, 120, 23);
+        rbProdName.setBounds(660, 160, 120, 23);
 
         rbCategory.setBackground(new java.awt.Color(255, 255, 255));
         rbCategory.setText("Category");
+        rbCategory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbCategoryMouseClicked(evt);
+            }
+        });
         getContentPane().add(rbCategory);
-        rbCategory.setBounds(530, 180, 120, 23);
+        rbCategory.setBounds(780, 160, 120, 23);
 
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/InventoryBG.png"))); // NOI18N
         getContentPane().add(BG);
@@ -270,7 +337,7 @@ public class StaffItems extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-           Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
+            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -295,21 +362,20 @@ public class StaffItems extends javax.swing.JFrame {
 
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
         //Iterate and search for specific stock
-        String input = txtSearchStock.getText();
+        String input = txtSearchStock.getText().toLowerCase();
 
         ArrayList<Stock> newListStock = new ArrayList<Stock>();
         if (!input.isEmpty()) {
-            String inputCapital = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
             if (rbProdName.isSelected()) {
                 for (Stock stock : allStock) {
-                    if ((stock.getProductName().contains(inputCapital))) {
+                    if ((stock.getProductName().toLowerCase().contains(input))) {
                         newListStock.add(stock);
                     }
                 }
                 populateTable(newListStock);
             } else if (rbCategory.isSelected()) {
                 for (Stock stock : allStock) {
-                    if (stock.getCategory().contains(inputCapital)) {
+                    if (stock.getCategory().toLowerCase().contains(input)) {
                         newListStock.add(stock);
                     }
                 }
@@ -317,7 +383,7 @@ public class StaffItems extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Please select a Search Criteria");
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "Please enter a keyword for the search", "Attention", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -357,6 +423,44 @@ public class StaffItems extends javax.swing.JFrame {
     private void btnChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnChooseActionPerformed
+
+    private void btnFilterCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterCategoryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFilterCategoryActionPerformed
+
+    private void btnSortQtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortQtyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSortQtyActionPerformed
+
+    private void btnFilterCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFilterCategoryMouseClicked
+        if (cmboCategory.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Please select a valid Category");
+        } else {
+//            String val = (String) cmboCategory.getSelectedItem();
+//            allStock = Stock.getStockByCategory(val);
+//            populateTable(allStock);
+            ArrayList<Stock> newListStock = new ArrayList<Stock>();
+            for (Stock stock : allStock) {
+                if (stock.getCategory().contains(cmboCategory.getSelectedItem().toString())) {
+                    newListStock.add(stock);
+                }
+            }
+            populateTable(newListStock);
+        }
+    }//GEN-LAST:event_btnFilterCategoryMouseClicked
+
+    private void rbProdNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbProdNameMouseClicked
+        rbCategory.setSelected(false);
+    }//GEN-LAST:event_rbProdNameMouseClicked
+
+    private void rbCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbCategoryMouseClicked
+        rbProdName.setSelected(false);
+    }//GEN-LAST:event_rbCategoryMouseClicked
+
+    private void btnSortQtyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSortQtyMouseClicked
+        Collections.sort(allStock, new sortQty());
+        populateTable(allStock);
+    }//GEN-LAST:event_btnSortQtyMouseClicked
 
     /**
      * @param args the command line arguments
@@ -405,9 +509,12 @@ public class StaffItems extends javax.swing.JFrame {
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnChoose;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnFilterCategory;
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSearchStock;
+    private javax.swing.JButton btnSortQty;
     private javax.swing.JButton btnStaffViewAllStock;
+    private javax.swing.JComboBox<String> cmboCategory;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rbCategory;
     private javax.swing.JRadioButton rbProdName;
