@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -13,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -26,7 +29,7 @@ public class Stock {
     public Stock() {
     }
 
-    public Stock(int stockID) {
+    public Stock(int StockID) {
         this.stockID = stockID;
     }
 
@@ -55,6 +58,17 @@ public class Stock {
     private double price;
     private int Quantity;
     private Date entryDate;
+
+    @Override
+    public String toString() {
+        return String.format("|%5d|%21s|%13s|%21s|%10s|%8d|%10s|",
+                stockID,
+                ((productName.length()>20)?productName.substring(0, 19):productName),
+                ((manufacturer.length()>13)?manufacturer.substring(0, 12):manufacturer),
+                ((category.length()>20)?category.substring(0, 19):category),
+                Currency.getInstance(Locale.getDefault()).getSymbol()+price,Quantity,entryDate);
+        //return "|" + stockID + "|" + productName + "|" + manufacturer + "|" + category + "|=" + price + "|" + Quantity + "|" + entryDate + "|";
+    }
 
     public ArrayList<Stock> getStock() {
         //populate list with stock from db;
@@ -173,3 +187,4 @@ public class Stock {
     }
 
 }
+

@@ -240,6 +240,9 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
                 purchaseOrder po = new purchaseOrder();
                 po.insert(requestedQty-InventoryQty);
                 JOptionPane.showMessageDialog(rootPane, "Purchase Order is sent");
+                RequestDetails recD = new RequestDetails();
+                ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                populateTable(detailsPackage);
                 //TODO
                     //Insert an ETA for purchase order items
             }

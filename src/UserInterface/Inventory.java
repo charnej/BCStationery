@@ -5,11 +5,20 @@
  */
 package UserInterface;
 //t
+import BusinessLayerPackage.BCSerializer;
+import BusinessLayerPackage.Reporter;
 import BusinessLayerPackage.Stock;
+import BusinessLayerPackage.purchaseOrder;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -70,6 +79,7 @@ public class Inventory extends javax.swing.JFrame {
 
         SearchCriteriaGroup = new javax.swing.ButtonGroup();
         btnViewAllStock = new javax.swing.JButton();
+        btnGenerateReport = new javax.swing.JButton();
         btnAddStock = new javax.swing.JButton();
         txtSearchStock = new javax.swing.JTextField();
         btnSearchStock = new javax.swing.JButton();
@@ -100,6 +110,15 @@ public class Inventory extends javax.swing.JFrame {
         });
         getContentPane().add(btnViewAllStock);
         btnViewAllStock.setBounds(130, 160, 109, 31);
+
+        btnGenerateReport.setText("Generate Report");
+        btnGenerateReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateReportActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGenerateReport);
+        btnGenerateReport.setBounds(780, 540, 130, 25);
 
         btnAddStock.setBackground(new java.awt.Color(254, 212, 29));
         btnAddStock.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -140,13 +159,13 @@ public class Inventory extends javax.swing.JFrame {
         SearchCriteriaGroup.add(rbProdName);
         rbProdName.setText("Product Name");
         getContentPane().add(rbProdName);
-        rbProdName.setBounds(530, 150, 120, 23);
+        rbProdName.setBounds(530, 150, 120, 25);
 
         rbCategory.setBackground(new java.awt.Color(255, 255, 255));
         SearchCriteriaGroup.add(rbCategory);
         rbCategory.setText("Category");
         getContentPane().add(rbCategory);
-        rbCategory.setBounds(530, 180, 120, 23);
+        rbCategory.setBounds(530, 180, 120, 25);
 
         tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -345,6 +364,60 @@ public class Inventory extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tblInventoryKeyPressed
 
+    private void btnGenerateReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
+        //Get current inventory
+        //allStock;
+        //get current purchase orders
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        Date d = new Date();
+        String output =String.format(
+                "==================================================================================================\n"
+              + "           STOCK REPORT            "+sdf.format(d)+"                                  =\n"
+              + "==================================================================================================\n"
+              + "The following table shows all the stock currently in the Inventory:\n"
+              + "________________________________________________________________________________________________\n"
+              + "|%5s|%21s|%13s|%21s|%10s|%8s|%10s|\n"
+              + "________________________________________________________________________________________________\n"
+                ,"ID","Name","Manufacturer","Category","Price","Quantity","Entry Date");
+        
+        for (Stock stock : allStock) {
+            output+=(stock.toString())+"\n";
+        }
+        output+=String.format("________________________________________________________________________________________________\n"
+                            + "\n"
+                            + "The following table shows the Purchase Order items that needs to be Purchased: \n"
+                            + "__________________________________________________________________________________\n"
+                            + "|%5s|%21s|%13s|%10s|%8s|%15s|\n"
+                            + "__________________________________________________________________________________\n"
+                            ,"ID","Name","Manufacturer","Price","Quantity","Quantity needed"
+                            );
+        //get all purchase orders
+        purchaseOrder po = new purchaseOrder();
+        ArrayList<purchaseOrder> pOrders = po.getPurchaseOrders();
+        for (purchaseOrder pOrder : pOrders) {
+            for (Stock stock : allStock) {
+                if (stock.getStockID()==pOrder.getStockID()) {
+                    output+= pOrder.showPurchaseOrder(stock);
+                }
+            }
+        }
+        output+="__________________________________________________________________________________\n";
+        
+        System.out.println(output);
+        // make pretty report
+        JFileChooser f = new JFileChooser();
+        f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        f.showSaveDialog(null);
+        String directory = (String)(f.getCurrentDirectory()).getPath();
+        directory+="\\CurrentInventoryReport";
+        Reporter rep = new Reporter(output);
+        BCSerializer ser = new BCSerializer(output);
+        rep.saveReport(directory);
+        ser.Serialize(directory);
+        // export ass xml
+        // export as serialised
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -387,6 +460,7 @@ public class Inventory extends javax.swing.JFrame {
     private javax.swing.JButton btnAddStock;
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnGenerateReport;
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSearchStock;
     private javax.swing.JButton btnViewAllStock;

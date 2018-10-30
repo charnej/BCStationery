@@ -71,13 +71,20 @@ public class AdminOrders extends javax.swing.JFrame {
 
         btnViewAllStaffReq = new javax.swing.JButton();
         btnViewComplStaffRequests = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         btnViewIncomStaffRequests = new javax.swing.JButton();
+        lDay = new javax.swing.JLabel();
+        spnDay = new javax.swing.JSpinner();
+        btnSortByDate = new javax.swing.JButton();
+        lYear = new javax.swing.JLabel();
+        lMonth = new javax.swing.JLabel();
+        spnYear = new javax.swing.JSpinner();
+        spnMonth = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblStaffRequests = new javax.swing.JTable();
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        cmboViewByDate = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -111,7 +118,11 @@ public class AdminOrders extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnViewComplStaffRequests);
-        btnViewComplStaffRequests.setBounds(290, 170, 190, 40);
+        btnViewComplStaffRequests.setBounds(280, 170, 190, 40);
+
+        jButton1.setText("Generate Report");
+        getContentPane().add(jButton1);
+        jButton1.setBounds(750, 520, 180, 40);
 
         btnViewIncomStaffRequests.setBackground(new java.awt.Color(254, 212, 29));
         btnViewIncomStaffRequests.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -125,7 +136,29 @@ public class AdminOrders extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnViewIncomStaffRequests);
-        btnViewIncomStaffRequests.setBounds(510, 170, 220, 40);
+        btnViewIncomStaffRequests.setBounds(490, 170, 220, 40);
+
+        lDay.setText("Day");
+        getContentPane().add(lDay);
+        lDay.setBounds(730, 120, 21, 16);
+        getContentPane().add(spnDay);
+        spnDay.setBounds(730, 140, 50, 22);
+
+        btnSortByDate.setText("Sort By Date");
+        getContentPane().add(btnSortByDate);
+        btnSortByDate.setBounds(730, 170, 190, 40);
+
+        lYear.setText("Year");
+        getContentPane().add(lYear);
+        lYear.setBounds(850, 120, 26, 16);
+
+        lMonth.setText("Month");
+        getContentPane().add(lMonth);
+        lMonth.setBounds(790, 120, 35, 16);
+        getContentPane().add(spnYear);
+        spnYear.setBounds(840, 140, 80, 22);
+        getContentPane().add(spnMonth);
+        spnMonth.setBounds(790, 140, 40, 22);
 
         tblStaffRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -168,7 +201,7 @@ public class AdminOrders extends javax.swing.JFrame {
         }
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(110, 240, 820, 300);
+        jScrollPane1.setBounds(110, 240, 820, 280);
 
         btnBackLogout.setBackground(new java.awt.Color(255, 255, 255));
         btnBackLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -221,13 +254,6 @@ public class AdminOrders extends javax.swing.JFrame {
         });
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 10, 50, 30);
-
-        cmboViewByDate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmboViewByDate.setToolTipText("View Requests by date");
-        cmboViewByDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cmboViewByDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(cmboViewByDate);
-        cmboViewByDate.setBounds(770, 170, 140, 40);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/orderMng.png"))); // NOI18N
         getContentPane().add(jLabel1);
@@ -346,12 +372,19 @@ public class AdminOrders extends javax.swing.JFrame {
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
+    private javax.swing.JButton btnSortByDate;
     private javax.swing.JButton btnViewAllStaffReq;
     private javax.swing.JButton btnViewComplStaffRequests;
     private javax.swing.JButton btnViewIncomStaffRequests;
-    private javax.swing.JComboBox<String> cmboViewByDate;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lDay;
+    private javax.swing.JLabel lMonth;
+    private javax.swing.JLabel lYear;
+    private javax.swing.JSpinner spnDay;
+    private javax.swing.JSpinner spnMonth;
+    private javax.swing.JSpinner spnYear;
     private javax.swing.JTable tblStaffRequests;
     // End of variables declaration//GEN-END:variables
 }
