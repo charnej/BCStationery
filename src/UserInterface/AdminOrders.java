@@ -6,6 +6,7 @@
 package UserInterface;
 //t
 
+import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.BCSerializer;
 import BusinessLayerPackage.Reporter;
 import BusinessLayerPackage.RequestDetails;
@@ -93,10 +94,12 @@ public class AdminOrders extends javax.swing.JFrame {
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setMinimumSize(new java.awt.Dimension(1030, 636));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -128,7 +131,10 @@ public class AdminOrders extends javax.swing.JFrame {
         getContentPane().add(btnViewComplStaffRequests);
         btnViewComplStaffRequests.setBounds(280, 170, 190, 40);
 
+        jButton1.setBackground(new java.awt.Color(254, 212, 29));
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton1.setText("Generate Report");
+        jButton1.setBorderPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -153,13 +159,16 @@ public class AdminOrders extends javax.swing.JFrame {
 
         lDay.setText("Day");
         getContentPane().add(lDay);
-        lDay.setBounds(730, 120, 21, 16);
+        lDay.setBounds(730, 120, 19, 14);
 
         spnDay.setModel(new javax.swing.SpinnerNumberModel(1, 0, 31, 1));
         getContentPane().add(spnDay);
-        spnDay.setBounds(730, 140, 50, 22);
+        spnDay.setBounds(730, 140, 50, 20);
 
+        btnSortByDate.setBackground(new java.awt.Color(254, 212, 29));
+        btnSortByDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSortByDate.setText("Sort By Date");
+        btnSortByDate.setBorderPainted(false);
         btnSortByDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSortByDateActionPerformed(evt);
@@ -170,19 +179,19 @@ public class AdminOrders extends javax.swing.JFrame {
 
         lYear.setText("Year");
         getContentPane().add(lYear);
-        lYear.setBounds(850, 120, 26, 16);
+        lYear.setBounds(850, 120, 22, 14);
 
         lMonth.setText("Month");
         getContentPane().add(lMonth);
-        lMonth.setBounds(790, 120, 35, 16);
+        lMonth.setBounds(790, 120, 30, 14);
 
         spnYear.setModel(new javax.swing.SpinnerNumberModel(2000, 2000, 2020, 1));
         getContentPane().add(spnYear);
-        spnYear.setBounds(840, 140, 80, 22);
+        spnYear.setBounds(840, 140, 80, 20);
 
         spnMonth.setModel(new javax.swing.SpinnerNumberModel(2, 0, 12, 1));
         getContentPane().add(spnMonth);
-        spnMonth.setBounds(790, 140, 40, 22);
+        spnMonth.setBounds(790, 140, 40, 20);
 
         tblStaffRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -279,6 +288,19 @@ public class AdminOrders extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 10, 50, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 900, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/orderMng.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 1031, 637);
@@ -304,6 +326,7 @@ public class AdminOrders extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -467,6 +490,21 @@ public class AdminOrders extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -510,6 +548,7 @@ public class AdminOrders extends javax.swing.JFrame {
     private javax.swing.JButton btnViewAllStaffReq;
     private javax.swing.JButton btnViewComplStaffRequests;
     private javax.swing.JButton btnViewIncomStaffRequests;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

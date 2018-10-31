@@ -48,10 +48,12 @@ public class StaffMenu extends javax.swing.JFrame {
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(652, 459));
+        setMinimumSize(new java.awt.Dimension(648, 459));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -146,9 +148,22 @@ public class StaffMenu extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(610, 10, 30, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 540, 40);
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/staffMenu.png"))); // NOI18N
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(0, 0, 650, 450);
+        jLabel2.setBounds(0, 0, 650, 459);
 
         pack();
         setLocationRelativeTo(null);
@@ -200,6 +215,21 @@ public class StaffMenu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnViewMyRequestsActionPerformed
 
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -242,6 +272,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdateProfile;
     private javax.swing.JButton btnViewItems;
     private javax.swing.JButton btnViewMyRequests;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

@@ -42,7 +42,8 @@ public class AdminHandler {
                                         staffUsers.getString(2),//("FirstName"),
                                         staffUsers.getString(3),//("LastName"),
                                         staffUsers.getString(4),//("Username"),
-                                        staffUsers.getString(5)));//("Password")));
+                                        staffUsers.getString(5),//("Password")));
+                                        staffUsers.getInt(6)));
             }
              con.close();
             } catch (ClassNotFoundException ex) {
@@ -55,6 +56,23 @@ public class AdminHandler {
              return rsUsers;
     }
    
+    public static void updateAdminLoggedIn(int LoggedIn, String UserName){
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
+            Connection con =(Connection) DriverManager.getConnection(url,"root","");
+            Statement st = (Statement) con.createStatement();
+            String query = "UPDATE admin SET LoggedIn = '"+LoggedIn+"' WHERE Username = '"+UserName+"'";
+            st.executeUpdate(query);
+            con.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdminHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+    }
     //do update user
     //do delete user 
 }

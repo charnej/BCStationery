@@ -19,12 +19,14 @@ import java.util.logging.Logger;
  * @author Jozehan
  */
 public class Admin extends User {
-
+    int loggedIn;
+    
     public Admin() {
     }
 
-    public Admin(int userID, String firstName, String lastName, String username, String password) {
+    public Admin(int userID, String firstName, String lastName, String username, String password, int loggedIn) {
         super(userID, firstName, lastName, username, password);
+        this.loggedIn = loggedIn;
     }
 
     public ArrayList<Admin> getAdmin() {
@@ -33,5 +35,18 @@ public class Admin extends User {
         allAdmin = inst.getUsers();
         return allAdmin;
     }
+    
+    public static void UpdateAdminLoggedIn(String userName, int loggedIn){
+        AdminHandler.updateAdminLoggedIn(loggedIn, userName);
+    }
+
+    public int getLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(int loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+    
 
 }

@@ -89,10 +89,12 @@ public class StaffPastRequests extends javax.swing.JFrame {
         btnCloseRequestPackage = new javax.swing.JButton();
         btnEnterRequestPackage = new javax.swing.JButton();
         btnRemoveRequest = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setMinimumSize(new java.awt.Dimension(1030, 637));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -272,6 +274,19 @@ public class StaffPastRequests extends javax.swing.JFrame {
         getContentPane().add(btnRemoveRequest);
         btnRemoveRequest.setBounds(640, 530, 140, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 900, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/requesthistory.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 1030, 637);
@@ -390,6 +405,21 @@ public class StaffPastRequests extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnViewAllRequests1ActionPerformed
 
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
+
     public void addParentTableData(ArrayList<StaffRequest> staffRequests) {
         DefaultTableModel model = (DefaultTableModel) tblRequests.getModel();
         model.setRowCount(0);
@@ -461,6 +491,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
     private javax.swing.JButton btnViewAllRequests1;
     private javax.swing.JButton btnViewDoneRequests1;
     private javax.swing.JButton btnViewIncomRequests;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
