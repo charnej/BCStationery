@@ -104,10 +104,12 @@ public class StaffItems extends javax.swing.JFrame {
         btnFilterCategory = new javax.swing.JButton();
         rbProdName = new javax.swing.JRadioButton();
         rbCategory = new javax.swing.JRadioButton();
+        frameMove = new javax.swing.JLabel();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setMinimumSize(new java.awt.Dimension(1029, 637));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -326,6 +328,19 @@ public class StaffItems extends javax.swing.JFrame {
         getContentPane().add(rbCategory);
         rbCategory.setBounds(780, 160, 120, 23);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 900, 40);
+
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/InventoryBG.png"))); // NOI18N
         getContentPane().add(BG);
         BG.setBounds(0, 0, 1030, 637);
@@ -462,6 +477,21 @@ public class StaffItems extends javax.swing.JFrame {
         populateTable(allStock);
     }//GEN-LAST:event_btnSortQtyMouseClicked
 
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -515,6 +545,7 @@ public class StaffItems extends javax.swing.JFrame {
     private javax.swing.JButton btnSortQty;
     private javax.swing.JButton btnStaffViewAllStock;
     private javax.swing.JComboBox<String> cmboCategory;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rbCategory;
     private javax.swing.JRadioButton rbProdName;

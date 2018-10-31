@@ -22,6 +22,9 @@ public class StaffLogin extends javax.swing.JFrame {
     /**
      * Creates new form StaffLogin
      */
+    
+    
+    
     public StaffLogin() {
         initComponents();
     }
@@ -42,12 +45,15 @@ public class StaffLogin extends javax.swing.JFrame {
         btnStaffLogin1 = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
         btnAdmin = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 628));
+        setMaximumSize(new java.awt.Dimension(800, 600));
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setUndecorated(true);
         setResizable(false);
-        setSize(new java.awt.Dimension(800, 628));
+        setSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(null);
 
         txtStaffUsername.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -166,6 +172,19 @@ public class StaffLogin extends javax.swing.JFrame {
         getContentPane().add(btnAdmin);
         btnAdmin.setBounds(10, 560, 90, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 710, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/StaffLogin.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 800, 600);
@@ -221,11 +240,9 @@ public class StaffLogin extends javax.swing.JFrame {
         }
         if (UserFound) {
              if (Staff.getStaffMember(txtStaffUsername.getText()).getLoggedIn() == 1) {
-                JOptionPane.showMessageDialog(null, "USer is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "User is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
             }else{
-               activeUser = Staff.getStaffMember(txtStaffUsername.getText());
-             //JOptionPane.showMessageDialog(null, Staff.getStaffMember(txtStaffUsername.getText()).getUsername(), "Please Note", JOptionPane.WARNING_MESSAGE);
-            //Staff.updateStaffLoggedIn(Staff.getStaffMember(txtStaffUsername.getText()).getUsername(), 1);
+               activeUser = Staff.getStaffMember(txtStaffUsername.getText());             
             Staff.updateStaffLoggedIn(activeUser.getUsername(), 1);
             
             //JOptionPane.showMessageDialog(null, activeUser.getUsername(), "Please Note", JOptionPane.WARNING_MESSAGE);
@@ -253,6 +270,21 @@ public class StaffLogin extends javax.swing.JFrame {
     private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
         txtPassword.setText("");
     }//GEN-LAST:event_txtPasswordFocusGained
+
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        
+        this.setLocation(x - xMouse, y - yMouse);
+        
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
 
     /**
      * @param args the command line arguments
@@ -295,6 +327,7 @@ public class StaffLogin extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnStaffLogin1;
     private javax.swing.JButton btnStaffRegister;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtStaffUsername;

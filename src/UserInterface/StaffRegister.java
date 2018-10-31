@@ -56,14 +56,16 @@ public class StaffRegister extends javax.swing.JFrame {
         btnExit = new javax.swing.JButton();
         cmboDepartment = new javax.swing.JComboBox<>();
         cmboCampusLocation1 = new javax.swing.JComboBox<>();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(800, 628));
-        setMinimumSize(new java.awt.Dimension(800, 628));
-        setPreferredSize(new java.awt.Dimension(800, 628));
+        setMaximumSize(new java.awt.Dimension(800, 600));
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(800, 600));
         setResizable(false);
-        setSize(new java.awt.Dimension(800, 628));
+        setSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(null);
 
         txtFirstName.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
@@ -184,6 +186,19 @@ public class StaffRegister extends javax.swing.JFrame {
         cmboCampusLocation1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         getContentPane().add(cmboCampusLocation1);
         cmboCampusLocation1.setBounds(100, 470, 210, 30);
+
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 710, 40);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/StaffRegistration.png"))); // NOI18N
         getContentPane().add(jLabel1);
@@ -361,6 +376,21 @@ public class StaffRegister extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -403,6 +433,7 @@ public class StaffRegister extends javax.swing.JFrame {
     private javax.swing.JButton btnRegister;
     private javax.swing.JComboBox<String> cmboCampusLocation1;
     private javax.swing.JComboBox<String> cmboDepartment;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField txtCell;
     private javax.swing.JTextField txtEmail;

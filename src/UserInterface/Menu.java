@@ -5,6 +5,7 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Admin;
 import javax.swing.JOptionPane;
 
 /**
@@ -36,10 +37,12 @@ public class Menu extends javax.swing.JFrame {
         btnStaff = new javax.swing.JButton();
         btnOrders = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(652, 459));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -142,6 +145,19 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().add(jButton1);
         jButton1.setBounds(360, 270, 160, 50);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 540, 40);
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/adminMenu.png"))); // NOI18N
         jLabel2.setText("jLabel2");
         jLabel2.setMinimumSize(new java.awt.Dimension(652, 459));
@@ -165,6 +181,7 @@ public class Menu extends javax.swing.JFrame {
 
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             StaffLogin staffLogin = new StaffLogin();
             staffLogin.setVisible(true);
             this.dispose();
@@ -176,6 +193,7 @@ public class Menu extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -192,11 +210,26 @@ public class Menu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnStaffActionPerformed
 
+    int xMouse;
+    int yMouse;
     private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
         AdminOrders orders = new AdminOrders();
         orders.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnOrdersActionPerformed
+
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
 
     /**
      * @param args the command line arguments
@@ -240,6 +273,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnOrders;
     private javax.swing.JButton btnStaff;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables

@@ -5,6 +5,7 @@
  */
 package UserInterface;
 //t
+import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.BCSerializer;
 import BusinessLayerPackage.Reporter;
 import BusinessLayerPackage.Stock;
@@ -90,10 +91,12 @@ public class Inventory extends javax.swing.JFrame {
         btnExit = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setMinimumSize(new java.awt.Dimension(1028, 637));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -111,14 +114,17 @@ public class Inventory extends javax.swing.JFrame {
         getContentPane().add(btnViewAllStock);
         btnViewAllStock.setBounds(130, 160, 109, 31);
 
+        btnGenerateReport.setBackground(new java.awt.Color(254, 212, 29));
+        btnGenerateReport.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnGenerateReport.setText("Generate Report");
+        btnGenerateReport.setBorderPainted(false);
         btnGenerateReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerateReportActionPerformed(evt);
             }
         });
         getContentPane().add(btnGenerateReport);
-        btnGenerateReport.setBounds(780, 540, 130, 25);
+        btnGenerateReport.setBounds(760, 530, 170, 30);
 
         btnAddStock.setBackground(new java.awt.Color(254, 212, 29));
         btnAddStock.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -159,13 +165,13 @@ public class Inventory extends javax.swing.JFrame {
         SearchCriteriaGroup.add(rbProdName);
         rbProdName.setText("Product Name");
         getContentPane().add(rbProdName);
-        rbProdName.setBounds(530, 150, 120, 25);
+        rbProdName.setBounds(530, 150, 120, 23);
 
         rbCategory.setBackground(new java.awt.Color(255, 255, 255));
         SearchCriteriaGroup.add(rbCategory);
         rbCategory.setText("Category");
         getContentPane().add(rbCategory);
-        rbCategory.setBounds(530, 180, 120, 25);
+        rbCategory.setBounds(530, 180, 120, 23);
 
         tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -266,6 +272,19 @@ public class Inventory extends javax.swing.JFrame {
         getContentPane().add(btnMinimize);
         btnMinimize.setBounds(910, 10, 31, 31);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 900, 40);
+
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/InventoryBG.png"))); // NOI18N
         getContentPane().add(BG);
         BG.setBounds(0, 0, 1030, 637);
@@ -283,6 +302,7 @@ public class Inventory extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -418,6 +438,21 @@ public class Inventory extends javax.swing.JFrame {
         // export as serialised
     }//GEN-LAST:event_btnGenerateReportActionPerformed
 
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -464,6 +499,7 @@ public class Inventory extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSearchStock;
     private javax.swing.JButton btnViewAllStock;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rbCategory;
     private javax.swing.JRadioButton rbProdName;
