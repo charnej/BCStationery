@@ -87,10 +87,12 @@ public class UpdateUser extends javax.swing.JFrame {
         cmboUpdDepartment = new javax.swing.JComboBox<>();
         btnBack = new javax.swing.JButton();
         btnUpdateProfile = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 628));
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setUndecorated(true);
         setResizable(false);
         setSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(null);
@@ -214,6 +216,19 @@ public class UpdateUser extends javax.swing.JFrame {
         getContentPane().add(btnUpdateProfile);
         btnUpdateProfile.setBounds(520, 400, 180, 40);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 710, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/UpdateUser.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 800, 600);
@@ -268,6 +283,21 @@ public class UpdateUser extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnExitActionPerformed
+
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
 
     public void validateFirstName() {
         staffObj.setFirstName(txtFirstName.getText());
@@ -448,6 +478,7 @@ public class UpdateUser extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdateProfile;
     private javax.swing.JComboBox<String> cmboUpdCampusLocation;
     private javax.swing.JComboBox<String> cmboUpdDepartment;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField txtCell;
     private javax.swing.JTextField txtEmail;

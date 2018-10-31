@@ -6,6 +6,7 @@
 package UserInterface;
 //t
 
+import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.RequestDetails;
 import BusinessLayerPackage.StaffRequest;
 import BusinessLayerPackage.Stock;
@@ -14,6 +15,8 @@ import DataAccessLayerPackage.StaffRequestHandler;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.OptionPaneUI;
 import javax.swing.table.DefaultTableModel;
@@ -94,10 +97,12 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setMinimumSize(new java.awt.Dimension(1029, 637));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -198,6 +203,19 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 10, 50, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 900, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/orderItemsAdmin.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 1030, 637);
@@ -223,6 +241,7 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -237,14 +256,21 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
             int selection = JOptionPane.showConfirmDialog(null, "You do not meet requirements, do you want to send purchase order",
                     "Please Note", JOptionPane.INFORMATION_MESSAGE);
             if (selection == JOptionPane.YES_OPTION) {
-                purchaseOrder po = new purchaseOrder();
-                po.insert(requestedQty-InventoryQty);
-                JOptionPane.showMessageDialog(rootPane, "Purchase Order is sent");
-                RequestDetails recD = new RequestDetails();
+              RequestDetails recD = new RequestDetails();
                 ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
-                populateTable(detailsPackage);
-                //TODO
-                    //Insert an ETA for purchase order items
+                List<Integer> lID = detailsPackage.stream().map(requestdetails -> requestdetails.getStockID()).collect(Collectors.toList());
+                if (lID.contains(currentItemId)) {
+                    purchaseOrder po = new purchaseOrder();
+                    po.insert(requestedQty - InventoryQty);
+                    //TODO 
+                    //check if item is still in db
+                    JOptionPane.showMessageDialog(rootPane, "Purchase Order is sent");
+                     detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                    populateTable(detailsPackage);
+                }else{
+                    JOptionPane.showMessageDialog(null, "The item is no longer requested");
+                }
+                
             }
         } else if (InventoryQty >= requestedQty) {
             int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to complete transaction ",
@@ -268,6 +294,21 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_tblRequestItemsMouseClicked
+
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
 
     /**
      * @param args the command line arguments
@@ -308,6 +349,7 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblRequestItems;

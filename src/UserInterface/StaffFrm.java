@@ -5,6 +5,7 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.Staff;
 import DataAccessLayerPackage.StaffHandler;
 import java.util.ArrayList;
@@ -42,10 +43,12 @@ public class StaffFrm extends javax.swing.JFrame {
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setMinimumSize(new java.awt.Dimension(1031, 637));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -158,6 +161,19 @@ public class StaffFrm extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 10, 50, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 900, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/StaffBG.png"))); // NOI18N
         jLabel1.setText("jLabel1");
         getContentPane().add(jLabel1);
@@ -188,6 +204,7 @@ public class StaffFrm extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
          int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -219,6 +236,22 @@ public class StaffFrm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAcceptStaffMouseClicked
 
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
+
+    int xMouse;
+    int yMouse;
+    
     public void addTableData(ArrayList<Staff> staffList) {
         DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
         model.setRowCount(0);
@@ -282,6 +315,7 @@ public class StaffFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnViewAllStaff;
     private javax.swing.JButton btnViewPendingStaff;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblStaff;

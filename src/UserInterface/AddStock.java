@@ -5,6 +5,7 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.Category;
 import BusinessLayerPackage.Stock;
 import java.sql.Date;
@@ -53,12 +54,14 @@ public class AddStock extends javax.swing.JFrame {
         btnMinimize = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         txtPriceAdd = new javax.swing.JTextField();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 628));
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setUndecorated(true);
         setResizable(false);
-        setSize(new java.awt.Dimension(800, 628));
+        setSize(new java.awt.Dimension(800, 600));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -149,6 +152,19 @@ public class AddStock extends javax.swing.JFrame {
         getContentPane().add(txtPriceAdd);
         txtPriceAdd.setBounds(500, 220, 130, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 710, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/AddSTock.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 800, 600);
@@ -210,6 +226,7 @@ public class AddStock extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
          int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -227,6 +244,21 @@ public class AddStock extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         //JOptionPane.showMessageDialog(null,"hi");
     }//GEN-LAST:event_formWindowActivated
+    
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
 
     /**
      * @param args the command line arguments
@@ -269,6 +301,7 @@ public class AddStock extends javax.swing.JFrame {
     private javax.swing.JButton btnItemAdd;
     private javax.swing.JButton btnMinimize;
     private javax.swing.JComboBox<String> cmboCategoryAdd;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSpinner spnQtyAdd;
     private javax.swing.JTextField txtManufacturerAdd;

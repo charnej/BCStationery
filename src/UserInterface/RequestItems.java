@@ -6,6 +6,7 @@
 package UserInterface;
 
 import BusinessLayerPackage.RequestDetails;
+import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.StaffRequest;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -50,10 +51,12 @@ public class RequestItems extends javax.swing.JFrame {
         spnQtyAdd = new javax.swing.JSpinner();
         txtProductName = new javax.swing.JTextField();
         txtCategory = new javax.swing.JTextField();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 628));
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -149,6 +152,19 @@ public class RequestItems extends javax.swing.JFrame {
         getContentPane().add(txtCategory);
         txtCategory.setBounds(140, 400, 200, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 670, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/itemRequestForm1.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 800, 600);
@@ -174,6 +190,7 @@ public class RequestItems extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+           Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -200,6 +217,21 @@ public class RequestItems extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btnSendRequestMouseClicked
+
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
 
     /**
      * @param args the command line arguments
@@ -241,6 +273,7 @@ public class RequestItems extends javax.swing.JFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSendRequest;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSpinner spnQtyAdd;
     private javax.swing.JTextField txtCategory;

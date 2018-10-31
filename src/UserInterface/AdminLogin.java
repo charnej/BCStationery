@@ -13,8 +13,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -46,12 +49,14 @@ public class AdminLogin extends javax.swing.JFrame {
         btnExit = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
         btnBackLogout = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 628));
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setUndecorated(true);
         setResizable(false);
-        setSize(new java.awt.Dimension(800, 628));
+        setSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(null);
 
         txtAdminUsername.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -154,6 +159,19 @@ public class AdminLogin extends javax.swing.JFrame {
         getContentPane().add(btnBackLogout);
         btnBackLogout.setBounds(720, 10, 30, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 670, 40);
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Login.png"))); // NOI18N
         getContentPane().add(jLabel2);
         jLabel2.setBounds(0, 0, 800, 600);
@@ -193,6 +211,9 @@ public class AdminLogin extends javax.swing.JFrame {
     private int logInAtempts = 0;
     int k = 20;
     Timer t;
+    
+    public static String activeUser;
+    
     private void btnAdminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminLoginActionPerformed
 //T         
         //Get all staff user objects
@@ -202,24 +223,44 @@ public class AdminLogin extends javax.swing.JFrame {
 //        allAdmin.add(new Admin(1, "Charne", "Jordaan", "charne", "charne"));
 //        allAdmin.add(new Admin(1, "Jozehan", "Grobler", "jozehan", "jozehan"));
 //        allAdmin.add(new Admin(1, "Admin", "Admin", "admin", "admin"));
-
-        boolean UserFound = false;
+           
+        Admin UserFound = null;
+//        
+//        Optional<Admin> foundAdmin = allAdmin.stream()
+//                .filter(admin -> admin.getUsername().equals(txtAdminUsername.getText()))
+//                .filter(admin -> admin.getPassword().equals(txtPassword.getText()))
+//                .findAny();
+//        
+//        if (foundAdmin.isPresent()) {
+//            //found with correct username and password
+//        } else {
+//            //not found
+//        }
+        
         try {
             for (Admin adminItem : allAdmin) {
                 if (adminItem.getUsername().equals(txtAdminUsername.getText())) {
                     if (adminItem.getPassword().equals(txtPassword.getText())) {
                         //log in user user valid
-                        UserFound = true;
+                        UserFound = adminItem;
                     }
                 }
             }
-            if (UserFound) {
+            if (UserFound != null) {
                 //log in user
                 // close current form
                 // re route to another form
-                Menu mainMenu = new Menu();
-                mainMenu.setVisible(true);
-                this.dispose();
+                if (UserFound.getLoggedIn() == 1) {
+                   JOptionPane.showMessageDialog(null, "Admin is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+                }else{
+                    activeUser = UserFound.getUsername();
+                    Admin.UpdateAdminLoggedIn(activeUser, 1);
+                     Menu mainMenu = new Menu();
+                    mainMenu.setVisible(true);
+                    this.dispose();
+                }
+                
+                
             } else if (logInAtempts < 3) {
                 //throw warning
                 logInAtempts++;
@@ -253,6 +294,21 @@ public class AdminLogin extends javax.swing.JFrame {
     private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
         txtPassword.setText("");
     }//GEN-LAST:event_txtPasswordFocusGained
+
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
 
     /**
      * @param args the command line arguments
@@ -294,6 +350,7 @@ public class AdminLogin extends javax.swing.JFrame {
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtAdminUsername;
     private javax.swing.JPasswordField txtPassword;

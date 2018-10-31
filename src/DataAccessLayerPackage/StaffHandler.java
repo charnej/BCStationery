@@ -132,6 +132,7 @@ public static enum staffType{
             st = con.createStatement();
             st.executeUpdate(sql);
             //
+            con.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }

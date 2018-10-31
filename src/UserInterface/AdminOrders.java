@@ -6,11 +6,20 @@
 package UserInterface;
 //t
 
+import BusinessLayerPackage.Admin;
+import BusinessLayerPackage.BCSerializer;
+import BusinessLayerPackage.Reporter;
+import BusinessLayerPackage.RequestDetails;
 import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.StaffRequest;
+import BusinessLayerPackage.Stock;
 import DataAccessLayerPackage.StaffHandler;
 import DataAccessLayerPackage.StaffRequestHandler;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,9 +38,9 @@ public class AdminOrders extends javax.swing.JFrame {
         populateTable(staffRequests);
         tblStaffRequests.setAutoCreateRowSorter(true);
     }
-
+    
     private void populateTable(ArrayList<StaffRequest> requestList) {
-
+        
         DefaultTableModel dmodel = (DefaultTableModel) tblStaffRequests.getModel();
         Object[] row = new Object[5];
         //get all staff
@@ -46,7 +55,7 @@ public class AdminOrders extends javax.swing.JFrame {
                 row[0] = stc.getRequestNr();
                 for (Staff s : allStaff) {
                     if (s.getUserID() == stc.getStaffID()) {
-
+                        
                         row[1] = s.getFirstName() + " " + s.getLastName();
                     }
                 }
@@ -85,10 +94,12 @@ public class AdminOrders extends javax.swing.JFrame {
         btnBackLogout = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 665));
+        setMinimumSize(new java.awt.Dimension(1030, 636));
+        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -120,7 +131,15 @@ public class AdminOrders extends javax.swing.JFrame {
         getContentPane().add(btnViewComplStaffRequests);
         btnViewComplStaffRequests.setBounds(280, 170, 190, 40);
 
+        jButton1.setBackground(new java.awt.Color(254, 212, 29));
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton1.setText("Generate Report");
+        jButton1.setBorderPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton1);
         jButton1.setBounds(750, 520, 180, 40);
 
@@ -140,25 +159,39 @@ public class AdminOrders extends javax.swing.JFrame {
 
         lDay.setText("Day");
         getContentPane().add(lDay);
-        lDay.setBounds(730, 120, 21, 16);
-        getContentPane().add(spnDay);
-        spnDay.setBounds(730, 140, 50, 22);
+        lDay.setBounds(730, 120, 19, 14);
 
+        spnDay.setModel(new javax.swing.SpinnerNumberModel(1, 0, 31, 1));
+        getContentPane().add(spnDay);
+        spnDay.setBounds(730, 140, 50, 20);
+
+        btnSortByDate.setBackground(new java.awt.Color(254, 212, 29));
+        btnSortByDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSortByDate.setText("Sort By Date");
+        btnSortByDate.setBorderPainted(false);
+        btnSortByDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSortByDateActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnSortByDate);
         btnSortByDate.setBounds(730, 170, 190, 40);
 
         lYear.setText("Year");
         getContentPane().add(lYear);
-        lYear.setBounds(850, 120, 26, 16);
+        lYear.setBounds(850, 120, 22, 14);
 
         lMonth.setText("Month");
         getContentPane().add(lMonth);
-        lMonth.setBounds(790, 120, 35, 16);
+        lMonth.setBounds(790, 120, 30, 14);
+
+        spnYear.setModel(new javax.swing.SpinnerNumberModel(2000, 2000, 2020, 1));
         getContentPane().add(spnYear);
-        spnYear.setBounds(840, 140, 80, 22);
+        spnYear.setBounds(840, 140, 80, 20);
+
+        spnMonth.setModel(new javax.swing.SpinnerNumberModel(2, 0, 12, 1));
         getContentPane().add(spnMonth);
-        spnMonth.setBounds(790, 140, 40, 22);
+        spnMonth.setBounds(790, 140, 40, 20);
 
         tblStaffRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -255,6 +288,19 @@ public class AdminOrders extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 10, 50, 30);
 
+        frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameMoveMouseDragged(evt);
+            }
+        });
+        frameMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameMoveMousePressed(evt);
+            }
+        });
+        getContentPane().add(frameMove);
+        frameMove.setBounds(4, 0, 900, 40);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/orderMng.png"))); // NOI18N
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 1031, 637);
@@ -280,6 +326,7 @@ public class AdminOrders extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
+            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
@@ -333,6 +380,131 @@ public class AdminOrders extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tblStaffRequestsMouseClicked
 
+    private void btnSortByDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortByDateActionPerformed
+        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+        ArrayList<StaffRequest> holder = new ArrayList<>();
+        boolean dayZero = ((int) spnDay.getValue() == 0);
+        boolean monthZero = ((int) spnMonth.getValue() == 0);
+        for (StaffRequest sr : staffRequests) {
+            if (dayZero && !monthZero) {
+                if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
+                        && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                    holder.add(sr);
+                }
+            } else if (!dayZero && !monthZero) {
+                if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
+                        && sr.getRequestDate().getDate() == (int) spnDay.getValue()
+                        && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                    holder.add(sr);
+                }
+            } else {
+                if (sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                    holder.add(sr);
+                }
+            }
+        }
+        populateTable(holder);
+    }//GEN-LAST:event_btnSortByDateActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ArrayList<Staff> allStaff = (new Staff()).getStaff(StaffHandler.staffType.All);
+        ArrayList<Stock> allStock = (new Stock()).getStock();
+        RequestDetails dets = new RequestDetails();
+        
+        ArrayList<StaffRequest> staffRequests
+                = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+        ArrayList<StaffRequest> holder = new ArrayList<>();
+        //get spinners values 
+        int day = (int) spnDay.getValue();
+        int month = (int) spnMonth.getValue();
+        int Year = (int) spnYear.getValue();
+        //set Interval
+        String dateInterval = "";
+        boolean dayZero = (day == 0);
+        boolean monthZero = (month == 0);
+        for (StaffRequest sr : staffRequests) {
+            if (dayZero && !monthZero) {
+                dateInterval = new DateFormatSymbols().getMonths()[month - 1];
+                if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
+                        && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                    holder.add(sr);
+                }
+            } else if (!dayZero && !monthZero) {
+                dateInterval = Year + "-" + month + "-" + day;
+                if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
+                        && sr.getRequestDate().getDate() == (int) spnDay.getValue()
+                        && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                    holder.add(sr);
+                }
+            } else {
+                dateInterval = "" + Year;
+                if (sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                    holder.add(sr);
+                }
+            }
+        }
+        if (holder.size() == 0) {
+            JOptionPane.showMessageDialog(null, "The selection is empty no report can be made");
+        } else {
+
+            //Get current inventory
+            //allStock;
+            //get current purchase orders
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+            Date d = new Date();
+            String output = String.format(
+                    "==================================================================================================\n"
+                    + "           STAFF REQUEST REPORT            " + sdf.format(d) + "                          =\n"
+                    + "==================================================================================================\n"
+                    + "The following tables shows all the staffs' request made for %s :\n",dateInterval);
+//                    + "Request %s by %s on %s_______________________________________________________________________________________________\n"
+//                    + "|%5s|%21s|%13s|%21s|%10s|%8s|%10s|\n"
+//                    + "________________________________________________________________________________________________\n",
+//                     dateInterval,"Request ID", "Staff Name", "Date", "Category", "Price", "Quantity", "Entry Date");
+            for (StaffRequest sr : holder) {
+                output+=String.format("Request %s by USER %s on %s\n"
+                        + "____________________________________________________________________________________\n"
+                        + "|%19s|%19s|%19s|%19s|\n",sr.getRequestNr(),sr.getStaffID(),sr.getRequestDate(),"ProductName","Manufacturer","Category","Quantity");
+                ArrayList<RequestDetails> recDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, sr.getStaffID(), sr.getRequestNr());
+                for (RequestDetails rd : recDetails) {
+                    output+= String.format("|%19s|%19s|%19s|%19s|\n",
+                            (rd.getProductName().length()>19)?rd.getProductName().substring(0,18):rd.getProductName(),
+                            (rd.getManufacturer().length()>19)?rd.getManufacturer().substring(0,18):rd.getManufacturer(),
+                            (rd.getCategory().length()>19)?rd.getCategory().substring(0,18):rd.getCategory(),
+                            rd.getQuantity() );
+                }
+            }
+            output+= "____________________________________________________________________________________\n";
+            // make pretty report
+            JFileChooser f = new JFileChooser();
+            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            f.showSaveDialog(null);
+            String directory = (String) (f.getCurrentDirectory()).getPath();
+            directory += "\\RequestHistory Report";
+            Reporter rep = new Reporter(output);
+            BCSerializer ser = new BCSerializer(output);
+            rep.saveReport(directory);
+            ser.Serialize(directory);
+            // export ass xml
+            // export as serialised
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    int xMouse;
+    int yMouse;
+    private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xMouse, y - yMouse);
+
+    }//GEN-LAST:event_frameMoveMouseDragged
+
+    private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_frameMoveMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -376,6 +548,7 @@ public class AdminOrders extends javax.swing.JFrame {
     private javax.swing.JButton btnViewAllStaffReq;
     private javax.swing.JButton btnViewComplStaffRequests;
     private javax.swing.JButton btnViewIncomStaffRequests;
+    private javax.swing.JLabel frameMove;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
