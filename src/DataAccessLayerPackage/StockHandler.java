@@ -91,6 +91,25 @@ public class StockHandler {
         return pst;
     }
 
+    //used to filter by Category
+    public static PreparedStatement getStockByCategory(String categoryName) {
+        try {
+            con = JavaConnectDB.ConnectDB();
+            String sql = "SELECT StockID, ProductName, Manufacturer, category.Name, Quantity "
+                    + "FROM Stock "
+                    + "INNER JOIN category ON category.CategoryID = Stock.Category "
+                    + "WHERE category.Name LIKE '%" + categoryName + "%'";
+            //
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            //
+            return pst;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        //
+        return pst;
+    }
+    
     //do insert Stock
     public boolean insertStock(Stock stock) {
 
