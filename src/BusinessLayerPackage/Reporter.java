@@ -27,6 +27,8 @@ public class Reporter {
         try {
             FileOutputStream fos = new FileOutputStream(path + ".txt");
             DataOutputStream dos = new DataOutputStream(fos);
+            dos.writeUTF(this.report);
+            dos.flush();
             System.out.println("Report saved");
             dos.close();
             fos.close();

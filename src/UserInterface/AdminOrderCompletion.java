@@ -14,6 +14,8 @@ import DataAccessLayerPackage.StaffRequestHandler;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.OptionPaneUI;
 import javax.swing.table.DefaultTableModel;
@@ -237,14 +239,21 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
             int selection = JOptionPane.showConfirmDialog(null, "You do not meet requirements, do you want to send purchase order",
                     "Please Note", JOptionPane.INFORMATION_MESSAGE);
             if (selection == JOptionPane.YES_OPTION) {
-                purchaseOrder po = new purchaseOrder();
-                po.insert(requestedQty-InventoryQty);
-                JOptionPane.showMessageDialog(rootPane, "Purchase Order is sent");
-                RequestDetails recD = new RequestDetails();
+              RequestDetails recD = new RequestDetails();
                 ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
-                populateTable(detailsPackage);
-                //TODO
-                    //Insert an ETA for purchase order items
+                List<Integer> lID = detailsPackage.stream().map(requestdetails -> requestdetails.getStockID()).collect(Collectors.toList());
+                if (lID.contains(currentItemId)) {
+                    purchaseOrder po = new purchaseOrder();
+                    po.insert(requestedQty - InventoryQty);
+                    //TODO 
+                    //check if item is still in db
+                    JOptionPane.showMessageDialog(rootPane, "Purchase Order is sent");
+                     detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                    populateTable(detailsPackage);
+                }else{
+                    JOptionPane.showMessageDialog(null, "The item is no longer requested");
+                }
+                
             }
         } else if (InventoryQty >= requestedQty) {
             int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to complete transaction ",
