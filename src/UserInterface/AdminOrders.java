@@ -38,7 +38,7 @@ public class AdminOrders extends javax.swing.JFrame {
         populateTable(staffRequests);
         tblStaffRequests.setAutoCreateRowSorter(true);
     }
-    
+    public static String staffUsernameRequest = "";
     private void populateTable(ArrayList<StaffRequest> requestList) {
         
         DefaultTableModel dmodel = (DefaultTableModel) tblStaffRequests.getModel();
@@ -56,13 +56,14 @@ public class AdminOrders extends javax.swing.JFrame {
                 for (Staff s : allStaff) {
                     if (s.getUserID() == stc.getStaffID()) {
                         
-                        row[1] = s.getFirstName() + " " + s.getLastName();
+                        row[1] = s.getFirstName() + " " + s.getLastName();                                             
                     }
                 }
                 row[2] = stc.getRequestDate().getDate();
                 row[3] = stc.getRequestDate().getMonth() + 1;
                 row[4] = stc.getRequestDate().getYear() + 1900;
                 dmodel.addRow(row);
+                
             }
         } else {
             JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
@@ -347,6 +348,7 @@ public class AdminOrders extends javax.swing.JFrame {
         populateTable(staffRequests);
     }//GEN-LAST:event_btnViewComplStaffRequestsActionPerformed
 
+    
     private void tblStaffRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStaffRequestsMouseClicked
         //Get selected value
         //Send object to update form.
@@ -357,10 +359,16 @@ public class AdminOrders extends javax.swing.JFrame {
                         tblStaffRequests.getSelectedRow(), 0));
         //check that it is an unmanaged package
         ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+        ArrayList<Staff> allStaff = (new Staff()).getStaff(StaffHandler.staffType.All);       
         boolean checkIncomplete = false;
         for (StaffRequest st : staffRequests) {
             if (CurrentPackage == st.getRequestNr() && st.getComplete() == 0) {
                 checkIncomplete = true;
+            }
+            for (Staff staff : allStaff) {
+                if (st.getStaffID() == staff.getUserID()) {
+                    staffUsernameRequest = staff.getUsername();                    
+                }
             }
         }
         if (checkIncomplete) {
@@ -370,6 +378,7 @@ public class AdminOrders extends javax.swing.JFrame {
                 for (StaffRequest request : staffRequests) {
                     if (request.getRequestNr() == CurrentPackage) {
                         curRequest = request;
+                        System.out.println(staffUsernameRequest);
                     }
                 }
                 //new update page object

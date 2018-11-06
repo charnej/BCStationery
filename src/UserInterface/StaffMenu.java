@@ -49,6 +49,7 @@ public class StaffMenu extends javax.swing.JFrame {
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         frameMove = new javax.swing.JLabel();
+        btnStaffMessages = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -83,7 +84,7 @@ public class StaffMenu extends javax.swing.JFrame {
         getContentPane().add(btnViewMyRequests);
         btnViewMyRequests.setBounds(360, 180, 170, 50);
 
-        btnViewItems.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnRequestView.png"))); // NOI18N
+        btnViewItems.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnViewRequest.png"))); // NOI18N
         btnViewItems.setToolTipText("View items and send item requests");
         btnViewItems.setBorderPainted(false);
         btnViewItems.setContentAreaFilled(false);
@@ -94,7 +95,7 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnViewItems);
-        btnViewItems.setBounds(140, 240, 390, 50);
+        btnViewItems.setBounds(140, 240, 170, 50);
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
         btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
@@ -160,6 +161,19 @@ public class StaffMenu extends javax.swing.JFrame {
         });
         getContentPane().add(frameMove);
         frameMove.setBounds(4, 0, 540, 40);
+
+        btnStaffMessages.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnMessages.png"))); // NOI18N
+        btnStaffMessages.setToolTipText("View my messages");
+        btnStaffMessages.setBorderPainted(false);
+        btnStaffMessages.setContentAreaFilled(false);
+        btnStaffMessages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnStaffMessages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStaffMessagesActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStaffMessages);
+        btnStaffMessages.setBounds(360, 240, 170, 50);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/staffMenu.png"))); // NOI18N
         getContentPane().add(jLabel2);
@@ -230,6 +244,12 @@ public class StaffMenu extends javax.swing.JFrame {
         yMouse = evt.getY();
     }//GEN-LAST:event_frameMoveMousePressed
 
+    private void btnStaffMessagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffMessagesActionPerformed
+        StaffMessages msgs = new StaffMessages();
+        msgs.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnStaffMessagesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -269,6 +289,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
+    private javax.swing.JButton btnStaffMessages;
     private javax.swing.JButton btnUpdateProfile;
     private javax.swing.JButton btnViewItems;
     private javax.swing.JButton btnViewMyRequests;
