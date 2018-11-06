@@ -5,27 +5,46 @@
  */
 package UserInterface;
 
-import BusinessLayerPackage.Admin;
-import BusinessLayerPackage.Staff;
-import BusinessLayerPackage.Messages;
-import DataAccessLayerPackage.MessageHandler;
-import DataAccessLayerPackage.StaffHandler;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import BusinessLayerPackage.Messages;
+import BusinessLayerPackage.Staff;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author User
  */
-public class StaffFrm extends javax.swing.JFrame {
+public class StaffMessages extends javax.swing.JFrame {
 
     /**
-     * Creates new form Staff
+     * Creates new form Messages
      */
-    public StaffFrm() {
+    public StaffMessages() {
         initComponents();
-        btnAcceptStaff.setVisible(false);
+        loadTableData();
+
+    }
+
+    public void loadTableData() {
+        ArrayList<Messages> msgsList = Messages.getMessages(StaffLogin.activeUser.getUserID());
+        //System.out.println(StaffLogin.activeUser.getUserID());
+        addTableData(msgsList);
+        btnDeleteMsg.setVisible(false);
+    }
+
+    public void addTableData(ArrayList<Messages> messageList) {
+        DefaultTableModel model = (DefaultTableModel) tblMessages.getModel();
+        model.setRowCount(0);
+        Object rowData[] = new Object[9];
+        for (Messages s : messageList) {
+            rowData[0] = s.getMessageID();
+            rowData[1] = s.getSubject();
+            rowData[2] = s.getDate();
+            rowData[3] = s.getMessage();
+
+            model.addRow(rowData);
+        }
     }
 
     /**
@@ -37,79 +56,72 @@ public class StaffFrm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnViewAllStaff = new javax.swing.JButton();
-        btnViewPendingStaff = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblStaff = new javax.swing.JTable();
-        btnAcceptStaff = new javax.swing.JButton();
+        tblMessages = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtMessageDetail = new javax.swing.JTextArea();
+        btnDeleteMsg = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
         btnBackLogout = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        frameMove = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        frameMove = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1031, 637));
+        setMinimumSize(new java.awt.Dimension(1028, 637));
         setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(null);
 
-        btnViewAllStaff.setBackground(new java.awt.Color(254, 212, 29));
-        btnViewAllStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        btnViewAllStaff.setText("View All Staff");
-        btnViewAllStaff.setBorderPainted(false);
-        btnViewAllStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewAllStaff.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnViewAllStaffMouseClicked(evt);
-            }
-        });
-        getContentPane().add(btnViewAllStaff);
-        btnViewAllStaff.setBounds(170, 170, 190, 37);
-
-        btnViewPendingStaff.setBackground(new java.awt.Color(254, 212, 29));
-        btnViewPendingStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        btnViewPendingStaff.setText("View Pending Staff");
-        btnViewPendingStaff.setBorderPainted(false);
-        btnViewPendingStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewPendingStaff.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnViewPendingStaffMouseClicked(evt);
-            }
-        });
-        btnViewPendingStaff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewPendingStaffActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnViewPendingStaff);
-        btnViewPendingStaff.setBounds(390, 170, 240, 37);
-
-        tblStaff.setModel(new javax.swing.table.DefaultTableModel(
+        tblMessages.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Staff ID", "Username", "Password", "First Name", "Last Name", "Email", "Cell- number", "Department", "Campus Location"
+                "Message Nr", "Subject", "Date", "Message"
             }
-        ));
-        jScrollPane1.setViewportView(tblStaff);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(164, 224, 758, 270);
-
-        btnAcceptStaff.setBackground(new java.awt.Color(254, 212, 29));
-        btnAcceptStaff.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        btnAcceptStaff.setText("Accept Staff");
-        btnAcceptStaff.setBorderPainted(false);
-        btnAcceptStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAcceptStaff.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAcceptStaffMouseClicked(evt);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        getContentPane().add(btnAcceptStaff);
-        btnAcceptStaff.setBounds(741, 510, 180, 33);
+        tblMessages.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMessagesMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblMessages);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(100, 190, 470, 274);
+
+        txtMessageDetail.setColumns(20);
+        txtMessageDetail.setLineWrap(true);
+        txtMessageDetail.setRows(5);
+        txtMessageDetail.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(txtMessageDetail);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(600, 190, 340, 274);
+
+        btnDeleteMsg.setBackground(new java.awt.Color(254, 212, 29));
+        btnDeleteMsg.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnDeleteMsg.setText("Delete Message");
+        btnDeleteMsg.setBorderPainted(false);
+        btnDeleteMsg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteMsgActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDeleteMsg);
+        btnDeleteMsg.setBounds(757, 500, 180, 40);
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
         btnMinimize.setForeground(new java.awt.Color(255, 255, 255));
@@ -163,6 +175,10 @@ public class StaffFrm extends javax.swing.JFrame {
         getContentPane().add(btnExit);
         btnExit.setBounds(980, 10, 50, 30);
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/staffMessages.png"))); // NOI18N
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 0, 1030, 637);
+
         frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 frameMoveMouseDragged(evt);
@@ -176,18 +192,27 @@ public class StaffFrm extends javax.swing.JFrame {
         getContentPane().add(frameMove);
         frameMove.setBounds(4, 0, 900, 40);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/StaffBG.png"))); // NOI18N
-        jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 1031, 637);
-
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewPendingStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPendingStaffActionPerformed
-        btnAcceptStaff.setVisible(true);
-    }//GEN-LAST:event_btnViewPendingStaffActionPerformed
+    private void tblMessagesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMessagesMouseClicked
+
+        //int id = (int) tblMessages.getValueAt(tblMessages.getSelectedRow(), 0);
+        String name = tblMessages.getValueAt(tblMessages.getSelectedRow(), 3).toString();
+        txtMessageDetail.setText(name);
+        btnDeleteMsg.setVisible(true);
+    }//GEN-LAST:event_tblMessagesMouseClicked
+
+    private void btnDeleteMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteMsgActionPerformed
+        int id = (int) tblMessages.getValueAt(tblMessages.getSelectedRow(), 0);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this message?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        if (selection == JOptionPane.YES_OPTION) {
+            Messages.DeleteStaffMessages(id);
+            loadTableData();
+            txtMessageDetail.setText("");
+        }
+    }//GEN-LAST:event_btnDeleteMsgActionPerformed
 
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
         this.setState(this.ICONIFIED);
@@ -198,54 +223,25 @@ public class StaffFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutMouseClicked
 
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
-        Menu menu = new Menu();
+        StaffMenu menu = new StaffMenu();
         menu.setVisible(true);;
         this.dispose();
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
+            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitMouseClicked
-
-    private void btnViewAllStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllStaffMouseClicked
-        btnAcceptStaff.setVisible(false);
-
-        ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Accepted);
-        addTableData(staffList);
-    }//GEN-LAST:event_btnViewAllStaffMouseClicked
-
-    private void btnViewPendingStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewPendingStaffMouseClicked
-        btnAcceptStaff.setVisible(true);
-
-        ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Pending);
-        addTableData(staffList);
-    }//GEN-LAST:event_btnViewPendingStaffMouseClicked
-
-    private void btnAcceptStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAcceptStaffMouseClicked
-        try {
-            int id = (int) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0);
-            String name = tblStaff.getValueAt(tblStaff.getSelectedRow(), 3).toString();
-            String username = tblStaff.getValueAt(tblStaff.getSelectedRow(), 1).toString();
-            Staff.acceptPendingStaff(name, id);            
-            Messages.InsertStaffMessages(MessageHandler.Message.accepted, username);
-            //
-            ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Pending);
-            addTableData(staffList);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Please select a valid Staff Request to Accept");
-        }
-    }//GEN-LAST:event_btnAcceptStaffMouseClicked
-
+    int xMouse;
+    int yMouse;
     private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
 
         this.setLocation(x - xMouse, y - yMouse);
-
     }//GEN-LAST:event_frameMoveMouseDragged
 
     private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
@@ -253,32 +249,10 @@ public class StaffFrm extends javax.swing.JFrame {
         yMouse = evt.getY();
     }//GEN-LAST:event_frameMoveMousePressed
 
-    int xMouse;
-    int yMouse;
-    
-    public void addTableData(ArrayList<Staff> staffList) {
-        DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
-        model.setRowCount(0);
-        Object rowData[] = new Object[9];
-        for (Staff s : staffList) {
-            rowData[0] = s.getUserID();
-            rowData[1] = s.getUsername();
-            rowData[2] = s.getPasswordEncrypt();
-            rowData[3] = s.getFirstName();
-            rowData[4] = s.getLastName();
-            rowData[5] = s.getEmail();
-            rowData[6] = s.getCellphone();
-            rowData[7] = s.getDepartmentName();
-            rowData[8] = s.getCampusName();
-            model.addRow(rowData);
-        }
-    }
-
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -286,19 +260,19 @@ public class StaffFrm extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows Classic".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StaffFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffMessages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StaffFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffMessages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StaffFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffMessages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StaffFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StaffMessages.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -306,22 +280,21 @@ public class StaffFrm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StaffFrm().setVisible(true);
-
+                new StaffMessages().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAcceptStaff;
     private javax.swing.JButton btnBackLogout;
+    private javax.swing.JButton btnDeleteMsg;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMinimize;
-    private javax.swing.JButton btnViewAllStaff;
-    private javax.swing.JButton btnViewPendingStaff;
     private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblStaff;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblMessages;
+    private javax.swing.JTextArea txtMessageDetail;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,8 +9,10 @@ package UserInterface;
 import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.RequestDetails;
 import BusinessLayerPackage.StaffRequest;
+import BusinessLayerPackage.Messages;
 import BusinessLayerPackage.Stock;
 import BusinessLayerPackage.purchaseOrder;
+import DataAccessLayerPackage.MessageHandler;
 import DataAccessLayerPackage.StaffRequestHandler;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -264,6 +266,7 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
                     po.insert(requestedQty - InventoryQty);
                     //TODO 
                     //check if item is still in db
+                    Messages.InsertStaffMessages(MessageHandler.Message.inventory, AdminOrders.staffUsernameRequest);
                     JOptionPane.showMessageDialog(rootPane, "Purchase Order is sent");
                      detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
                     populateTable(detailsPackage);
@@ -287,6 +290,7 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
                     if (currentItemId == rdp.getStockID()) {
                         recD.CompleteTransaction(rdp.getRequestDetailsID(), 1, Date.valueOf(LocalDate.now()));
                         stockHolder.removeStock(rdp.getStockID(), rdp.getQuantity());
+                        Messages.InsertStaffMessages(MessageHandler.Message.requestComplete, AdminOrders.staffUsernameRequest);
                     }
                 }
                 detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
