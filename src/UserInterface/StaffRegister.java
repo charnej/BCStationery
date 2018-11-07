@@ -6,6 +6,8 @@
 package UserInterface;
 
 import BusinessLayerPackage.Staff;
+import BusinessLayerPackage.Messages;
+import DataAccessLayerPackage.MessageHandler;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -224,6 +226,7 @@ public class StaffRegister extends javax.swing.JFrame {
     }                                    
 
     public Staff staffObj;
+    //public Messages messageObj;
     public boolean isValid;
 
     private void btnRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegisterMouseClicked
@@ -241,6 +244,7 @@ public class StaffRegister extends javax.swing.JFrame {
         //
         if (isValid) {
             Staff.insertStaff(staffObj);
+            Messages.InsertStaffMessages(MessageHandler.Message.registered, txtStaffUsername.getText());
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Please Fix the fields highlighted in red and register again");
