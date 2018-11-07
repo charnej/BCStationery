@@ -32,6 +32,14 @@ public class AdminLogin extends javax.swing.JFrame {
      */
     public AdminLogin() {
         initComponents();
+        Runnable r = new Runnable() {
+            public void run() {
+                Admin objHolder = new Admin();
+                allAdmin = objHolder.getAdmin();
+            }
+        };
+        new Thread(r).start();
+
     }
 
     /**
@@ -211,32 +219,12 @@ public class AdminLogin extends javax.swing.JFrame {
     private int logInAtempts = 0;
     int k = 20;
     Timer t;
-    
+
     public static String activeUser;
-    
+    private ArrayList<Admin> allAdmin;
     private void btnAdminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminLoginActionPerformed
-//T         
-        //Get all staff user objects
-        Admin objHolder = new Admin();
-        ArrayList<Admin> allAdmin = objHolder.getAdmin();//new ArrayList<>(); //
-//        allAdmin.add(new Admin(1, "Tyrone", "Du Plesis", "tyrone", "tyrone"));
-//        allAdmin.add(new Admin(1, "Charne", "Jordaan", "charne", "charne"));
-//        allAdmin.add(new Admin(1, "Jozehan", "Grobler", "jozehan", "jozehan"));
-//        allAdmin.add(new Admin(1, "Admin", "Admin", "admin", "admin"));
-           
+
         Admin UserFound = null;
-//        
-//        Optional<Admin> foundAdmin = allAdmin.stream()
-//                .filter(admin -> admin.getUsername().equals(txtAdminUsername.getText()))
-//                .filter(admin -> admin.getPassword().equals(txtPassword.getText()))
-//                .findAny();
-//        
-//        if (foundAdmin.isPresent()) {
-//            //found with correct username and password
-//        } else {
-//            //not found
-//        }
-        
         try {
             for (Admin adminItem : allAdmin) {
                 if (adminItem.getUsername().equals(txtAdminUsername.getText())) {
@@ -251,35 +239,33 @@ public class AdminLogin extends javax.swing.JFrame {
                 // close current form
                 // re route to another form
                 if (UserFound.getLoggedIn() == 1) {
-                   JOptionPane.showMessageDialog(null, "Admin is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
-                }else{
+                    JOptionPane.showMessageDialog(null, "Admin is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+                } else {
                     activeUser = UserFound.getUsername();
                     Admin.UpdateAdminLoggedIn(activeUser, 1);
-                     Menu mainMenu = new Menu();
+                    Menu mainMenu = new Menu();
                     mainMenu.setVisible(true);
                     this.dispose();
                 }
-                
-                
+
             } else if (logInAtempts < 3) {
                 //throw warning
                 logInAtempts++;
                 throw new WrongCredException("Wrong Credentials");
-                
+
                 //increase log in attempts
-                
             } else if (logInAtempts == 3) {
                 //add waiting mechanism
                 //disable textboxes for certain time
                 //logInAtempts = 0;
-                
-                logInAtempts++; 
+
+                logInAtempts++;
 
                 //throw warning
                 throw new LoginAttemptsException("You do not have any log in attempts left");
-  
-            }           
-            
+
+            }
+
         } catch (WrongCredException | LoginAttemptsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Please Note", JOptionPane.WARNING_MESSAGE);
         }

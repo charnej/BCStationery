@@ -391,9 +391,9 @@ public class Inventory extends javax.swing.JFrame {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
         Date d = new Date();
         String output =String.format(
-                "==================================================================================================\n"
-              + "           STOCK REPORT            "+sdf.format(d)+"                                  =\n"
-              + "==================================================================================================\n"
+                "=================================================================================================\n"
+              + "           STOCK REPORT            "+sdf.format(d)+"                                                   =\n"
+              + "=================================================================================================\n"
               + "The following table shows all the stock currently in the Inventory:\n"
               + "________________________________________________________________________________________________\n"
               + "|%5s|%21s|%13s|%21s|%10s|%8s|%10s|\n"
@@ -406,9 +406,9 @@ public class Inventory extends javax.swing.JFrame {
         output+=String.format("________________________________________________________________________________________________\n"
                             + "\n"
                             + "The following table shows the Purchase Order items that needs to be Purchased: \n"
-                            + "__________________________________________________________________________________\n"
+                            + "_______________________________________________________________________________\n"
                             + "|%5s|%21s|%13s|%10s|%8s|%15s|\n"
-                            + "__________________________________________________________________________________\n"
+                            + "_______________________________________________________________________________\n"
                             ,"ID","Name","Manufacturer","Price","Quantity","Quantity needed"
                             );
         //get all purchase orders
@@ -421,19 +421,19 @@ public class Inventory extends javax.swing.JFrame {
                 }
             }
         }
-        output+="__________________________________________________________________________________\n";
+        output+="_______________________________________________________________________________\n";
         
-        System.out.println(output);
+        
         // make pretty report
         JFileChooser f = new JFileChooser();
-        f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        f.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
         f.showSaveDialog(null);
         String directory = (String)(f.getCurrentDirectory()).getPath();
         directory+="\\CurrentInventoryReport";
         Reporter rep = new Reporter(output);
         BCSerializer ser = new BCSerializer(output);
         rep.saveReport(directory);
-        ser.Serialize(directory);
+        //ser.Serialize(directory);
         // export ass xml
         // export as serialised
     }//GEN-LAST:event_btnGenerateReportActionPerformed

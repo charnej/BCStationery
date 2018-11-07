@@ -22,8 +22,11 @@ import java.util.logging.Logger;
  */
 public class AdminHandler {
    
-    
-    public AdminHandler() {}
+    private static AdminHandler instance = new AdminHandler();
+    public static AdminHandler getInstance(){
+        return instance;
+    }
+    private AdminHandler() {}
 
     //get users from db
     //hold users in resultset private to compare changes
