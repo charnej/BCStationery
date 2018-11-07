@@ -81,13 +81,13 @@ public class Stock {
 
     public ArrayList<Stock> getStock() {
         //populate list with stock from db;
-        StockHandler dbHandler = new StockHandler();
+        StockHandler dbHandler = StockHandler.getInstance();
         return dbHandler.getStock();
 
     }
 
     public boolean addStock(Stock stock) {
-        StockHandler dbHandler = new StockHandler();
+        StockHandler dbHandler = StockHandler.getInstance();
         //new stock to db
         //get instance of dbHandler
         //insert new record
@@ -96,7 +96,7 @@ public class Stock {
     }
 
     public boolean updateStock(Stock stock) {
-        StockHandler dbHandler = new StockHandler();
+        StockHandler dbHandler = StockHandler.getInstance();
         //alter stock to db
         //get instance of dbHandler
         //update record

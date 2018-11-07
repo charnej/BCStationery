@@ -14,8 +14,13 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class StockHandler {
+    private static StockHandler instance = new StockHandler();
 
-    public StockHandler() {
+    public static StockHandler getInstance() {
+        return instance;
+    }
+
+    private  StockHandler() {
     }
 
     //get users from db

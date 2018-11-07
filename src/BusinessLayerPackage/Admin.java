@@ -31,7 +31,7 @@ public class Admin extends User {
 
     public ArrayList<Admin> getAdmin() {
         ArrayList<Admin> allAdmin = new ArrayList<Admin>();
-        AdminHandler inst = new AdminHandler();
+        AdminHandler inst = AdminHandler.getInstance();
         allAdmin = inst.getUsers();
         return allAdmin;
     }

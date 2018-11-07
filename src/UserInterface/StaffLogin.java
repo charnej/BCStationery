@@ -22,11 +22,19 @@ public class StaffLogin extends javax.swing.JFrame {
     /**
      * Creates new form StaffLogin
      */
-    
-    
-    
     public StaffLogin() {
         initComponents();
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                //Get all staff user objects
+                Staff objHolder = new Staff();
+                 allStaff = objHolder.getStaff(StaffHandler.staffType.All);
+            }
+        };
+        Thread backgroundThread = new Thread(r);
+        backgroundThread.start();
+
     }
 
     /**
@@ -224,11 +232,9 @@ public class StaffLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdminActionPerformed
     public static Staff activeUser;
     private int logInAtempts = 0;
+    private List<Staff> allStaff;
     private void btnStaffLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStaffLogin1ActionPerformed
 
-        //Get all staff user objects
-        Staff objHolder = new Staff();
-        List<Staff> allStaff = objHolder.getStaff(StaffHandler.staffType.All);
         boolean UserFound = false;
         for (Staff staffItem : allStaff) {
             if (staffItem.getUsername().equals(txtStaffUsername.getText())) {
@@ -239,17 +245,17 @@ public class StaffLogin extends javax.swing.JFrame {
             }
         }
         if (UserFound) {
-             if (Staff.getStaffMember(txtStaffUsername.getText()).getLoggedIn() == 1) {
+            if (Staff.getStaffMember(txtStaffUsername.getText()).getLoggedIn() == 1) {
                 JOptionPane.showMessageDialog(null, "User is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
-            }else{
-               activeUser = Staff.getStaffMember(txtStaffUsername.getText());             
-            Staff.updateStaffLoggedIn(activeUser.getUsername(), 1);
-            
-            //JOptionPane.showMessageDialog(null, activeUser.getUsername(), "Please Note", JOptionPane.WARNING_MESSAGE);
-           //Staff.updateStaffLoggedIn(activeUser.getUsername(), 0);
-            StaffMenu staffMenu = new StaffMenu();
-            staffMenu.setVisible(true);
-            this.dispose(); 
+            } else {
+                activeUser = Staff.getStaffMember(txtStaffUsername.getText());
+                Staff.updateStaffLoggedIn(activeUser.getUsername(), 1);
+
+                //JOptionPane.showMessageDialog(null, activeUser.getUsername(), "Please Note", JOptionPane.WARNING_MESSAGE);
+                //Staff.updateStaffLoggedIn(activeUser.getUsername(), 0);
+                StaffMenu staffMenu = new StaffMenu();
+                staffMenu.setVisible(true);
+                this.dispose();
             }
         } else {
             //throw warning
@@ -276,9 +282,9 @@ public class StaffLogin extends javax.swing.JFrame {
     private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
-        
+
         this.setLocation(x - xMouse, y - yMouse);
-        
+
     }//GEN-LAST:event_frameMoveMouseDragged
 
     private void frameMoveMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMousePressed
