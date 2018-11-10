@@ -30,7 +30,7 @@ public class Category {
     
     public ArrayList<Category> getCategories(){
         //get categories, populate them and send them. 
-        catagoryHandler dbHandler = new catagoryHandler();
+        catagoryHandler dbHandler = catagoryHandler.getInstance();
         return dbHandler.getCatagories();
     }
     public int getCategoryID() {

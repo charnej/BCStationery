@@ -21,26 +21,33 @@ import javax.sql.DataSource;
  * @author Jozehan
  */
 public class catagoryHandler {
+
     //Catagory is used to define a simple catagory of a product
-    public  catagoryHandler() {
+    private static catagoryHandler instance = new catagoryHandler();
+
+    public static catagoryHandler getInstance() {
+        return instance;
+    }
+
+    private catagoryHandler() {
     }
 
     public ArrayList<Category> getCatagories() {
         ArrayList<Category> cats = new ArrayList<Category>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url ="jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
-            Connection con =(Connection) DriverManager.getConnection(url,"root","");
+            String url = "jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
+            Connection con = (Connection) DriverManager.getConnection(url, "root", "");
             Statement st = (Statement) con.createStatement();
-            ResultSet rs =st.executeQuery("SELECT * FROM `category`");
-            while (rs.next()) {                
-                cats.add(new Category(rs.getInt("CategoryID"),rs.getString("Name")));
+            ResultSet rs = st.executeQuery("SELECT * FROM `category`");
+            while (rs.next()) {
+                cats.add(new Category(rs.getInt("CategoryID"), rs.getString("Name")));
             }
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(catagoryHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return cats;  
+        return cats;
     }
-    
+
 }

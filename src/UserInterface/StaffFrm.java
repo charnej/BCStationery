@@ -26,6 +26,7 @@ public class StaffFrm extends javax.swing.JFrame {
     public StaffFrm() {
         initComponents();
         btnAcceptStaff.setVisible(false);
+        rbAll.setSelected(true);
     }
 
     /**
@@ -37,8 +38,12 @@ public class StaffFrm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        bgByCampusLocation = new javax.swing.ButtonGroup();
         btnViewAllStaff = new javax.swing.JButton();
         btnViewPendingStaff = new javax.swing.JButton();
+        rbAll = new javax.swing.JRadioButton();
+        rbKempton = new javax.swing.JRadioButton();
+        rbPretoria = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblStaff = new javax.swing.JTable();
         btnAcceptStaff = new javax.swing.JButton();
@@ -64,6 +69,11 @@ public class StaffFrm extends javax.swing.JFrame {
                 btnViewAllStaffMouseClicked(evt);
             }
         });
+        btnViewAllStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllStaffActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnViewAllStaff);
         btnViewAllStaff.setBounds(170, 170, 190, 37);
 
@@ -84,6 +94,21 @@ public class StaffFrm extends javax.swing.JFrame {
         });
         getContentPane().add(btnViewPendingStaff);
         btnViewPendingStaff.setBounds(390, 170, 240, 37);
+
+        bgByCampusLocation.add(rbAll);
+        rbAll.setText("All Campuss'");
+        getContentPane().add(rbAll);
+        rbAll.setBounds(710, 120, 170, 25);
+
+        bgByCampusLocation.add(rbKempton);
+        rbKempton.setText("Kempton Park Campus");
+        getContentPane().add(rbKempton);
+        rbKempton.setBounds(710, 150, 170, 25);
+
+        bgByCampusLocation.add(rbPretoria);
+        rbPretoria.setText("Pretoria Campus");
+        getContentPane().add(rbPretoria);
+        rbPretoria.setBounds(710, 180, 170, 25);
 
         tblStaff.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -106,6 +131,11 @@ public class StaffFrm extends javax.swing.JFrame {
         btnAcceptStaff.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAcceptStaffMouseClicked(evt);
+            }
+        });
+        btnAcceptStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcceptStaffActionPerformed(evt);
             }
         });
         getContentPane().add(btnAcceptStaff);
@@ -204,7 +234,7 @@ public class StaffFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
+        int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
             Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
             System.exit(0);
@@ -230,7 +260,7 @@ public class StaffFrm extends javax.swing.JFrame {
             int id = (int) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0);
             String name = tblStaff.getValueAt(tblStaff.getSelectedRow(), 3).toString();
             String username = tblStaff.getValueAt(tblStaff.getSelectedRow(), 1).toString();
-            Staff.acceptPendingStaff(name, id);            
+            Staff.acceptPendingStaff(name, id);
             Messages.InsertStaffMessages(MessageHandler.Message.accepted, username);
             //
             ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Pending);
@@ -253,14 +283,42 @@ public class StaffFrm extends javax.swing.JFrame {
         yMouse = evt.getY();
     }//GEN-LAST:event_frameMoveMousePressed
 
+    private void btnAcceptStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptStaffActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAcceptStaffActionPerformed
+
+    private void btnViewAllStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllStaffActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnViewAllStaffActionPerformed
+
     int xMouse;
     int yMouse;
-    
+
     public void addTableData(ArrayList<Staff> staffList) {
         DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
         model.setRowCount(0);
         Object rowData[] = new Object[9];
-        for (Staff s : staffList) {
+        ArrayList<Staff> filteredList = new ArrayList<>();
+        if (rbAll.isSelected()) {
+            //no filtering needed
+            filteredList=staffList;
+        } else if (rbPretoria.isSelected()) {
+
+            for (Staff staff : staffList) {
+                if (staff.getCampusName().equalsIgnoreCase("Pretoria Campus")) {
+                    filteredList.add(staff);
+                }
+            }
+        } else if (rbKempton.isSelected()) {
+            for (Staff staff : staffList) {
+                if (staff.getCampusName().equalsIgnoreCase("Kempton Park Campus")) {
+                    filteredList.add(staff);
+                }
+            }
+
+        }
+
+        for (Staff s : filteredList) {
             rowData[0] = s.getUserID();
             rowData[1] = s.getUsername();
             rowData[2] = s.getPasswordEncrypt();
@@ -313,6 +371,7 @@ public class StaffFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup bgByCampusLocation;
     private javax.swing.JButton btnAcceptStaff;
     private javax.swing.JButton btnBackLogout;
     private javax.swing.JButton btnExit;
@@ -322,6 +381,9 @@ public class StaffFrm extends javax.swing.JFrame {
     private javax.swing.JLabel frameMove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rbAll;
+    private javax.swing.JRadioButton rbKempton;
+    private javax.swing.JRadioButton rbPretoria;
     private javax.swing.JTable tblStaff;
     // End of variables declaration//GEN-END:variables
 }

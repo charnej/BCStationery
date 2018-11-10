@@ -32,8 +32,8 @@ public class BCSerializer<T> {
             FileOutputStream fos = new FileOutputStream(file+".ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(this.t);
-            System.out.println("Object serialized!!!!!");
             oos.flush();
+            System.out.println("Object serialized!!!!!");
             oos.close();
             fos.close();
         } catch (FileNotFoundException ex) {

@@ -160,11 +160,11 @@ public class AdminOrders extends javax.swing.JFrame {
 
         lDay.setText("Day");
         getContentPane().add(lDay);
-        lDay.setBounds(730, 120, 19, 14);
+        lDay.setBounds(730, 120, 40, 16);
 
         spnDay.setModel(new javax.swing.SpinnerNumberModel(1, 0, 31, 1));
         getContentPane().add(spnDay);
-        spnDay.setBounds(730, 140, 50, 20);
+        spnDay.setBounds(730, 140, 50, 22);
 
         btnSortByDate.setBackground(new java.awt.Color(254, 212, 29));
         btnSortByDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -180,19 +180,19 @@ public class AdminOrders extends javax.swing.JFrame {
 
         lYear.setText("Year");
         getContentPane().add(lYear);
-        lYear.setBounds(850, 120, 22, 14);
+        lYear.setBounds(850, 120, 60, 16);
 
         lMonth.setText("Month");
         getContentPane().add(lMonth);
-        lMonth.setBounds(790, 120, 30, 14);
+        lMonth.setBounds(790, 120, 40, 16);
 
         spnYear.setModel(new javax.swing.SpinnerNumberModel(2000, 2000, 2020, 1));
         getContentPane().add(spnYear);
-        spnYear.setBounds(840, 140, 80, 20);
+        spnYear.setBounds(840, 140, 80, 22);
 
         spnMonth.setModel(new javax.swing.SpinnerNumberModel(2, 0, 12, 1));
         getContentPane().add(spnMonth);
-        spnMonth.setBounds(790, 140, 40, 20);
+        spnMonth.setBounds(790, 140, 40, 22);
 
         tblStaffRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -462,9 +462,9 @@ public class AdminOrders extends javax.swing.JFrame {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
             Date d = new Date();
             String output = String.format(
-                    "==================================================================================================\n"
-                    + "           STAFF REQUEST REPORT            " + sdf.format(d) + "                          =\n"
-                    + "==================================================================================================\n"
+                      "=================================================================================\n"
+                    + "           STAFF REQUEST REPORT            " + sdf.format(d) + "                           =\n"
+                    + "=================================================================================\n"
                     + "The following tables shows all the staffs' request made for %s :\n",dateInterval);
 //                    + "Request %s by %s on %s_______________________________________________________________________________________________\n"
 //                    + "|%5s|%21s|%13s|%21s|%10s|%8s|%10s|\n"
@@ -472,7 +472,7 @@ public class AdminOrders extends javax.swing.JFrame {
 //                     dateInterval,"Request ID", "Staff Name", "Date", "Category", "Price", "Quantity", "Entry Date");
             for (StaffRequest sr : holder) {
                 output+=String.format("Request %s by USER %s on %s\n"
-                        + "____________________________________________________________________________________\n"
+                        + "_________________________________________________________________________________\n"
                         + "|%19s|%19s|%19s|%19s|\n",sr.getRequestNr(),sr.getStaffID(),sr.getRequestDate(),"ProductName","Manufacturer","Category","Quantity");
                 ArrayList<RequestDetails> recDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, sr.getStaffID(), sr.getRequestNr());
                 for (RequestDetails rd : recDetails) {
@@ -483,17 +483,17 @@ public class AdminOrders extends javax.swing.JFrame {
                             rd.getQuantity() );
                 }
             }
-            output+= "____________________________________________________________________________________\n";
+            output+= "_________________________________________________________________________________\n";
             // make pretty report
             JFileChooser f = new JFileChooser();
             f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             f.showSaveDialog(null);
             String directory = (String) (f.getCurrentDirectory()).getPath();
-            directory += "\\RequestHistory Report";
+            directory += "\\RequestHistory_Report";
             Reporter rep = new Reporter(output);
             BCSerializer ser = new BCSerializer(output);
             rep.saveReport(directory);
-            ser.Serialize(directory);
+            //ser.Serialize(directory);
             // export ass xml
             // export as serialised
         }
