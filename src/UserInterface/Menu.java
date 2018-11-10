@@ -6,6 +6,12 @@
 package UserInterface;
 
 import BusinessLayerPackage.Admin;
+import BusinessLayerPackage.IAdmin;
+import BusinessLayerPackage.SingleRegistry;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -181,10 +187,17 @@ public class Menu extends javax.swing.JFrame {
 
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
-            StaffLogin staffLogin = new StaffLogin();
-            staffLogin.setVisible(true);
-            this.dispose();
+            try {
+                IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                adminImp.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
+                StaffLogin staffLogin = new StaffLogin();
+                staffLogin.setVisible(true);
+                this.dispose();
+            } catch (NotBoundException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
 
@@ -193,8 +206,15 @@ public class Menu extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
-            System.exit(0);
+            try {
+                IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                adminImp.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
+                System.exit(0);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
@@ -213,9 +233,15 @@ public class Menu extends javax.swing.JFrame {
     int xMouse;
     int yMouse;
     private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
-        AdminOrders orders = new AdminOrders();
-        orders.setVisible(true);
-        this.dispose();
+        try {
+            AdminOrders orders = new AdminOrders();
+            orders.setVisible(true);
+            this.dispose();
+        } catch (RemoteException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnOrdersActionPerformed
 
     private void frameMoveMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameMoveMouseDragged

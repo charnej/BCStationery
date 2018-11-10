@@ -11,6 +11,10 @@ import java.sql.Date;
 import java.util.ArrayList;
 import DataAccessLayerPackage.RequestDetailsHandler;
 import DataAccessLayerPackage.StaffRequestHandler;
+import java.io.Serializable;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +26,7 @@ import javax.swing.JOptionPane;
  *
  * @author User
  */
-public class RequestDetails extends Stock {
+public class RequestDetails extends Stock implements Serializable {
 
     // fields needed
     private int requestDetailsID;
@@ -100,58 +104,22 @@ public class RequestDetails extends Stock {
         this.dateComplete = dateComplete;
     }
 
-    //  -- database operations
-    private static PreparedStatement pst = null;
-    private static ResultSet rs = null;
-
-    // Static as this functionality is not bound to each object, but to the class
-    // Get all the required request data ..
-    public static ArrayList<RequestDetails> getRequestDetails(StaffRequestHandler.requestType requestType, int staffID, int requestNr) {
-        ArrayList<RequestDetails> allRequests = new ArrayList<RequestDetails>();
-        try {
-            pst = RequestDetailsHandler.getRequestDetails(requestType, staffID, requestNr);
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                allRequests.add(new RequestDetails(rs.getInt("RequestDetailsID"),
-                        rs.getInt("Quantity"),
-                        rs.getInt("Complete"),
-                        rs.getDate("DateComplete"),
-                        rs.getInt("requestdetails.StockID"),
-                        rs.getString("ProductName"),
-                        rs.getString("Manufacturer"),
-                        rs.getString("Name")));
-            }
-            return allRequests;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-    // get package items
-
-    public static ArrayList<RequestDetails> getPackageItems(int requestNr) {
-        ArrayList<RequestDetails> allRequests = new ArrayList<RequestDetails>();
-        try {
-            pst = RequestDetailsHandler.getPackageItems(requestNr);
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                allRequests.add(new RequestDetails(rs.getInt("StockID"),
-                        rs.getInt("Complete")));
-            }
-            return allRequests;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-
     // set the state of the package
     public static boolean testPackageState(int requestNr) {
-        ArrayList<RequestDetails> allRequests = getPackageItems(requestNr);
-        for (RequestDetails allRequest : allRequests) {
-            if (allRequest.getComplete() == 0) {
-                return false;
+        try {
+            IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+            ArrayList<RequestDetails> allRequests = rDetailsImp.getPackageItems(requestNr);
+            for (RequestDetails allRequest : allRequests) {
+                if (allRequest.getComplete() == 0) {
+                    return false;
+                }
             }
+            //
+            return true;
+        } catch (RemoteException ex) {
+            Logger.getLogger(RequestDetails.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(RequestDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
         //
         return true;
@@ -159,11 +127,20 @@ public class RequestDetails extends Stock {
 
     // test if package already contains item
     public static boolean testPackageItem(int requestNr, int stockID) {
-        ArrayList<RequestDetails> allRequests = getPackageItems(requestNr);
-        for (RequestDetails allRequest : allRequests) {
-            if (allRequest.getStockID() == stockID) {
-                return false;
+        try {
+            IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+            ArrayList<RequestDetails> allRequests = rDetailsImp.getPackageItems(requestNr);
+            for (RequestDetails allRequest : allRequests) {
+                if (allRequest.getStockID() == stockID) {
+                    return false;
+                }
             }
+            //
+            return true;
+        } catch (RemoteException ex) {
+            Logger.getLogger(RequestDetails.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(RequestDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
         //
         return true;
@@ -181,6 +158,6 @@ public class RequestDetails extends Stock {
 
     public static void CompleteTransaction(int requestDetailsID, int complete, Date dComplete) {
         RequestDetailsHandler.CompleteTransaction(requestDetailsID, complete, dComplete);
-
     }
+
 }

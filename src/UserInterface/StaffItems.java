@@ -7,14 +7,23 @@ package UserInterface;
 //t
 
 import BusinessLayerPackage.Category;
+import BusinessLayerPackage.ICategory;
+import BusinessLayerPackage.IStaff;
+import BusinessLayerPackage.IStock;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.Stock;
 import BusinessLayerPackage.sortQty;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -31,23 +40,24 @@ public class StaffItems extends javax.swing.JFrame {
      * Creates new form Administrator
      */
     public StaffItems() {
-        initComponents();
-        //
-        Category objCategoryHolder = new Category();
-        for (Category cat : objCategoryHolder.getCategories()) {
-            //fill with all possible names
-            cmboCategory.addItem(cat.getName());
-        }
-        //
-        Stock objStockHolder = new Stock();
-        allStock = objStockHolder.getStock();
-        populateTable(allStock);
-        //event listener for sorting on column headers
-        JTableHeader header = tblInventory.getTableHeader();
-        //using built in function
-        tblInventory.setAutoCreateRowSorter(true);
-        //using comparator
-        //header.addMouseListener(new headerSortMouseListener(tblInventory));
+        try {
+            initComponents();
+            //
+            ICategory categoryImp = (ICategory) SingleRegistry.getInstance().getRegistry().lookup("category");
+            for (Category cat : categoryImp.getCategories()) {
+                //fill with all possible names
+                cmboCategory.addItem(cat.getName());
+            }
+            //
+            IStock stockImp = (IStock) SingleRegistry.getInstance().getRegistry().lookup("stock");
+            allStock = stockImp.getStock();
+            populateTable(allStock);
+            //event listener for sorting on column headers
+            JTableHeader header = tblInventory.getTableHeader();
+            //using built in function
+            tblInventory.setAutoCreateRowSorter(true);
+            //using comparator
+            //header.addMouseListener(new headerSortMouseListener(tblInventory));
 //        JTable dmodel = new JTable(tblInventory.getModel());
 //        dmodel.getTableHeader().addMouseListener(new MouseAdapter () { 
 //            @Override
@@ -57,6 +67,11 @@ public class StaffItems extends javax.swing.JFrame {
 //            }
 //            
 //        });
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StaffItems.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(StaffItems.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
     private ArrayList<Stock> allStock;
@@ -352,8 +367,15 @@ public class StaffItems extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
-            System.exit(0);
+            try {
+                IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                staffImp.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
+                System.exit(0);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffItems.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffItems.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
@@ -424,7 +446,8 @@ public class StaffItems extends javax.swing.JFrame {
             //
             int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want request this item?", "Request ", JOptionPane.INFORMATION_MESSAGE);
             if (selection == JOptionPane.YES_OPTION) {
-                chosenItem = Stock.getStockItem(stockID);
+                IStock stockImp = (IStock) SingleRegistry.getInstance().getRegistry().lookup("stock");
+                chosenItem = stockImp.getStockItem(stockID);
                 //
                 RequestItems requestItem = new RequestItems();
                 requestItem.setVisible(true);

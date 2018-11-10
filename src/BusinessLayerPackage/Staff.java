@@ -9,17 +9,22 @@ package BusinessLayerPackage;
 import DataAccessLayerPackage.CampusHandler;
 import DataAccessLayerPackage.DepartmentHandler;
 import DataAccessLayerPackage.StaffHandler;
+import java.io.Serializable;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Tyrone
  */
-public class Staff extends User implements CampusLocation, Department {
+public class Staff extends User implements Serializable {
 
     public Staff() {
 
@@ -178,71 +183,22 @@ public class Staff extends User implements CampusLocation, Department {
         return "Staff{" + "staffID=" + userID + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", cellphone=" + cellphone + ", username=" + username + ", department=" + department + ", campusLocation=" + campusLocation + ", accepted=" + accepted + '}';
     }
 
-    private static PreparedStatement pst = null;
-    private static ResultSet rs = null;
-
-    // Static as this functionality is not bound to each object, but to the class
-    // Get all the required Staff members data ..
-    public static ArrayList<Staff> getStaff(StaffHandler.staffType staffType) {
-        ArrayList<Staff> allStaff = new ArrayList<Staff>();
-        try {
-            pst = StaffHandler.getStaff(staffType);
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                allStaff.add(new Staff(rs.getInt("StaffID"),
-                        rs.getString("FirstName"),
-                        rs.getString("LastName"),
-                        rs.getString("Email"),
-                        rs.getString("Cellphone"),
-                        rs.getString("Username"),
-                        rs.getString("Password"),
-                        rs.getString("DepartmentName"),
-                        rs.getString("CampusName"),
-                        rs.getInt("Accepted"),
-                        rs.getInt("LoggedIn")));
-            }
-            return allStaff;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-
-    // Get all the required Staff member data ..
-    public static Staff getStaffMember(String username) {
-        Staff staff = null;
-        try {
-            pst = StaffHandler.getStaffMember(username);
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                staff = new Staff(rs.getInt("StaffID"),
-                        rs.getString("FirstName"),
-                        rs.getString("LastName"),
-                        rs.getString("Email"),
-                        rs.getString("Cellphone"),
-                        rs.getString("Username"),
-                        rs.getString("Password"),
-                        rs.getString("DepartmentName"),
-                        rs.getString("CampusName"),
-                        rs.getInt("Accepted"),
-                        rs.getInt("LoggedIn"));
-            }
-            return staff;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-
     public static boolean isUniqueUsername(String usernameInput) {
-        ArrayList<Staff> allStaff = getStaff(StaffHandler.staffType.All);
         //
         boolean isUnique = true;
-        //
-        for (Staff staff : allStaff) {
-            if (staff.username.equals(usernameInput)) {
-                isUnique = false;
+        try {
+            IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+            ArrayList<Staff> allStaff = staffImp.getStaff(StaffHandler.staffType.All);
+            //
+            for (Staff staff : allStaff) {
+                if (staff.getUsername().equals(usernameInput)) {
+                    isUnique = false;
+                }
             }
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Staff.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Staff.class.getName()).log(Level.SEVERE, null, ex);
         }
         //
         return isUnique;
@@ -253,39 +209,6 @@ public class Staff extends User implements CampusLocation, Department {
         StaffHandler.acceptPendingStaff(name, id);
     }
 
-    // interface implementation
-    @Override
-    public ArrayList<String> getCampusData() {
-        ArrayList<String> campusList = new ArrayList<String>();
-        try {
-            pst = CampusHandler.getCampusData();
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                campusList.add(rs.getInt("CampusID") + ". " + rs.getString("CampusName"));
-            }
-            return campusList;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-
-    @Override
-    public ArrayList<String> getDepartmentData() {
-        ArrayList<String> campusList = new ArrayList<String>();
-        try {
-            pst = DepartmentHandler.getDepartmentData();
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                campusList.add(rs.getInt("DepartmentID") + ". " + rs.getString("DepartmentName"));
-            }
-            return campusList;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-
     // insert staff
     public static void insertStaff(Staff s) {
         StaffHandler.insertStaff(s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
@@ -294,10 +217,6 @@ public class Staff extends User implements CampusLocation, Department {
     // update staff
     public static void updateStaff(Staff s) {
         StaffHandler.updateStaff(s.userID, s.firstName, s.lastName, s.email, s.cellphone, s.username, s.password, s.department, s.campusLocation);
-    }
-    
-     public static void updateStaffLoggedIn(String userName, int loggedIn) {
-        StaffHandler.updateStaffLoggedIN(userName, loggedIn);
     }
 
 }

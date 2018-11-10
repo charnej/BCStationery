@@ -5,20 +5,29 @@
  */
 package UserInterface;
 //t
+
 import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.BCSerializer;
+import BusinessLayerPackage.IAdmin;
+import BusinessLayerPackage.IOrder;
+import BusinessLayerPackage.IStock;
 import BusinessLayerPackage.Reporter;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Stock;
 import BusinessLayerPackage.purchaseOrder;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -36,15 +45,20 @@ public class Inventory extends javax.swing.JFrame {
      * Creates new form Administrator
      */
     public Inventory() {
-        initComponents();
-        Stock objStockHolder = new Stock();
-        allStock = objStockHolder.getStock();
-        populateTable(allStock);
-        //event listener for sorting on column headers
-        JTableHeader header = tblInventory.getTableHeader();
-        //using built in function
-        tblInventory.setAutoCreateRowSorter(true);
-
+        try {
+            initComponents();
+            IStock stockImp = (IStock) SingleRegistry.getInstance().getRegistry().lookup("stock");
+            allStock = stockImp.getStock();
+            populateTable(allStock);
+            //event listener for sorting on column headers
+            JTableHeader header = tblInventory.getTableHeader();
+            //using built in function
+            tblInventory.setAutoCreateRowSorter(true);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Inventory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Inventory.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
     private ArrayList<Stock> allStock;
@@ -302,8 +316,15 @@ public class Inventory extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
-            System.exit(0);
+            try {
+                IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                adminImp.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
+                System.exit(0);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(Inventory.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Inventory.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
@@ -349,7 +370,7 @@ public class Inventory extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Please select a Search Criteria");
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "Please enter a keyword for the search", "Attention", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -385,57 +406,60 @@ public class Inventory extends javax.swing.JFrame {
     }//GEN-LAST:event_tblInventoryKeyPressed
 
     private void btnGenerateReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
-        //Get current inventory
-        //allStock;
-        //get current purchase orders
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
-        Date d = new Date();
-        String output =String.format(
-                "=================================================================================================\n"
-              + "           STOCK REPORT            "+sdf.format(d)+"                                                   =\n"
-              + "=================================================================================================\n"
-              + "The following table shows all the stock currently in the Inventory:\n"
-              + "________________________________________________________________________________________________\n"
-              + "|%5s|%21s|%13s|%21s|%10s|%8s|%10s|\n"
-              + "________________________________________________________________________________________________\n"
-                ,"ID","Name","Manufacturer","Category","Price","Quantity","Entry Date");
-        
-        for (Stock stock : allStock) {
-            output+=(stock.toString())+"\n";
-        }
-        output+=String.format("________________________________________________________________________________________________\n"
-                            + "\n"
-                            + "The following table shows the Purchase Order items that needs to be Purchased: \n"
-                            + "_______________________________________________________________________________\n"
-                            + "|%5s|%21s|%13s|%10s|%8s|%15s|\n"
-                            + "_______________________________________________________________________________\n"
-                            ,"ID","Name","Manufacturer","Price","Quantity","Quantity needed"
-                            );
-        //get all purchase orders
-        purchaseOrder po = new purchaseOrder();
-        ArrayList<purchaseOrder> pOrders = po.getPurchaseOrders();
-        for (purchaseOrder pOrder : pOrders) {
+        try {
+            //Get current inventory
+            //allStock;
+            //get current purchase orders
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+            Date d = new Date();
+            String output = String.format(
+                    "=================================================================================================\n"
+                    + "           STOCK REPORT            " + sdf.format(d) + "                                                   =\n"
+                    + "=================================================================================================\n"
+                    + "The following table shows all the stock currently in the Inventory:\n"
+                    + "________________________________________________________________________________________________\n"
+                    + "|%5s|%21s|%13s|%21s|%10s|%8s|%10s|\n"
+                    + "________________________________________________________________________________________________\n", "ID", "Name", "Manufacturer", "Category", "Price", "Quantity", "Entry Date");
+
             for (Stock stock : allStock) {
-                if (stock.getStockID()==pOrder.getStockID()) {
-                    output+= pOrder.showPurchaseOrder(stock);
+                output += (stock.toString()) + "\n";
+            }
+            output += String.format("________________________________________________________________________________________________\n"
+                    + "\n"
+                    + "The following table shows the Purchase Order items that needs to be Purchased: \n"
+                    + "_______________________________________________________________________________\n"
+                    + "|%5s|%21s|%13s|%10s|%8s|%15s|\n"
+                    + "_______________________________________________________________________________\n", "ID", "Name", "Manufacturer", "Price", "Quantity", "Quantity needed"
+            );
+            //get all purchase orders
+            IOrder orderImp = (IOrder) SingleRegistry.getInstance().getRegistry().lookup("order");
+            ArrayList<purchaseOrder> pOrders = orderImp.getPurchaseOrders();
+            for (purchaseOrder pOrder : pOrders) {
+                for (Stock stock : allStock) {
+                    if (stock.getStockID() == pOrder.getStockID()) {
+                        output += pOrder.showPurchaseOrder(stock);
+                    }
                 }
             }
+            output += "_______________________________________________________________________________\n";
+
+            // make pretty report
+            JFileChooser f = new JFileChooser();
+            f.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+            f.showSaveDialog(null);
+            String directory = (String) (f.getCurrentDirectory()).getPath();
+            directory += "\\CurrentInventoryReport";
+            Reporter rep = new Reporter(output);
+            BCSerializer ser = new BCSerializer(output);
+            rep.saveReport(directory);
+            //ser.Serialize(directory);
+            // export ass xml
+            // export as serialised
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Inventory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Inventory.class.getName()).log(Level.SEVERE, null, ex);
         }
-        output+="_______________________________________________________________________________\n";
-        
-        
-        // make pretty report
-        JFileChooser f = new JFileChooser();
-        f.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
-        f.showSaveDialog(null);
-        String directory = (String)(f.getCurrentDirectory()).getPath();
-        directory+="\\CurrentInventoryReport";
-        Reporter rep = new Reporter(output);
-        BCSerializer ser = new BCSerializer(output);
-        rep.saveReport(directory);
-        //ser.Serialize(directory);
-        // export ass xml
-        // export as serialised
     }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     int xMouse;

@@ -5,9 +5,15 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.IStaff;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Staff;
 import java.awt.Color;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,43 +32,49 @@ public class UpdateUser extends javax.swing.JFrame {
     }
 
     public void bindData() {
-        // -- text field data
-        txtFirstName.setText(StaffLogin.activeUser.getFirstName());
-        txtLastName.setText(StaffLogin.activeUser.getLastName());
-        txtEmail.setText(StaffLogin.activeUser.getEmail());
-        txtCell.setText(StaffLogin.activeUser.getCellphone());
-        txtStaffUsername.setText(StaffLogin.activeUser.getUsername());
-        txtStaffPassword.setText(StaffLogin.activeUser.getPassword());
-        // -- combobox data
-        cmboUpdCampusLocation.removeAllItems();
-        cmboUpdDepartment.removeAllItems();
-        //
-        Staff staffObj = new Staff();
-        // all options
-        ArrayList<String> campusList = staffObj.getCampusData();
-        cmboUpdCampusLocation.addItem("Select Campus");
-        for (String c : campusList) {
-            cmboUpdCampusLocation.addItem(c);
-        }
-        // selected option
-        for (String c : campusList) {
-            String[] itemSplit = c.split(" ");
-            if (c.equals(itemSplit[0] + " " + StaffLogin.activeUser.getCampusName())) {
-                cmboUpdCampusLocation.setSelectedItem(c);
+        try {
+            // -- text field data
+            txtFirstName.setText(StaffLogin.activeUser.getFirstName());
+            txtLastName.setText(StaffLogin.activeUser.getLastName());
+            txtEmail.setText(StaffLogin.activeUser.getEmail());
+            txtCell.setText(StaffLogin.activeUser.getCellphone());
+            txtStaffUsername.setText(StaffLogin.activeUser.getUsername());
+            txtStaffPassword.setText(StaffLogin.activeUser.getPassword());
+            // -- combobox data
+            cmboUpdCampusLocation.removeAllItems();
+            cmboUpdDepartment.removeAllItems();
+            //
+            IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+            // all options
+            ArrayList<String> campusList = staffImp.getCampusData();
+            cmboUpdCampusLocation.addItem("Select Campus");
+            for (String c : campusList) {
+                cmboUpdCampusLocation.addItem(c);
             }
-        }
-        // all options
-        ArrayList<String> departmentList = staffObj.getDepartmentData();
-        cmboUpdDepartment.addItem("Select Department");
-        for (String c : departmentList) {
-            cmboUpdDepartment.addItem(c);
-        }
-        // selected option
-        for (String c : departmentList) {
-            String[] itemSplit = c.split(" ");
-            if (c.equals(itemSplit[0] + " " + StaffLogin.activeUser.getDepartmentName())) {
-                cmboUpdDepartment.setSelectedItem(c);
+            // selected option
+            for (String c : campusList) {
+                String[] itemSplit = c.split(" ");
+                if (c.equals(itemSplit[0] + " " + StaffLogin.activeUser.getCampusName())) {
+                    cmboUpdCampusLocation.setSelectedItem(c);
+                }
             }
+            // all options
+            ArrayList<String> departmentList = staffImp.getDepartmentData();
+            cmboUpdDepartment.addItem("Select Department");
+            for (String c : departmentList) {
+                cmboUpdDepartment.addItem(c);
+            }
+            // selected option
+            for (String c : departmentList) {
+                String[] itemSplit = c.split(" ");
+                if (c.equals(itemSplit[0] + " " + StaffLogin.activeUser.getDepartmentName())) {
+                    cmboUpdDepartment.setSelectedItem(c);
+                }
+            }
+        } catch (NotBoundException ex) {
+            Logger.getLogger(UpdateUser.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(UpdateUser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -244,8 +256,15 @@ public class UpdateUser extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
-            System.exit(0);
+            try {
+                IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                staffImp.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
+                System.exit(0);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(UpdateUser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(UpdateUser.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
@@ -270,11 +289,18 @@ public class UpdateUser extends javax.swing.JFrame {
         validateCampus();
         //
         if (isValid) {
-            staffObj.setUserID(StaffLogin.activeUser.getUserID());
-            Staff.updateStaff(staffObj);
-            StaffLogin.activeUser = Staff.getStaffMember(staffObj.getUsername());
-            bindData();
-            //
+            try {
+                staffObj.setUserID(StaffLogin.activeUser.getUserID());
+                IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                Staff.updateStaff(staffObj);
+                StaffLogin.activeUser = staffImp.getStaffMember(staffObj.getUsername());
+                bindData();
+                //
+            } catch (NotBoundException ex) {
+                Logger.getLogger(UpdateUser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(UpdateUser.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Please Fix the fields highlighted in red and update again");
         }

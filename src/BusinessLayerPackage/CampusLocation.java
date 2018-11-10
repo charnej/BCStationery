@@ -12,5 +12,6 @@ import java.util.ArrayList;
  * @author Tyrone
  */
 public interface CampusLocation {
+
     abstract ArrayList<String> getCampusData();
 }

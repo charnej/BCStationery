@@ -11,7 +11,8 @@ import java.util.Comparator;
  *
  * @author Jozehan
  */
-public class compByName implements Comparator<Stock>{
+public class compByName implements Comparator<Stock> {
+
     @Override
     public int compare(Stock o1, Stock o2) {
         return o1.getProductName().compareTo(o1.getProductName());
