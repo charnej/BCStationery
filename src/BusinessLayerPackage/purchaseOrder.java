@@ -79,11 +79,20 @@ public class purchaseOrder implements Serializable {
             IOrder orderImp = (IOrder) SingleRegistry.getInstance().getRegistry().lookup("order");
             purchaseOrderHandler dbHandler = new purchaseOrderHandler();
             ArrayList<purchaseOrder> orders = orderImp.getPurchaseOrders();
-            for (purchaseOrder o : orders) {
-                if (o.stockID == this.stockID) {
-                    //increase stock
-                    dbHandler.update(o.getOrderID(), stockID, o.getQuantity() + quantity);
+            if (orders.size() > 0) {
+                int count =0;
+                for (purchaseOrder o : orders) {
+                    if (o.stockID == this.stockID) {
+                        //increase stock
+                        count ++;
+                        dbHandler.update(o.getOrderID(), stockID, o.getQuantity() + quantity);
+                    }
                 }
+                if(count==0){
+                    dbHandler.update(0, this.stockID, quantity);
+                }
+            } else {
+                dbHandler.update(0, this.stockID, quantity);
             }
         } catch (NotBoundException ex) {
             Logger.getLogger(purchaseOrder.class.getName()).log(Level.SEVERE, null, ex);

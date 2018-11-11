@@ -511,8 +511,9 @@ public class AdminOrders extends javax.swing.JFrame {
                     }
                 }
             }
+            populateTable(holder);
             if (holder.size() == 0) {
-                JOptionPane.showMessageDialog(null, "The selection is empty no report can be made");
+                JOptionPane.showMessageDialog(null, "The selection is empty please enter a valid period for the report to be made.");
             } else {
 
                 //Get current inventory

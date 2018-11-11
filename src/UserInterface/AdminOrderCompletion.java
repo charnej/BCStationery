@@ -299,6 +299,7 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
                     if (lID.contains(currentItemId)) {
                         try {
                             purchaseOrder po = new purchaseOrder();
+                            po.setStockID(currentItemId);
                             po.insert(requestedQty - InventoryQty);
                             //TODO
                             //check if item is still in db

@@ -47,12 +47,20 @@ public class purchaseOrderHandler {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull";
             Connection con = (Connection) DriverManager.getConnection(url, "root", "");
-            PreparedStatement ps = con.prepareStatement("UPDATE `purchaseorders` "
-                    + "SET `StockID` = ?, `Quantity` = ? WHERE `purchaseorders`.`OrderNr` = ? ");//continue when db done
-            ps.setInt(1, stockID);
-            ps.setInt(2, quantity);
-            ps.setInt(3, pOrderID);
-            ps.executeUpdate();
+            if (pOrderID!=0) {
+                PreparedStatement ps = con.prepareStatement("UPDATE `purchaseorders` "
+                        + "SET `StockID` = ?, `Quantity` = ? WHERE `purchaseorders`.`OrderNr` = ? ");//continue when db done
+                ps.setInt(1, stockID);
+                ps.setInt(2, quantity);
+                ps.setInt(3, pOrderID);
+                ps.executeUpdate();
+            } else {
+                PreparedStatement ps1 = con.prepareStatement("INSERT INTO `purchaseorders`(`StockID`,`Quantity`) "
+                        + "VALUES( ?, ? ) ");//continue when db done
+                ps1.setInt(1, stockID);
+                ps1.setInt(2, quantity);
+                System.out.println(ps1.executeUpdate());
+            }
             con.close();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(purchaseOrderHandler.class.getName()).log(Level.SEVERE, null, ex);
