@@ -42,7 +42,6 @@ public class Menu extends javax.swing.JFrame {
         btnInventory = new javax.swing.JButton();
         btnStaff = new javax.swing.JButton();
         btnOrders = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         frameMove = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -141,15 +140,7 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnOrders);
-        btnOrders.setBounds(150, 270, 165, 55);
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/btnReports.png"))); // NOI18N
-        jButton1.setToolTipText("View and Generate reports");
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(jButton1);
-        jButton1.setBounds(360, 270, 160, 50);
+        btnOrders.setBounds(150, 270, 380, 55);
 
         frameMove.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -300,7 +291,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnOrders;
     private javax.swing.JButton btnStaff;
     private javax.swing.JLabel frameMove;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
