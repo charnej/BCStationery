@@ -8,6 +8,9 @@ package BusinessLayerPackage;
 //t
 
 import DataAccessLayerPackage.StaffRequestHandler;
+import java.io.Serializable;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,13 +18,15 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Jozehan
  */
-public class StaffRequest {
+public class StaffRequest implements Serializable {
 
     private int requestNr;
     private Date requestDate;
@@ -32,7 +37,7 @@ public class StaffRequest {
 
     public StaffRequest() {
     }
-    
+
     // used to read staff request data
     public StaffRequest(int requestNr, Date requestDate) {
         this.requestNr = requestNr;
@@ -79,28 +84,6 @@ public class StaffRequest {
         this.complete = complete;
     }
 
-    //  -- database operations
-    private static PreparedStatement pst = null;
-    private static ResultSet rs = null;
-
-    // Static as this functionality is not bound to each object, but to the class
-    // Get all the required Staff request data ..
-    public static ArrayList<StaffRequest> getStaffRequests(StaffRequestHandler.requestType requestType, int staffID) {
-        ArrayList<StaffRequest> allRequests = new ArrayList<StaffRequest>();
-        try {
-            pst = StaffRequestHandler.getStaffRequests(requestType, staffID);
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                allRequests.add(new StaffRequest(rs.getInt("RequestNr"),
-                        rs.getDate("RequestDate"),rs.getInt("StaffID"),rs.getInt("Complete")));
-            }
-            return allRequests;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-
     // used to insert new Staff request
     public static void insertStaffRequest(Date requestDate, int staffID) {
         StaffRequestHandler.insertStaffRequest(sdf.format(requestDate), staffID);
@@ -108,21 +91,30 @@ public class StaffRequest {
 
     // check to see if package exists
     public static int isPackage(Date d, int staffID) {
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, staffID);
-        String df = sdf.format(d); // ensure that date format remains constant
-        for (StaffRequest staffRequest : staffRequests) {
-            String staffDate = staffRequest.getRequestDate().toString();
-            if (staffDate.equals(df)) {
-                return staffRequest.getRequestNr();
+        try {
+            IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.All, staffID);
+            String df = sdf.format(d); // ensure that date format remains constant
+            for (StaffRequest staffRequest : staffRequests) {
+                String staffDate = staffRequest.getRequestDate().toString();
+                if (staffDate.equals(df)) {
+                    return staffRequest.getRequestNr();
+                }
             }
+            //
+            return -1;
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StaffRequest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(StaffRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
         //
         return -1;
     }
+
     // change completion state of package
-    public static void updateState(StaffRequestHandler.stateType stateType, int requestNr){
+    public static void updateState(StaffRequestHandler.stateType stateType, int requestNr) {
         StaffRequestHandler.updateState(stateType, requestNr);
     }
 
 }
-

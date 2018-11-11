@@ -5,11 +5,18 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.IStaff;
 import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.Messages;
+import BusinessLayerPackage.SingleRegistry;
 import DataAccessLayerPackage.MessageHandler;
 import java.awt.Color;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,18 +29,24 @@ public class StaffRegister extends javax.swing.JFrame {
      * Creates new form StaffRegister
      */
     public StaffRegister() {
-        initComponents();
-        //
-        Staff staffObj = new Staff();
-        //
-        ArrayList<String> campusList = staffObj.getCampusData();
-        for (String c : campusList) {
-            cmboCampusLocation1.addItem(c);
-        }
-        //
-        ArrayList<String> departmentList = staffObj.getDepartmentData();
-        for (String c : departmentList) {
-            cmboDepartment.addItem(c);
+        try {
+            initComponents();
+            //
+            IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+            //
+            ArrayList<String> campusList = staffImp.getCampusData();
+            for (String c : campusList) {
+                cmboCampusLocation1.addItem(c);
+            }
+            //
+            ArrayList<String> departmentList = staffImp.getDepartmentData();
+            for (String c : departmentList) {
+                cmboDepartment.addItem(c);
+            }
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StaffRegister.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(StaffRegister.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -218,12 +231,12 @@ public class StaffRegister extends javax.swing.JFrame {
         this.setState(this.ICONIFIED);
     }//GEN-LAST:event_btnMinimizeMouseClicked
 
-    private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {                                     
+    private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
-    }                                    
+    }
 
     public Staff staffObj;
     //public Messages messageObj;
@@ -243,9 +256,16 @@ public class StaffRegister extends javax.swing.JFrame {
         validateCampus();
         //
         if (isValid) {
-            Staff.insertStaff(staffObj);
-            Messages.InsertStaffMessages(MessageHandler.Message.registered, txtStaffUsername.getText());
-            this.dispose();
+            try {
+                //IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                Staff.insertStaff(staffObj);
+                Messages.InsertStaffMessages(MessageHandler.Message.registered, txtStaffUsername.getText());
+                this.dispose();
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffRegister.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffRegister.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Please Fix the fields highlighted in red and register again");
         }

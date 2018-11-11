@@ -9,10 +9,10 @@ package BusinessLayerPackage;
  *
  * @author User
  */
-public class LoginAttemptsException extends Exception{
+public class LoginAttemptsException extends Exception {
 
     public LoginAttemptsException(String message) {
         super(message);
     }
-    
+
 }

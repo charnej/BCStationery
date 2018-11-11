@@ -1,7 +1,12 @@
 package DataAccessLayerPackage;
 
 import BusinessLayerPackage.Category;
+import BusinessLayerPackage.ICategory;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Stock;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,13 +19,14 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class StockHandler {
+
     private static StockHandler instance = new StockHandler();
 
     public static StockHandler getInstance() {
         return instance;
     }
 
-    private  StockHandler() {
+    private StockHandler() {
     }
 
     //get users from db
@@ -114,7 +120,7 @@ public class StockHandler {
         //
         return pst;
     }
-    
+
     //do insert Stock
     public boolean insertStock(Stock stock) {
 
@@ -127,7 +133,9 @@ public class StockHandler {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, stock.getProductName());
             ps.setString(2, stock.getManufacturer());
-            ArrayList<Category> cats = new Category().getCategories();
+            //
+            ICategory categoryImp = (ICategory) SingleRegistry.getInstance().getRegistry().lookup("category");
+            ArrayList<Category> cats = categoryImp.getCategories();
             int catChosen = 0;
             for (Category cat : cats) {
                 if (cat.getName().equals(stock.getCategory())) {
@@ -147,8 +155,12 @@ public class StockHandler {
         } catch (SQLException ex) {
             Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        } catch (RemoteException ex) {
+            Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return true;
     }
 
     //do update Stock
@@ -165,7 +177,9 @@ public class StockHandler {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, stock.getProductName());
             ps.setString(2, stock.getManufacturer());
-            ArrayList<Category> cats = new Category().getCategories();
+            //
+            ICategory categoryImp = (ICategory) SingleRegistry.getInstance().getRegistry().lookup("category");
+            ArrayList<Category> cats = categoryImp.getCategories();
             int catChosen = 0;
             for (Category cat : cats) {
                 if (cat.getName().equals(stock.getCategory())) {
@@ -186,8 +200,12 @@ public class StockHandler {
         } catch (SQLException ex) {
             Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        } catch (RemoteException ex) {
+            Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StockHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return true;
     }
     //do delete Stock
 }

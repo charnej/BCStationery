@@ -29,7 +29,7 @@ public class BCSerializer<T> {
 
     public void Serialize(String file) {
         try {
-            FileOutputStream fos = new FileOutputStream(file+".ser");
+            FileOutputStream fos = new FileOutputStream(file + ".ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(this.t);
             oos.flush();
@@ -44,11 +44,11 @@ public class BCSerializer<T> {
     }
 
     public T DeSerialize(String file) {
-        T innerT=null;
+        T innerT = null;
         try {
-            FileInputStream fis = new FileInputStream(file+".ser");
+            FileInputStream fis = new FileInputStream(file + ".ser");
             ObjectInputStream ois = new ObjectInputStream(fis);
-            innerT=(T) ois.readObject();
+            innerT = (T) ois.readObject();
             ois.close();
             fis.close();
         } catch (FileNotFoundException ex) {

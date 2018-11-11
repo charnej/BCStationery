@@ -5,11 +5,13 @@
  */
 package BusinessLayerPackage;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Tyrone
  */
-public abstract class User {
+public abstract class User implements Serializable {
 
     public User() {
     }

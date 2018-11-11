@@ -6,11 +6,19 @@
 package UserInterface;
 
 import BusinessLayerPackage.Admin;
+import BusinessLayerPackage.IAdmin;
+import BusinessLayerPackage.IStaff;
 import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.Messages;
+import BusinessLayerPackage.SingleRegistry;
 import DataAccessLayerPackage.MessageHandler;
 import DataAccessLayerPackage.StaffHandler;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -236,23 +244,42 @@ public class StaffFrm extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
-            System.exit(0);
+            try {
+                IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                adminImp.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
+                System.exit(0);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffFrm.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffFrm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnViewAllStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllStaffMouseClicked
-        btnAcceptStaff.setVisible(false);
-
-        ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Accepted);
-        addTableData(staffList);
+        try {
+            btnAcceptStaff.setVisible(false);
+            IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+            ArrayList<Staff> staffList = staffImp.getStaff(StaffHandler.staffType.Accepted);
+            addTableData(staffList);
+        } catch (RemoteException ex) {
+            Logger.getLogger(StaffFrm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StaffFrm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnViewAllStaffMouseClicked
 
     private void btnViewPendingStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewPendingStaffMouseClicked
-        btnAcceptStaff.setVisible(true);
-
-        ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Pending);
-        addTableData(staffList);
+        try {
+            btnAcceptStaff.setVisible(true);
+            IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+            ArrayList<Staff> staffList = staffImp.getStaff(StaffHandler.staffType.Pending);
+            addTableData(staffList);
+        } catch (RemoteException ex) {
+            Logger.getLogger(StaffFrm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StaffFrm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnViewPendingStaffMouseClicked
 
     private void btnAcceptStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAcceptStaffMouseClicked
@@ -260,10 +287,11 @@ public class StaffFrm extends javax.swing.JFrame {
             int id = (int) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0);
             String name = tblStaff.getValueAt(tblStaff.getSelectedRow(), 3).toString();
             String username = tblStaff.getValueAt(tblStaff.getSelectedRow(), 1).toString();
+            IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
             Staff.acceptPendingStaff(name, id);
             Messages.InsertStaffMessages(MessageHandler.Message.accepted, username);
             //
-            ArrayList<Staff> staffList = Staff.getStaff(StaffHandler.staffType.Pending);
+            ArrayList<Staff> staffList = staffImp.getStaff(StaffHandler.staffType.Pending);
             addTableData(staffList);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Please select a valid Staff Request to Accept");
@@ -301,7 +329,7 @@ public class StaffFrm extends javax.swing.JFrame {
         ArrayList<Staff> filteredList = new ArrayList<>();
         if (rbAll.isSelected()) {
             //no filtering needed
-            filteredList=staffList;
+            filteredList = staffList;
         } else if (rbPretoria.isSelected()) {
 
             for (Staff staff : staffList) {

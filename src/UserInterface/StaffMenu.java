@@ -5,7 +5,14 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.IStaff;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Staff;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -195,10 +202,17 @@ public class StaffMenu extends javax.swing.JFrame {
 
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), logIn);
-            StaffLogin staffLogin = new StaffLogin();
-            staffLogin.setVisible(true);
-            this.dispose();
+            try {
+                IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                staffImp.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), logIn);
+                StaffLogin staffLogin = new StaffLogin();
+                staffLogin.setVisible(true);
+                this.dispose();
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }//GEN-LAST:event_btnBackLogoutActionPerformed
@@ -206,8 +220,15 @@ public class StaffMenu extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), logIn);
-            System.exit(0);
+            try {
+                IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                staffImp.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), logIn);
+                System.exit(0);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 

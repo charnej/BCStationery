@@ -9,6 +9,10 @@ package BusinessLayerPackage;
 
 import DataAccessLayerPackage.StockHandler;
 import java.awt.List;
+import java.io.Serializable;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +28,7 @@ import javax.swing.JOptionPane;
  *
  * @author Jozehan
  */
-public class Stock {
+public class Stock implements Serializable {
 
     public Stock() {
     }
@@ -49,7 +53,7 @@ public class Stock {
         this.category = category;
         this.Quantity = quantity;
     }
-    
+
     public Stock(int stockID, String productName, String manufacturer, String category, double price, int Quantity, Date entryDate) {
         this.stockID = stockID;
         this.productName = productName;
@@ -72,18 +76,11 @@ public class Stock {
     public String toString() {
         return String.format("|%5d|%21s|%13s|%21s|%10s|%8d|%10s|",
                 stockID,
-                ((productName.length()>20)?productName.substring(0, 19):productName),
-                ((manufacturer.length()>13)?manufacturer.substring(0, 12):manufacturer),
-                ((category.length()>20)?category.substring(0, 19):category),
-                Currency.getInstance(Locale.getDefault()).getSymbol()+price,Quantity,entryDate);
+                ((productName.length() > 20) ? productName.substring(0, 19) : productName),
+                ((manufacturer.length() > 13) ? manufacturer.substring(0, 12) : manufacturer),
+                ((category.length() > 20) ? category.substring(0, 19) : category),
+                Currency.getInstance(Locale.getDefault()).getSymbol() + price, Quantity, entryDate);
         //return "|" + stockID + "|" + productName + "|" + manufacturer + "|" + category + "|=" + price + "|" + Quantity + "|" + entryDate + "|";
-    }
-
-    public ArrayList<Stock> getStock() {
-        //populate list with stock from db;
-        StockHandler dbHandler = StockHandler.getInstance();
-        return dbHandler.getStock();
-
     }
 
     public boolean addStock(Stock stock) {
@@ -159,62 +156,22 @@ public class Stock {
         this.stockID = stockID;
     }
 
-    private static PreparedStatement pst = null;
-    private static ResultSet rs = null;
-
-    // Get all the required Stock Item data ..
-    public static Stock getStockItem(int stockID) {
-        Stock stock = null;
-        try {
-            pst = StockHandler.getStockItem(stockID);
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                stock = new Stock(rs.getInt("StockID"),
-                        rs.getString("ProductName"),
-                        rs.getString("Manufacturer"),
-                        rs.getString("Name"));
-            }
-            return stock;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-
-    // Get all the required Stock filtered Item data ..
-    public static ArrayList<Stock> getStockByCategory(String categoryName) {
-        ArrayList<Stock> stock = null;
-        try {
-            pst = StockHandler.getStockByCategory(categoryName);
-            rs = (ResultSet) pst.executeQuery();
-            while (rs.next()) {
-                stock.add(new Stock(rs.getInt("StockID"),
-                        rs.getString("ProductName"),
-                        rs.getString("Manufacturer"),
-                        rs.getString("Name"),
-                        rs.getInt("Quantity")));
-            }
-            //
-            return stock;
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        return null;
-    }
-    
     public static void removeStock(int stockID, int qty) {
-        
+        try {
             //get current inventory
-            ArrayList<Stock> AllStock = (new Stock()).getStock();
+            IStock stockImp = (IStock) SingleRegistry.getInstance().getRegistry().lookup("stock");
+            ArrayList<Stock> AllStock = stockImp.getStock();
             for (Stock stock : AllStock) {
                 if (stock.getStockID() == stockID) {
-                    StockHandler.removeStock(stockID,(stock.getQuantity()- qty));
+                    StockHandler.removeStock(stockID, (stock.getQuantity() - qty));
                 }
             }
-
             System.out.println("Stock Quantity update complete");
-        
+        } catch (RemoteException ex) {
+            Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
-

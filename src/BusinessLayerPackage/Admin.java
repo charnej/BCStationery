@@ -8,6 +8,7 @@ package BusinessLayerPackage;
 
 import DataAccessLayerPackage.AdminHandler;
 import DataAccessLayerPackage.StaffHandler;
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,26 +19,16 @@ import java.util.logging.Logger;
  *
  * @author Jozehan
  */
-public class Admin extends User {
+public class Admin extends User implements Serializable {
+
     int loggedIn;
-    
+
     public Admin() {
     }
 
     public Admin(int userID, String firstName, String lastName, String username, String password, int loggedIn) {
         super(userID, firstName, lastName, username, password);
         this.loggedIn = loggedIn;
-    }
-
-    public ArrayList<Admin> getAdmin() {
-        ArrayList<Admin> allAdmin = new ArrayList<Admin>();
-        AdminHandler inst = AdminHandler.getInstance();
-        allAdmin = inst.getUsers();
-        return allAdmin;
-    }
-    
-    public static void UpdateAdminLoggedIn(String userName, int loggedIn){
-        AdminHandler.updateAdminLoggedIn(loggedIn, userName);
     }
 
     public int getLoggedIn() {
@@ -47,6 +38,5 @@ public class Admin extends User {
     public void setLoggedIn(int loggedIn) {
         this.loggedIn = loggedIn;
     }
-    
 
 }

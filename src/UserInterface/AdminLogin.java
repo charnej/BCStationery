@@ -6,10 +6,15 @@
 package UserInterface;
 
 import BusinessLayerPackage.Admin;
+import BusinessLayerPackage.IAdmin;
 import BusinessLayerPackage.LoginAttemptsException;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.WrongCredException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +39,14 @@ public class AdminLogin extends javax.swing.JFrame {
         initComponents();
         Runnable r = new Runnable() {
             public void run() {
-                Admin objHolder = new Admin();
-                allAdmin = objHolder.getAdmin();
+                try {
+                    IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                    allAdmin = adminImp.getAdmin();
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         };
         new Thread(r).start();
@@ -242,7 +253,9 @@ public class AdminLogin extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Admin is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
                 } else {
                     activeUser = UserFound.getUsername();
-                    Admin.UpdateAdminLoggedIn(activeUser, 1);
+                    //
+                    IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                    adminImp.UpdateAdminLoggedIn(activeUser, 1);
                     Menu mainMenu = new Menu();
                     mainMenu.setVisible(true);
                     this.dispose();
@@ -268,6 +281,10 @@ public class AdminLogin extends javax.swing.JFrame {
 
         } catch (WrongCredException | LoginAttemptsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Please Note", JOptionPane.WARNING_MESSAGE);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
 
 
