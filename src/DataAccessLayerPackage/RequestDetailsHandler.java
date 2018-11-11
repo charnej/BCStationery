@@ -93,12 +93,15 @@ public class RequestDetailsHandler {
     // delete operation
     public static void deleteRequest(int detailID) {
         try {
+            con = JavaConnectDB.ConnectDB();
             st = con.createStatement();
             st.executeUpdate("DELETE FROM requestdetails "
                     + "WHERE RequestDetailsID = " + detailID + "");
+            con.close();
             JOptionPane.showMessageDialog(null, "Delete Successfull");
+            
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(null, "ERROR"+e.getMessage());
         }
     }
         // select package items

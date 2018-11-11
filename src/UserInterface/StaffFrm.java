@@ -105,18 +105,21 @@ public class StaffFrm extends javax.swing.JFrame {
 
         bgByCampusLocation.add(rbAll);
         rbAll.setText("All Campuss'");
+        rbAll.setContentAreaFilled(false);
         getContentPane().add(rbAll);
-        rbAll.setBounds(710, 120, 170, 25);
+        rbAll.setBounds(710, 120, 170, 23);
 
         bgByCampusLocation.add(rbKempton);
         rbKempton.setText("Kempton Park Campus");
+        rbKempton.setContentAreaFilled(false);
         getContentPane().add(rbKempton);
-        rbKempton.setBounds(710, 150, 170, 25);
+        rbKempton.setBounds(710, 150, 170, 23);
 
         bgByCampusLocation.add(rbPretoria);
         rbPretoria.setText("Pretoria Campus");
+        rbPretoria.setContentAreaFilled(false);
         getContentPane().add(rbPretoria);
-        rbPretoria.setBounds(710, 180, 170, 25);
+        rbPretoria.setBounds(710, 180, 170, 23);
 
         tblStaff.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

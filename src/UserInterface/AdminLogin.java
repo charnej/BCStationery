@@ -7,6 +7,7 @@ package UserInterface;
 
 import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.IAdmin;
+import BusinessLayerPackage.LoggedInException;
 import BusinessLayerPackage.LoginAttemptsException;
 import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.WrongCredException;
@@ -250,7 +251,8 @@ public class AdminLogin extends javax.swing.JFrame {
                 // close current form
                 // re route to another form
                 if (UserFound.getLoggedIn() == 1) {
-                    JOptionPane.showMessageDialog(null, "Admin is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+                    //JOptionPane.showMessageDialog(null, "Admin is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+                    throw new LoggedInException("Admin is already logged in");
                 } else {
                     activeUser = UserFound.getUsername();
                     //
@@ -285,6 +287,8 @@ public class AdminLogin extends javax.swing.JFrame {
             Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotBoundException ex) {
             Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (LoggedInException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Please Note", JOptionPane.WARNING_MESSAGE);
         }
 
 
