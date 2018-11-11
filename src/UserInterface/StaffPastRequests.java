@@ -6,11 +6,20 @@
 package UserInterface;
 //t
 
+import BusinessLayerPackage.IRequestDetails;
+import BusinessLayerPackage.IStaff;
+import BusinessLayerPackage.IStaffRequest;
 import BusinessLayerPackage.RequestDetails;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.StaffRequest;
 import DataAccessLayerPackage.StaffRequestHandler;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,9 +33,17 @@ public class StaffPastRequests extends javax.swing.JFrame {
      * Creates new form StaffPastRequests
      */
     public StaffPastRequests() {
-        initComponents();
-        btnRemoveRequest.setVisible(false);
-        parentMode();
+        try {
+            this.requestImpl = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            this.staffRequestsList = requestImpl.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
+            initComponents();
+            btnRemoveRequest.setVisible(false);
+            parentMode();
+        } catch (RemoteException ex) {
+            Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void testState(ArrayList<StaffRequest> staffRequests) {
@@ -42,29 +59,43 @@ public class StaffPastRequests extends javax.swing.JFrame {
     public String mode = "";
 
     public void parentMode() {
-        tblRequests.setEnabled(true);
-        btnEnterRequestPackage.setVisible(true);
-        btnRemoveRequest.setVisible(false);
-        tblRequestDetails.setVisible(false);
-        btnCloseRequestPackage.setVisible(false);
-        //
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
-        addParentTableData(staffRequests);
-        //
-        mode = "p";
+        try {
+            tblRequests.setEnabled(true);
+            btnEnterRequestPackage.setVisible(true);
+            btnRemoveRequest.setVisible(false);
+            tblRequestDetails.setVisible(false);
+            btnCloseRequestPackage.setVisible(false);
+            //
+            IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
+            addParentTableData(staffRequests);
+            //
+            mode = "p";
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void childMode() {
-        tblRequests.setEnabled(false);
-        btnEnterRequestPackage.setVisible(false);
-        btnRemoveRequest.setVisible(false);
-        tblRequestDetails.setVisible(true);
-        btnCloseRequestPackage.setVisible(true);
-        //
-        ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
-        addChildTableData(requestDetails);
-        //
-        mode = "c";
+        try {
+            tblRequests.setEnabled(false);
+            btnEnterRequestPackage.setVisible(false);
+            btnRemoveRequest.setVisible(false);
+            tblRequestDetails.setVisible(true);
+            btnCloseRequestPackage.setVisible(true);
+            //
+            IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+            ArrayList<RequestDetails> requestDetails = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
+            addChildTableData(requestDetails);
+            //
+            mode = "c";
+        } catch (NotBoundException ex) {
+            Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -312,8 +343,15 @@ public class StaffPastRequests extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
-            System.exit(0);
+            try {
+                IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                staffImp.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
+                System.exit(0);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
@@ -325,40 +363,83 @@ public class StaffPastRequests extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoveRequestActionPerformed
 
     public int requestNr;
-    public ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
+    public IStaffRequest requestImpl;
+    public ArrayList<StaffRequest> staffRequestsList;
 
     private void btnViewAllRequests1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAllRequests1MouseClicked
         if (mode.equals("p")) {
-            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
-            addParentTableData(staffRequests);
+            try {
+                IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+                ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID());
+                addParentTableData(staffRequests);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (mode.equals("c")) {
-            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
-            addChildTableData(requestDetails);
-            btnRemoveRequest.setVisible(false);
+            try {
+                IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+                ArrayList<RequestDetails> requestDetails = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
+                addChildTableData(requestDetails);
+                btnRemoveRequest.setVisible(false);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnViewAllRequests1MouseClicked
 
     private void btnViewDoneRequests1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewDoneRequests1MouseClicked
         if (mode.equals("p")) {
-            testState(staffRequests);
-            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Complete, StaffLogin.activeUser.getUserID());
-            addParentTableData(staffRequests);
+            try {
+                testState(staffRequestsList);
+                IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+                ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.Complete, StaffLogin.activeUser.getUserID());
+                addParentTableData(staffRequests);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (mode.equals("c")) {
-            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.Complete, StaffLogin.activeUser.getUserID(), requestNr);
-            addChildTableData(requestDetails);
-            btnRemoveRequest.setVisible(false);
+            try {
+                IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+                ArrayList<RequestDetails> requestDetails = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.Complete, StaffLogin.activeUser.getUserID(), requestNr);
+                addChildTableData(requestDetails);
+                btnRemoveRequest.setVisible(false);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnViewDoneRequests1MouseClicked
 
     private void btnViewIncomRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewIncomRequestsMouseClicked
         if (mode.equals("p")) {
-            testState(staffRequests);
-            ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Incomplete, StaffLogin.activeUser.getUserID());
-            addParentTableData(staffRequests);
+            try {
+                testState(staffRequestsList);
+                IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+                ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.Incomplete, StaffLogin.activeUser.getUserID());
+                addParentTableData(staffRequests);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (mode.equals("c")) {
-            ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.Incomplete, StaffLogin.activeUser.getUserID(), requestNr);
-            addChildTableData(requestDetails);
-            btnRemoveRequest.setVisible(true);
+            try {
+                IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+                ArrayList<RequestDetails> requestDetails = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.Incomplete, StaffLogin.activeUser.getUserID(), requestNr);
+                addChildTableData(requestDetails);
+                btnRemoveRequest.setVisible(true);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(StaffPastRequests.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnViewIncomRequestsMouseClicked
 
@@ -380,7 +461,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEnterRequestPackageMouseClicked
 
     private void btnCloseRequestPackageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseRequestPackageMouseClicked
-        testState(staffRequests);
+        testState(staffRequestsList);
         parentMode();
     }//GEN-LAST:event_btnCloseRequestPackageMouseClicked
 
@@ -390,9 +471,10 @@ public class StaffPastRequests extends javax.swing.JFrame {
             //
             int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove this request?", "Delete Request", JOptionPane.INFORMATION_MESSAGE);
             if (selection == JOptionPane.YES_OPTION) {
+                IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
                 RequestDetails.deleteRequest(DetailID);
                 //
-                ArrayList<RequestDetails> requestDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
+                ArrayList<RequestDetails> requestDetails = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
                 addChildTableData(requestDetails);
                 btnRemoveRequest.setVisible(false);
             }

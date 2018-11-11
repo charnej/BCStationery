@@ -5,12 +5,20 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.IRequestDetails;
+import BusinessLayerPackage.IStaff;
 import BusinessLayerPackage.RequestDetails;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.StaffRequest;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -190,8 +198,15 @@ public class RequestItems extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-           Staff.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
-            System.exit(0);
+            try {
+                IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                staffImp.updateStaffLoggedIn(StaffLogin.activeUser.getUsername(), 0);
+                System.exit(0);
+            } catch (RemoteException ex) {
+                Logger.getLogger(RequestItems.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(RequestItems.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
@@ -209,8 +224,15 @@ public class RequestItems extends javax.swing.JFrame {
             }
             //
             if (RequestDetails.testPackageItem(packageNum, StaffItems.chosenItem.getStockID())) {
-                int qty = (int) spnQtyAdd.getValue();
-                RequestDetails.insertRequestDetails(packageNum, StaffItems.chosenItem.getStockID(), qty);
+                try {
+                    int qty = (int) spnQtyAdd.getValue();
+                    IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+                    RequestDetails.insertRequestDetails(packageNum, StaffItems.chosenItem.getStockID(), qty);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(RequestItems.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(RequestItems.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "This Package already contains this Item\nYou can Request this Item again Tomorrow");
             }

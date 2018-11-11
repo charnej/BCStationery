@@ -7,11 +7,18 @@ package UserInterface;
 
 import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.Category;
+import BusinessLayerPackage.IAdmin;
+import BusinessLayerPackage.ICategory;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Stock;
 import java.awt.List;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,22 +31,29 @@ public class UpdateStock extends javax.swing.JFrame {
      * Creates new form UpdateStock
      */
     private Stock currStock;
+
     public UpdateStock(Stock stock) {
-        initComponents();
-        currStock=stock;
-        //fill dropdown with possible catagories
+        try {
+            initComponents();
+            currStock = stock;
+            //fill dropdown with possible catagories
             //get all catagories
-        Category objCategoryHolder = new Category();
-        for (Category cat : objCategoryHolder.getCategories()) {
-            //fill with all possible names
-            cmboCategoryUpd.addItem(cat.getName());
+            ICategory categoryImp = (ICategory) SingleRegistry.getInstance().getRegistry().lookup("category");
+            for (Category cat : categoryImp.getCategories()) {
+                //fill with all possible names
+                cmboCategoryUpd.addItem(cat.getName());
+            }
+            //fill fields with current stock values
+            txtProductNameUpd.setText(currStock.getProductName());
+            txtManufacturerUpd.setText(currStock.getManufacturer());
+            cmboCategoryUpd.setSelectedItem(currStock.getCategory());
+            txtPriceUpd.setText(Double.toString(currStock.getPrice()));
+            spnQuantityUpd.setValue(currStock.getQuantity());
+        } catch (NotBoundException ex) {
+            Logger.getLogger(UpdateStock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(UpdateStock.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //fill fields with current stock values
-        txtProductNameUpd.setText(currStock.getProductName());
-        txtManufacturerUpd.setText(currStock.getManufacturer());
-        cmboCategoryUpd.setSelectedItem(currStock.getCategory());
-        txtPriceUpd.setText(Double.toString(currStock.getPrice()));
-        spnQuantityUpd.setValue(currStock.getQuantity());
     }
 
     private UpdateStock() {
@@ -184,64 +198,80 @@ public class UpdateStock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateItemActionPerformed
-        String prodName =      (txtProductNameUpd.getText());
-        String manName =       (txtManufacturerUpd.getText());
-        String catagoryName =  (cmboCategoryUpd.getSelectedItem().toString());
+        String prodName = (txtProductNameUpd.getText());
+        String manName = (txtManufacturerUpd.getText());
+        String catagoryName = (cmboCategoryUpd.getSelectedItem().toString());
         //Double prodPrice =     (Double.parseDouble((Integer.toString((int) spnPriceUpd.getValue()))));
-        int prodQuantity =  ((int)spnQuantityUpd.getValue());
+        int prodQuantity = ((int) spnQuantityUpd.getValue());
         Double prodPrice = 0.0;
         String priceString = txtPriceUpd.getText();
         boolean isNumeric = false;
         if (!priceString.isEmpty()) {
-             isNumeric = priceString.chars().allMatch(Character::isAlphabetic);
+            isNumeric = priceString.chars().allMatch(Character::isAlphabetic);
             if (!isNumeric) {
-                prodPrice =  Double.parseDouble(txtPriceUpd.getText());         
+                prodPrice = Double.parseDouble(txtPriceUpd.getText());
             }
         }
 
-
         ArrayList<String> errors = new ArrayList<>();
-        boolean bprodName =      (txtProductNameUpd.getText().isEmpty());
-        if(bprodName)errors.add("You cant have the name field empty");
-        boolean bmanName =       (txtManufacturerUpd.getText().equals(""));
-        if(bmanName)errors.add("You cant have the Manufacturer field empty");
-        boolean bcatagoryName =  (cmboCategoryUpd.getSelectedItem().equals(""));
-        if(bcatagoryName)errors.add("You cant have the Category Selection empty");
+        boolean bprodName = (txtProductNameUpd.getText().isEmpty());
+        if (bprodName) {
+            errors.add("You cant have the name field empty");
+        }
+        boolean bmanName = (txtManufacturerUpd.getText().equals(""));
+        if (bmanName) {
+            errors.add("You cant have the Manufacturer field empty");
+        }
+        boolean bcatagoryName = (cmboCategoryUpd.getSelectedItem().equals(""));
+        if (bcatagoryName) {
+            errors.add("You cant have the Category Selection empty");
+        }
         //boolean bprodPrice =     !((int)spnPriceUpd.getValue()>0);
-        
-        boolean bprodPrice =     (txtPriceUpd.getText().isEmpty() || txtPriceUpd.getText().chars().allMatch(Character::isAlphabetic) || prodPrice<=0);
-        
-        if(bprodPrice)errors.add("You cant have the Price field empty");
-        boolean bprodQuantity =  !((int)spnQuantityUpd.getValue()>0);
-        if(bprodQuantity)errors.add("You cant have the Quantity field empty");
-        if (!bprodName&&!bmanName&&!bcatagoryName&&!bprodPrice&&!bprodQuantity) {
+
+        boolean bprodPrice = (txtPriceUpd.getText().isEmpty() || txtPriceUpd.getText().chars().allMatch(Character::isAlphabetic) || prodPrice <= 0);
+
+        if (bprodPrice) {
+            errors.add("You cant have the Price field empty");
+        }
+        boolean bprodQuantity = !((int) spnQuantityUpd.getValue() > 0);
+        if (bprodQuantity) {
+            errors.add("You cant have the Quantity field empty");
+        }
+        if (!bprodName && !bmanName && !bcatagoryName && !bprodPrice && !bprodQuantity) {
             //create object of Stock
             //get id sent to form
-            
+
             Stock stock = new Stock(currStock.getStockID(), prodName, manName, catagoryName, prodPrice, prodQuantity, Date.valueOf(LocalDate.now()));
-            boolean workDone =stock.updateStock(stock);
+            boolean workDone = stock.updateStock(stock);
             if (workDone) {
                 JOptionPane.showMessageDialog(null, "Stock Updated in inventory");
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Something went wrong please contact your administrator");
             }
-            
+
             //send object of stock to db
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, errors.get(0), "Please Note", JOptionPane.WARNING_MESSAGE);
-           //show error 
-           //just keep showing the first error in the ArrayList
-           
+            //show error 
+            //just keep showing the first error in the ArrayList
+
         }
     }//GEN-LAST:event_btnUpdateItemActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
-            System.exit(0);
+            try {
+                IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                adminImp.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
+                System.exit(0);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(UpdateStock.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(UpdateStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
+
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked

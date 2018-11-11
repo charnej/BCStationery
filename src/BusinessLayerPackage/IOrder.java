@@ -5,14 +5,15 @@
  */
 package BusinessLayerPackage;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+
 /**
  *
- * @author User
+ * @author Tyrone
  */
-public class WrongCredException extends Exception {
+public interface IOrder extends Remote {
 
-    public WrongCredException(String message) {
-        super(message);
-    }
-
+    public ArrayList<purchaseOrder> getPurchaseOrders() throws RemoteException;
 }

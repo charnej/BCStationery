@@ -5,10 +5,17 @@
  */
 package UserInterface;
 
+import BusinessLayerPackage.IStaff;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Staff;
 import DataAccessLayerPackage.StaffHandler;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -27,9 +34,15 @@ public class StaffLogin extends javax.swing.JFrame {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                //Get all staff user objects
-                Staff objHolder = new Staff();
-                 allStaff = objHolder.getStaff(StaffHandler.staffType.All);
+                try {
+                    //Get all staff user objects
+                    IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                    allStaff = staffImp.getStaff(StaffHandler.staffType.All);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(StaffLogin.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(StaffLogin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         };
         Thread backgroundThread = new Thread(r);
@@ -245,17 +258,24 @@ public class StaffLogin extends javax.swing.JFrame {
             }
         }
         if (UserFound) {
-            if (Staff.getStaffMember(txtStaffUsername.getText()).getLoggedIn() == 1) {
-                JOptionPane.showMessageDialog(null, "User is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
-            } else {
-                activeUser = Staff.getStaffMember(txtStaffUsername.getText());
-                Staff.updateStaffLoggedIn(activeUser.getUsername(), 1);
+            try {
+                IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+                if (staffImp.getStaffMember(txtStaffUsername.getText()).getLoggedIn() == 1) {
+                    JOptionPane.showMessageDialog(null, "User is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    activeUser = staffImp.getStaffMember(txtStaffUsername.getText());
+                    staffImp.updateStaffLoggedIn(activeUser.getUsername(), 1);
 
-                //JOptionPane.showMessageDialog(null, activeUser.getUsername(), "Please Note", JOptionPane.WARNING_MESSAGE);
-                //Staff.updateStaffLoggedIn(activeUser.getUsername(), 0);
-                StaffMenu staffMenu = new StaffMenu();
-                staffMenu.setVisible(true);
-                this.dispose();
+                    //JOptionPane.showMessageDialog(null, activeUser.getUsername(), "Please Note", JOptionPane.WARNING_MESSAGE);
+                    //Staff.updateStaffLoggedIn(activeUser.getUsername(), 0);
+                    StaffMenu staffMenu = new StaffMenu();
+                    staffMenu.setVisible(true);
+                    this.dispose();
+                }
+            } catch (RemoteException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Server Connection Error", JOptionPane.WARNING_MESSAGE);
+            } catch (NotBoundException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Server Connection Error", JOptionPane.WARNING_MESSAGE);
             }
         } else {
             //throw warning

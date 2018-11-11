@@ -7,17 +7,26 @@ package UserInterface;
 //t
 
 import BusinessLayerPackage.Admin;
+import BusinessLayerPackage.IAdmin;
+import BusinessLayerPackage.IRequestDetails;
+import BusinessLayerPackage.IStock;
 import BusinessLayerPackage.RequestDetails;
 import BusinessLayerPackage.StaffRequest;
 import BusinessLayerPackage.Messages;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Stock;
 import BusinessLayerPackage.purchaseOrder;
 import DataAccessLayerPackage.MessageHandler;
 import DataAccessLayerPackage.StaffRequestHandler;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.OptionPaneUI;
@@ -33,51 +42,63 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
      * Creates new form AdminOrderCompletion
      */
     public AdminOrderCompletion(StaffRequest rec) {
-        initComponents();
-        RequestDetails rd = new RequestDetails();
-        ArrayList<RequestDetails> detailsPackage = rd.getRequestDetails(StaffRequestHandler.requestType.Incomplete, rec.getStaffID(), rec.getRequestNr());
-        currentRequest = rec;
-        populateTable(detailsPackage);
+        try {
+            initComponents();
+            IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+            ArrayList<RequestDetails> detailsPackage = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.Incomplete, rec.getStaffID(), rec.getRequestNr());
+            currentRequest = rec;
+            populateTable(detailsPackage);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     private StaffRequest currentRequest = new StaffRequest();
     private ArrayList<Stock> outOfStock = new ArrayList<>();
 
     private void populateTable(ArrayList<RequestDetails> requestList) {
 
-        DefaultTableModel dmodel = (DefaultTableModel) tblRequestItems.getModel();
-        Object[] row = new Object[7];
-        //clearTable
-        dmodel.setRowCount(0);
-        Stock s = new Stock();
-        ArrayList<Stock> inventory = s.getStock();
-        if (requestList.size() > 0) {
-            for (RequestDetails stc : requestList) {
-                row[0] = stc.getStockID();
-                row[1] = stc.getProductName();
-                row[2] = stc.getManufacturer();
-                row[3] = stc.getCategory();
-                row[4] = stc.getQuantity();
-                int qty = 0;
-                for (Stock ss : inventory) {
-                    if (ss.getStockID() == stc.getStockID()) {
-                        row[5] = ss.getQuantity();
-                        qty = ss.getQuantity();
-                        if (qty < stc.getQuantity()) {
-                            row[6] = "Not Enough Stock";
-                            outOfStock.add(ss);
-                        } else {
-                            row[6] = "In Stock";
+        try {
+            DefaultTableModel dmodel = (DefaultTableModel) tblRequestItems.getModel();
+            Object[] row = new Object[7];
+            //clearTable
+            dmodel.setRowCount(0);
+            IStock stockImp = (IStock) SingleRegistry.getInstance().getRegistry().lookup("stock");
+            ArrayList<Stock> inventory = stockImp.getStock();
+            if (requestList.size() > 0) {
+                for (RequestDetails stc : requestList) {
+                    row[0] = stc.getStockID();
+                    row[1] = stc.getProductName();
+                    row[2] = stc.getManufacturer();
+                    row[3] = stc.getCategory();
+                    row[4] = stc.getQuantity();
+                    int qty = 0;
+                    for (Stock ss : inventory) {
+                        if (ss.getStockID() == stc.getStockID()) {
+                            row[5] = ss.getQuantity();
+                            qty = ss.getQuantity();
+                            if (qty < stc.getQuantity()) {
+                                row[6] = "Not Enough Stock";
+                                outOfStock.add(ss);
+                            } else {
+                                row[6] = "In Stock";
+                            }
                         }
                     }
+                    
+                    dmodel.addRow(row);
                 }
-
-                dmodel.addRow(row);
+            } else {
+                //set current order package to complete
+                StaffRequest sr = new StaffRequest();
+                sr.updateState(StaffRequestHandler.stateType.Complete, currentRequest.getRequestNr());
+                JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
             }
-        } else {
-            //set current order package to complete
-            StaffRequest sr = new StaffRequest();
-            sr.updateState(StaffRequestHandler.stateType.Complete, currentRequest.getRequestNr());
-            JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -231,9 +252,15 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackLogoutMouseClicked
 
     private void btnBackLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackLogoutActionPerformed
-        AdminOrders orders = new AdminOrders();
-        orders.setVisible(true);
-        this.dispose();
+        try {
+            AdminOrders orders = new AdminOrders();
+            orders.setVisible(true);
+            this.dispose();
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnBackLogoutActionPerformed
 
     private void btnMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseClicked
@@ -243,8 +270,15 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
-            System.exit(0);
+            try {
+                IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                adminImp.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
+                System.exit(0);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
@@ -258,43 +292,67 @@ public class AdminOrderCompletion extends javax.swing.JFrame {
             int selection = JOptionPane.showConfirmDialog(null, "You do not meet requirements, do you want to send purchase order",
                     "Please Note", JOptionPane.INFORMATION_MESSAGE);
             if (selection == JOptionPane.YES_OPTION) {
-              RequestDetails recD = new RequestDetails();
-                ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
-                List<Integer> lID = detailsPackage.stream().map(requestdetails -> requestdetails.getStockID()).collect(Collectors.toList());
-                if (lID.contains(currentItemId)) {
-                    purchaseOrder po = new purchaseOrder();
-                    po.insert(requestedQty - InventoryQty);
-                    //TODO 
-                    //check if item is still in db
-                    Messages.InsertStaffMessages(MessageHandler.Message.inventory, AdminOrders.staffUsernameRequest);
-                    JOptionPane.showMessageDialog(rootPane, "Purchase Order is sent");
-                     detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
-                    populateTable(detailsPackage);
-                }else{
-                    JOptionPane.showMessageDialog(null, "The item is no longer requested");
+                try {
+                    IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+                    ArrayList<RequestDetails> detailsPackage = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                    List<Integer> lID = detailsPackage.stream().map(requestdetails -> requestdetails.getStockID()).collect(Collectors.toList());
+                    if (lID.contains(currentItemId)) {
+                        try {
+                            purchaseOrder po = new purchaseOrder();
+                            po.insert(requestedQty - InventoryQty);
+                            //TODO
+                            //check if item is still in db
+                            Messages.InsertStaffMessages(MessageHandler.Message.inventory, AdminOrders.staffUsernameRequest);
+                            JOptionPane.showMessageDialog(rootPane, "Purchase Order is sent");
+                            detailsPackage = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                            populateTable(detailsPackage);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (NotBoundException ex) {
+                            Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "The item is no longer requested");
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
         } else if (InventoryQty >= requestedQty) {
             int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to complete transaction ",
                     "Please Note", JOptionPane.INFORMATION_MESSAGE);
             if (selection == JOptionPane.YES_OPTION) {
 
-                //if in stock dilver items
-                RequestDetails recD = new RequestDetails();
-                //getting all requested items--final check if user did not remove the items
-                ArrayList<RequestDetails> detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
-                int RequestDetailsID = 0;
-                Stock stockHolder = new Stock();
-                for (RequestDetails rdp : detailsPackage) {
-                    if (currentItemId == rdp.getStockID()) {
-                        recD.CompleteTransaction(rdp.getRequestDetailsID(), 1, Date.valueOf(LocalDate.now()));
-                        stockHolder.removeStock(rdp.getStockID(), rdp.getQuantity());
-                        Messages.InsertStaffMessages(MessageHandler.Message.requestComplete, AdminOrders.staffUsernameRequest);
+                try {
+                    //if in stock dilver items
+                    IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+                    //getting all requested items--final check if user did not remove the items
+                    ArrayList<RequestDetails> detailsPackage = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                    int RequestDetailsID = 0;
+                    Stock stockHolder = new Stock();
+                    for (RequestDetails rdp : detailsPackage) {
+                        if (currentItemId == rdp.getStockID()) {
+                            try {
+                                RequestDetails.CompleteTransaction(rdp.getRequestDetailsID(), 1, Date.valueOf(LocalDate.now()));
+                                stockHolder.removeStock(rdp.getStockID(), rdp.getQuantity());
+                                Messages.InsertStaffMessages(MessageHandler.Message.requestComplete, AdminOrders.staffUsernameRequest);
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (NotBoundException ex) {
+                                Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                     }
+                    detailsPackage = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
+                    populateTable(detailsPackage);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(AdminOrderCompletion.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                detailsPackage = recD.getRequestDetails(StaffRequestHandler.requestType.Incomplete, currentRequest.getStaffID(), currentRequest.getRequestNr());
-                populateTable(detailsPackage);
             }
         }
     }//GEN-LAST:event_tblRequestItemsMouseClicked

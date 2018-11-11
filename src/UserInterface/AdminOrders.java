@@ -8,17 +8,28 @@ package UserInterface;
 
 import BusinessLayerPackage.Admin;
 import BusinessLayerPackage.BCSerializer;
+import BusinessLayerPackage.IAdmin;
+import BusinessLayerPackage.IRequestDetails;
+import BusinessLayerPackage.IStaff;
+import BusinessLayerPackage.IStaffRequest;
+import BusinessLayerPackage.IStock;
 import BusinessLayerPackage.Reporter;
 import BusinessLayerPackage.RequestDetails;
+import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Staff;
 import BusinessLayerPackage.StaffRequest;
 import BusinessLayerPackage.Stock;
 import DataAccessLayerPackage.StaffHandler;
 import DataAccessLayerPackage.StaffRequestHandler;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -32,19 +43,22 @@ public class AdminOrders extends javax.swing.JFrame {
     /**
      * Creates new form AdminOrders
      */
-    public AdminOrders() {
+    public AdminOrders() throws RemoteException, NotBoundException {
         initComponents();
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+        IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+        ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.All, 0);
         populateTable(staffRequests);
         tblStaffRequests.setAutoCreateRowSorter(true);
     }
     public static String staffUsernameRequest = "";
-    private void populateTable(ArrayList<StaffRequest> requestList) {
-        
+
+    private void populateTable(ArrayList<StaffRequest> requestList) throws RemoteException, NotBoundException {
+
         DefaultTableModel dmodel = (DefaultTableModel) tblStaffRequests.getModel();
         Object[] row = new Object[5];
         //get all staff
-        ArrayList<Staff> allStaff = (new Staff()).getStaff(StaffHandler.staffType.All);
+        IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+        ArrayList<Staff> allStaff = staffImp.getStaff(StaffHandler.staffType.All);
 //        for (Staff s : allStaff) {
 //                    System.out.println(s.toString());
 //                }
@@ -55,15 +69,15 @@ public class AdminOrders extends javax.swing.JFrame {
                 row[0] = stc.getRequestNr();
                 for (Staff s : allStaff) {
                     if (s.getUserID() == stc.getStaffID()) {
-                        
-                        row[1] = s.getFirstName() + " " + s.getLastName();                                             
+
+                        row[1] = s.getFirstName() + " " + s.getLastName();
                     }
                 }
                 row[2] = stc.getRequestDate().getDate();
                 row[3] = stc.getRequestDate().getMonth() + 1;
                 row[4] = stc.getRequestDate().getYear() + 1900;
                 dmodel.addRow(row);
-                
+
             }
         } else {
             JOptionPane.showMessageDialog(null, "There is no Data that matches your search result", "Attention", JOptionPane.INFORMATION_MESSAGE);
@@ -327,175 +341,226 @@ public class AdminOrders extends javax.swing.JFrame {
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
         int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Please Note", JOptionPane.INFORMATION_MESSAGE);
         if (selection == JOptionPane.YES_OPTION) {
-            Admin.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
-            System.exit(0);
+            try {
+                IAdmin adminImp = (IAdmin) SingleRegistry.getInstance().getRegistry().lookup("admin");
+                adminImp.UpdateAdminLoggedIn(AdminLogin.activeUser, 0);
+                System.exit(0);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnViewIncomStaffRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewIncomStaffRequestsActionPerformed
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Incomplete, 0);
-        populateTable(staffRequests);
+        try {
+            IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.Incomplete, 0);
+            populateTable(staffRequests);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_btnViewIncomStaffRequestsActionPerformed
 
     private void btnViewAllStaffReqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllStaffReqActionPerformed
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
-        populateTable(staffRequests);
+        try {
+            IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+            populateTable(staffRequests);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnViewAllStaffReqActionPerformed
 
     private void btnViewComplStaffRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewComplStaffRequestsActionPerformed
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.Complete, 0);
-        populateTable(staffRequests);
+        try {
+            IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.Complete, 0);
+            populateTable(staffRequests);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnViewComplStaffRequestsActionPerformed
 
-    
+
     private void tblStaffRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStaffRequestsMouseClicked
-        //Get selected value
-        //Send object to update form.
-        DefaultTableModel dmodel = (DefaultTableModel) tblStaffRequests.getModel();
-        StaffRequest curRequest = new StaffRequest();
-        int CurrentPackage
-                = ((int) tblStaffRequests.getValueAt(
-                        tblStaffRequests.getSelectedRow(), 0));
-        //check that it is an unmanaged package
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
-        ArrayList<Staff> allStaff = (new Staff()).getStaff(StaffHandler.staffType.All);       
-        boolean checkIncomplete = false;
-        for (StaffRequest st : staffRequests) {
-            if (CurrentPackage == st.getRequestNr() && st.getComplete() == 0) {
-                checkIncomplete = true;
-            }
-            for (Staff staff : allStaff) {
-                if (st.getStaffID() == staff.getUserID()) {
-                    staffUsernameRequest = staff.getUsername();                    
+        try {
+            //Get selected value
+            //Send object to update form.
+            DefaultTableModel dmodel = (DefaultTableModel) tblStaffRequests.getModel();
+            StaffRequest curRequest = new StaffRequest();
+            int CurrentPackage
+                    = ((int) tblStaffRequests.getValueAt(
+                            tblStaffRequests.getSelectedRow(), 0));
+            //check that it is an unmanaged package
+            IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+            IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+            ArrayList<Staff> allStaff = staffImp.getStaff(StaffHandler.staffType.All);
+            boolean checkIncomplete = false;
+            for (StaffRequest st : staffRequests) {
+                if (CurrentPackage == st.getRequestNr() && st.getComplete() == 0) {
+                    checkIncomplete = true;
                 }
-            }
-        }
-        if (checkIncomplete) {
-            int selection = JOptionPane.showConfirmDialog(null, "Do you want to handle request " + CurrentPackage,
-                    "Please Note", JOptionPane.INFORMATION_MESSAGE);
-            if (selection == JOptionPane.YES_OPTION) {
-                for (StaffRequest request : staffRequests) {
-                    if (request.getRequestNr() == CurrentPackage) {
-                        curRequest = request;
-                        System.out.println(staffUsernameRequest);
+                for (Staff staff : allStaff) {
+                    if (st.getStaffID() == staff.getUserID()) {
+                        staffUsernameRequest = staff.getUsername();
                     }
                 }
-                //new update page object
-                AdminOrderCompletion newAdminOrderCompletion = new AdminOrderCompletion(curRequest);
-                newAdminOrderCompletion.setVisible(true);;
-                this.dispose();
             }
+            if (checkIncomplete) {
+                int selection = JOptionPane.showConfirmDialog(null, "Do you want to handle request " + CurrentPackage,
+                        "Please Note", JOptionPane.INFORMATION_MESSAGE);
+                if (selection == JOptionPane.YES_OPTION) {
+                    for (StaffRequest request : staffRequests) {
+                        if (request.getRequestNr() == CurrentPackage) {
+                            curRequest = request;
+                            System.out.println(staffUsernameRequest);
+                        }
+                    }
+                    //new update page object
+                    AdminOrderCompletion newAdminOrderCompletion = new AdminOrderCompletion(curRequest);
+                    newAdminOrderCompletion.setVisible(true);;
+                    this.dispose();
+                }
+            }
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tblStaffRequestsMouseClicked
 
     private void btnSortByDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortByDateActionPerformed
-        ArrayList<StaffRequest> staffRequests = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
-        ArrayList<StaffRequest> holder = new ArrayList<>();
-        boolean dayZero = ((int) spnDay.getValue() == 0);
-        boolean monthZero = ((int) spnMonth.getValue() == 0);
-        for (StaffRequest sr : staffRequests) {
-            if (dayZero && !monthZero) {
-                if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
-                        && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
-                    holder.add(sr);
-                }
-            } else if (!dayZero && !monthZero) {
-                if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
-                        && sr.getRequestDate().getDate() == (int) spnDay.getValue()
-                        && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
-                    holder.add(sr);
-                }
-            } else {
-                if (sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+        try {
+            IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            ArrayList<StaffRequest> staffRequests = requestImp.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+            ArrayList<StaffRequest> holder = new ArrayList<>();
+            boolean dayZero = ((int) spnDay.getValue() == 0);
+            boolean monthZero = ((int) spnMonth.getValue() == 0);
+            for (StaffRequest sr : staffRequests) {
+                if (dayZero && !monthZero) {
+                    if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
+                            && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                        holder.add(sr);
+                    }
+                } else if (!dayZero && !monthZero) {
+                    if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
+                            && sr.getRequestDate().getDate() == (int) spnDay.getValue()
+                            && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                        holder.add(sr);
+                    }
+                } else if (sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
                     holder.add(sr);
                 }
             }
+            populateTable(holder);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
-        populateTable(holder);
     }//GEN-LAST:event_btnSortByDateActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        ArrayList<Staff> allStaff = (new Staff()).getStaff(StaffHandler.staffType.All);
-        ArrayList<Stock> allStock = (new Stock()).getStock();
-        RequestDetails dets = new RequestDetails();
-        
-        ArrayList<StaffRequest> staffRequests
-                = StaffRequest.getStaffRequests(StaffRequestHandler.requestType.All, 0);
-        ArrayList<StaffRequest> holder = new ArrayList<>();
-        //get spinners values 
-        int day = (int) spnDay.getValue();
-        int month = (int) spnMonth.getValue();
-        int Year = (int) spnYear.getValue();
-        //set Interval
-        String dateInterval = "";
-        boolean dayZero = (day == 0);
-        boolean monthZero = (month == 0);
-        for (StaffRequest sr : staffRequests) {
-            if (dayZero && !monthZero) {
-                dateInterval = new DateFormatSymbols().getMonths()[month - 1];
-                if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
-                        && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
-                    holder.add(sr);
-                }
-            } else if (!dayZero && !monthZero) {
-                dateInterval = Year + "-" + month + "-" + day;
-                if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
-                        && sr.getRequestDate().getDate() == (int) spnDay.getValue()
-                        && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
-                    holder.add(sr);
-                }
-            } else {
-                dateInterval = "" + Year;
-                if (sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
-                    holder.add(sr);
+        try {
+            IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
+            ArrayList<Staff> allStaff = staffImp.getStaff(StaffHandler.staffType.All);
+            IStock stockImp = (IStock) SingleRegistry.getInstance().getRegistry().lookup("stock");
+            ArrayList<Stock> allStock = stockImp.getStock();
+            RequestDetails dets = new RequestDetails();
+            //
+            IStaffRequest requestImp = (IStaffRequest) SingleRegistry.getInstance().getRegistry().lookup("request");
+            ArrayList<StaffRequest> staffRequests
+                    = requestImp.getStaffRequests(StaffRequestHandler.requestType.All, 0);
+            ArrayList<StaffRequest> holder = new ArrayList<>();
+            //get spinners values
+            int day = (int) spnDay.getValue();
+            int month = (int) spnMonth.getValue();
+            int Year = (int) spnYear.getValue();
+            //set Interval
+            String dateInterval = "";
+            boolean dayZero = (day == 0);
+            boolean monthZero = (month == 0);
+            for (StaffRequest sr : staffRequests) {
+                if (dayZero && !monthZero) {
+                    dateInterval = new DateFormatSymbols().getMonths()[month - 1];
+                    if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
+                            && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                        holder.add(sr);
+                    }
+                } else if (!dayZero && !monthZero) {
+                    dateInterval = Year + "-" + month + "-" + day;
+                    if (sr.getRequestDate().getMonth() + 1 == (int) spnMonth.getValue()
+                            && sr.getRequestDate().getDate() == (int) spnDay.getValue()
+                            && sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                        holder.add(sr);
+                    }
+                } else {
+                    dateInterval = "" + Year;
+                    if (sr.getRequestDate().getYear() + 1900 == (int) spnYear.getValue()) {
+                        holder.add(sr);
+                    }
                 }
             }
-        }
-        if (holder.size() == 0) {
-            JOptionPane.showMessageDialog(null, "The selection is empty no report can be made");
-        } else {
+            if (holder.size() == 0) {
+                JOptionPane.showMessageDialog(null, "The selection is empty no report can be made");
+            } else {
 
-            //Get current inventory
-            //allStock;
-            //get current purchase orders
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
-            Date d = new Date();
-            String output = String.format(
-                      "=================================================================================\n"
-                    + "           STAFF REQUEST REPORT            " + sdf.format(d) + "                           =\n"
-                    + "=================================================================================\n"
-                    + "The following tables shows all the staffs' request made for %s :\n",dateInterval);
+                //Get current inventory
+                //allStock;
+                //get current purchase orders
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+                Date d = new Date();
+                String output = String.format(
+                        "=================================================================================\n"
+                        + "           STAFF REQUEST REPORT            " + sdf.format(d) + "                           =\n"
+                        + "=================================================================================\n"
+                        + "The following tables shows all the staffs' request made for %s :\n", dateInterval);
 //                    + "Request %s by %s on %s_______________________________________________________________________________________________\n"
 //                    + "|%5s|%21s|%13s|%21s|%10s|%8s|%10s|\n"
 //                    + "________________________________________________________________________________________________\n",
 //                     dateInterval,"Request ID", "Staff Name", "Date", "Category", "Price", "Quantity", "Entry Date");
-            for (StaffRequest sr : holder) {
-                output+=String.format("Request %s by USER %s on %s\n"
-                        + "_________________________________________________________________________________\n"
-                        + "|%19s|%19s|%19s|%19s|\n",sr.getRequestNr(),sr.getStaffID(),sr.getRequestDate(),"ProductName","Manufacturer","Category","Quantity");
-                ArrayList<RequestDetails> recDetails = RequestDetails.getRequestDetails(StaffRequestHandler.requestType.All, sr.getStaffID(), sr.getRequestNr());
-                for (RequestDetails rd : recDetails) {
-                    output+= String.format("|%19s|%19s|%19s|%19s|\n",
-                            (rd.getProductName().length()>19)?rd.getProductName().substring(0,18):rd.getProductName(),
-                            (rd.getManufacturer().length()>19)?rd.getManufacturer().substring(0,18):rd.getManufacturer(),
-                            (rd.getCategory().length()>19)?rd.getCategory().substring(0,18):rd.getCategory(),
-                            rd.getQuantity() );
+                for (StaffRequest sr : holder) {
+                    output += String.format("Request %s by USER %s on %s\n"
+                            + "_________________________________________________________________________________\n"
+                            + "|%19s|%19s|%19s|%19s|\n", sr.getRequestNr(), sr.getStaffID(), sr.getRequestDate(), "ProductName", "Manufacturer", "Category", "Quantity");
+                    IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+                    ArrayList<RequestDetails> recDetails = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.All, sr.getStaffID(), sr.getRequestNr());
+                    for (RequestDetails rd : recDetails) {
+                        output += String.format("|%19s|%19s|%19s|%19s|\n",
+                                (rd.getProductName().length() > 19) ? rd.getProductName().substring(0, 18) : rd.getProductName(),
+                                (rd.getManufacturer().length() > 19) ? rd.getManufacturer().substring(0, 18) : rd.getManufacturer(),
+                                (rd.getCategory().length() > 19) ? rd.getCategory().substring(0, 18) : rd.getCategory(),
+                                rd.getQuantity());
+                    }
                 }
+                output += "_________________________________________________________________________________\n";
+// make pretty report
+                JFileChooser f = new JFileChooser();
+                f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                f.showSaveDialog(null);
+                String directory = (String) (f.getCurrentDirectory()).getPath();
+                directory += "\\RequestHistory_Report";
+                Reporter rep = new Reporter(output);
+                BCSerializer ser = new BCSerializer(output);
+                rep.saveReport(directory);
+//ser.Serialize(directory);
+// export ass xml
+// export as serialised
             }
-            output+= "_________________________________________________________________________________\n";
-            // make pretty report
-            JFileChooser f = new JFileChooser();
-            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            f.showSaveDialog(null);
-            String directory = (String) (f.getCurrentDirectory()).getPath();
-            directory += "\\RequestHistory_Report";
-            Reporter rep = new Reporter(output);
-            BCSerializer ser = new BCSerializer(output);
-            rep.saveReport(directory);
-            //ser.Serialize(directory);
-            // export ass xml
-            // export as serialised
+        } catch (RemoteException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -544,7 +609,13 @@ public class AdminOrders extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdminOrders().setVisible(true);
+                try {
+                    new AdminOrders().setVisible(true);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(AdminOrders.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
