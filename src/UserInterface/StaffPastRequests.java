@@ -469,10 +469,13 @@ public class StaffPastRequests extends javax.swing.JFrame {
         try {
             int DetailID = (int) tblRequestDetails.getValueAt(tblRequestDetails.getSelectedRow(), 0);
             //
+            //System.out.println(DetailID);
             int selection = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove this request?", "Delete Request", JOptionPane.INFORMATION_MESSAGE);
             if (selection == JOptionPane.YES_OPTION) {
-                IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
                 RequestDetails.deleteRequest(DetailID);
+                //testState(staffRequestsList);
+                IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
+                JOptionPane.showMessageDialog(null, "BY YES");
                 //
                 ArrayList<RequestDetails> requestDetails = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
                 addChildTableData(requestDetails);

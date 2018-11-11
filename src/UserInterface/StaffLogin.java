@@ -6,6 +6,7 @@
 package UserInterface;
 
 import BusinessLayerPackage.IStaff;
+import BusinessLayerPackage.LoggedInException;
 import BusinessLayerPackage.SingleRegistry;
 import BusinessLayerPackage.Staff;
 import DataAccessLayerPackage.StaffHandler;
@@ -261,7 +262,8 @@ public class StaffLogin extends javax.swing.JFrame {
             try {
                 IStaff staffImp = (IStaff) SingleRegistry.getInstance().getRegistry().lookup("staff");
                 if (staffImp.getStaffMember(txtStaffUsername.getText()).getLoggedIn() == 1) {
-                    JOptionPane.showMessageDialog(null, "User is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+                    //JOptionPane.showMessageDialog(null, "User is already logged in", "Please Note", JOptionPane.WARNING_MESSAGE);
+                    throw new LoggedInException("User is already logged in");
                 } else {
                     activeUser = staffImp.getStaffMember(txtStaffUsername.getText());
                     staffImp.updateStaffLoggedIn(activeUser.getUsername(), 1);
@@ -276,6 +278,8 @@ public class StaffLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Server Connection Error", JOptionPane.WARNING_MESSAGE);
             } catch (NotBoundException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Server Connection Error", JOptionPane.WARNING_MESSAGE);
+            } catch (LoggedInException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Please Note", JOptionPane.WARNING_MESSAGE);
             }
         } else {
             //throw warning
