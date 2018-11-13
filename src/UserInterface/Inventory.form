@@ -198,7 +198,7 @@
                 <Column editable="false" title="ProductName" type="java.lang.String"/>
                 <Column editable="false" title="Manufacturer" type="java.lang.String"/>
                 <Column editable="false" title="Category" type="java.lang.String"/>
-                <Column editable="false" title="Price" type="java.lang.Double"/>
+                <Column editable="false" title="Price" type="java.lang.String"/>
                 <Column editable="false" title="Quantity" type="java.lang.Integer"/>
               </Table>
             </Property>

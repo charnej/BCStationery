@@ -475,7 +475,7 @@ public class StaffPastRequests extends javax.swing.JFrame {
                 RequestDetails.deleteRequest(DetailID);
                 //testState(staffRequestsList);
                 IRequestDetails rDetailsImp = (IRequestDetails) SingleRegistry.getInstance().getRegistry().lookup("rDetails");
-                JOptionPane.showMessageDialog(null, "BY YES");
+                //JOptionPane.showMessageDialog(null, "BY YES");
                 //
                 ArrayList<RequestDetails> requestDetails = rDetailsImp.getRequestDetails(StaffRequestHandler.requestType.All, StaffLogin.activeUser.getUserID(), requestNr);
                 addChildTableData(requestDetails);

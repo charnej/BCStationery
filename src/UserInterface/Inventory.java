@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -74,7 +75,7 @@ public class Inventory extends javax.swing.JFrame {
                 row[0] = stc.getProductName();
                 row[1] = stc.getManufacturer();
                 row[2] = stc.getCategory();
-                row[3] = stc.getPrice();
+                row[3] = DecimalFormat.getCurrencyInstance().format(stc.getPrice());
                 row[4] = stc.getQuantity();
                 dmodel.addRow(row);
             }
@@ -179,13 +180,13 @@ public class Inventory extends javax.swing.JFrame {
         SearchCriteriaGroup.add(rbProdName);
         rbProdName.setText("Product Name");
         getContentPane().add(rbProdName);
-        rbProdName.setBounds(530, 150, 120, 23);
+        rbProdName.setBounds(530, 150, 120, 25);
 
         rbCategory.setBackground(new java.awt.Color(255, 255, 255));
         SearchCriteriaGroup.add(rbCategory);
         rbCategory.setText("Category");
         getContentPane().add(rbCategory);
-        rbCategory.setBounds(530, 180, 120, 23);
+        rbCategory.setBounds(530, 180, 120, 25);
 
         tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -196,7 +197,7 @@ public class Inventory extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
