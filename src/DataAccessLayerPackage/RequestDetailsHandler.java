@@ -130,6 +130,7 @@ public class RequestDetailsHandler {
             st.executeUpdate("insert into requestdetails "
                     + "(RequestNr, StockID, Quantity, Complete, DateComplete) "
                     + "values (" + requestNr + ", " + stockID + ", " + Quantity + ", 0, " + null + ")");
+            st.executeUpdate("UPDATE `staffrequest` SET `Complete` = '0' WHERE `staffrequest`.`RequestNr` = "+requestNr+"");
             //
             JOptionPane.showMessageDialog(null, "Request Details Sent");
         } catch (Exception e) {
